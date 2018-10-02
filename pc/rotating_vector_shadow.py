@@ -8,7 +8,7 @@ from PyQt5.QtWidgets import QApplication, QWidget
 from PyQt5.Qt import QPushButton, QPainter, QColor, Qt,\
     QVBoxLayout, QHBoxLayout, QGroupBox, \
     QSizePolicy, QTimer, QPen, QSpinBox, QGridLayout, QLabel, \
-    QDoubleSpinBox, QLineEdit, QMainWindow, QFont
+    QDoubleSpinBox, QLineEdit, QMainWindow, QFont, QCheckBox
  
 s = serial.Serial(port="COM3", baudrate=115200)
 thread_done = True
@@ -56,13 +56,16 @@ class ShadowTipTracker(QWidget):
     def initUI(self):
         
         self.current_height = 0
+        self.current_angle_in_radians = 0
         self.time_paused = False
         self.x_axis_y_coordinate = 248
-        self.timer_interval = 100
+        self.timer_interval = 30
         self.amplitude = 220
         self.pen_width = 10
         self.x_axis_offset_from_right = 523
-        self.time_x_increment = 3               # num pixels everything moves left in each paint iteration  
+        self.time_x_increment = 2               # num pixels everything moves left in each paint iteration
+        self.draw_rotating_vector = True
+        self.draw_shadow = True
 #         self.angle = 0
         
         self.setMinimumHeight(400)
@@ -75,13 +78,13 @@ class ShadowTipTracker(QWidget):
         self.timer.start(self.timer_interval)
         
         random.seed(0)
-        self.ordinates = [0] * 1000
+        self.ordinates = [0] * 1500
         self.bkTextPoints = [Point(random.randint(0, 1900),
                                    random.randint(0, 800),
-                                   text="Background") for _ in range(10)]
-        self.timeTextPoints = [Point(random.randint(0, 1900),
-                                     random.randint(0, 800),
-                                     text="Time") for _ in range(10)]
+                                   text="Background") for _ in range(15)]
+        self.timeTextPoints = [Point(random.randint(-200, 1700),
+                                     random.randint(-200, 1700),
+                                     text="Time") for _ in range(15)]
         self.show()
         
         
@@ -92,14 +95,13 @@ class ShadowTipTracker(QWidget):
         """
         The current angle in radians is NOT stored in the object.
         """
-        self.current_height = self.amplitude * math.sin(current_angle)
+        self.current_angle_in_radians = current_angle
+        self.current_height = self.amplitude * math.sin(self.current_angle_in_radians)
         #print("setting current height = " + str(self.current_height))
     
     def set_current_angle_in_degrees(self, current_angle_degrees):
-        # Be 1 degree ahead of what arduino reports. This is so that the shadow and simulation look in sync.
-        current_angle_degrees += 1
-        
         self._set_current_angle_in_radians(
+            # Be certain degree ahead of what arduino reports. This is so that the shadow and simulation look in sync.
             (current_angle_degrees + runningAngleOffset_sb.value()) * math.pi / 180
         )
         global angle_le
@@ -129,6 +131,11 @@ class ShadowTipTracker(QWidget):
     def unpause_time(self):
         self.time_paused = False
         
+    def show_rotating_vector(self, bool_value):
+        self.draw_rotating_vector = bool_value
+
+    def show_shadow(self, bool_value):
+        self.draw_shadow = bool_value
     
     def paintEvent(self, event):
         qp = QPainter()
@@ -166,6 +173,103 @@ class ShadowTipTracker(QWidget):
                     self.amplitude*2 + self.pen_width + 2)
         qp.setOpacity(1)
 
+        #--------------------------------------------------------------------        
+        # Draw vector shadow, if enabled
+        #--------------------------------------------------------------------        
+        if self.draw_shadow:
+            pen = QPen(QColor(220, 20, 20))
+            pen.setWidth(2)
+            pen.setCapStyle(Qt.RoundCap)
+            qp.setPen(pen)
+            qp.setBrush(QColor(220, 20, 20))
+            qp.setOpacity(1)
+            qp.drawRect(self.width() - self.x_axis_offset_from_right - self.pen_width//2,
+                        self.x_axis_y_coordinate - self.current_height,
+                        self.pen_width,
+                        self.current_height)
+            qp.setOpacity(1)
+        
+        #--------------------------------------------------------------------        
+        # Draw rotating vector, if enabled
+        #--------------------------------------------------------------------        
+        if self.draw_rotating_vector:
+            vector_origin = Point()
+            vector_origin.x = self.width() - self.x_axis_offset_from_right + 20 + self.amplitude
+            vector_origin.y = self.x_axis_y_coordinate
+            
+            vector_width  = self.amplitude * math.cos(self.current_angle_in_radians)
+            vector_height = self.amplitude * math.sin(self.current_angle_in_radians)
+            
+            vector_tip = Point()
+            vector_tip.x = vector_origin.x + vector_width
+            vector_tip.y = vector_origin.y - vector_height
+
+
+            #----------------------------------------------------
+            # Draw vector axis and tracing circle
+            pen = QPen(QColor(120, 120, 120))
+            pen.setWidth(2)
+            pen.setCapStyle(Qt.RoundCap)
+            qp.setPen(pen)
+            qp.setBrush(QColor(220, 20, 20))
+            qp.setOpacity(0.1)
+            qp.drawEllipse(vector_origin.x - self.amplitude,
+                           vector_origin.y - self.amplitude,
+                           2 * self.amplitude,
+                           2 * self.amplitude
+            )
+            
+            qp.setOpacity(0.3)
+            # vector's x axis
+            qp.drawLine(vector_origin.x - self.amplitude - 10,
+                        vector_origin.y,
+                        vector_origin.x + self.amplitude + 10,
+                        vector_origin.y
+            )
+            # vector's y axis
+            qp.drawLine(vector_origin.x,
+                        vector_origin.y - self.amplitude - 10,
+                        vector_origin.x,
+                        vector_origin.y + self.amplitude + 10
+            )
+            
+            qp.setOpacity(1)
+            
+            
+            #----------------------------------------------------
+            # Draw vector itself.
+            pen = QPen(QColor(220, 20, 20))
+            pen.setWidth(self.pen_width)
+            pen.setCapStyle(Qt.RoundCap)
+            qp.setPen(pen)
+            qp.setBrush(QColor(220, 20, 20))
+            qp.setOpacity(1)
+            qp.drawLine(vector_origin.x,
+                        vector_origin.y,
+                        vector_tip.x,
+                        vector_tip.y
+            ) 
+            qp.setOpacity(1)
+            
+
+            #----------------------------------------------------
+            # Draw vector tip projection
+            pen = QPen(QColor(20, 20, 20))
+            pen.setWidth(self.pen_width)
+            pen.setStyle(Qt.DotLine)
+            qp.setPen(pen)
+            qp.setOpacity(0.2)
+            qp.drawLine(
+                        vector_tip.x,
+                        vector_tip.y,
+                        self.width() - self.x_axis_offset_from_right,
+                        self.x_axis_y_coordinate - vector_height
+            )
+            qp.setOpacity(1)
+                        
+            
+            
+        
         
         #--------------------------------------------------------------------        
         # Draw background
@@ -195,7 +299,8 @@ class ShadowTipTracker(QWidget):
         #--------------------------------------------------------------------        
         # Draw points
         #--------------------------------------------------------------------        
-        pen = QPen(QColor(120, 60, 60))
+#         pen = QPen(QColor(120, 60, 60))
+        pen = QPen(QColor(220, 20, 20))
         pen.setWidth(self.pen_width)
         pen.setCapStyle(Qt.RoundCap)
         qp.setPen(pen)
@@ -555,6 +660,44 @@ def createGuiCalibration():
     gb.setLayout(vbox)
     return gb
 
+def createGuiControls():
+    gb = QGroupBox("GUI Controls")
+    
+    #-------------------------------------------------
+    
+    layout = QVBoxLayout()
+
+    drawShadow_cb = QCheckBox("Draw Shadow")
+    drawRotatingVector_cb = QCheckBox("Draw Rotating Vector and projection")
+    
+    drawShadow_cb.setChecked(tracker.draw_shadow)
+    drawRotatingVector_cb.setChecked(tracker.draw_rotating_vector)
+    
+    drawShadow_cb.stateChanged.connect(lambda: tracker.show_shadow(drawShadow_cb.isChecked()))
+    drawRotatingVector_cb.stateChanged.connect(lambda: tracker.show_rotating_vector(drawRotatingVector_cb.isChecked()))
+    
+    layout.setContentsMargins(0,0,0,0)
+    layout.setSpacing(0)
+
+    layout.addWidget(drawShadow_cb)
+    layout.addWidget(drawRotatingVector_cb)
+
+    upper = QWidget()
+    upper.setLayout(layout)
+    
+    #-------------------------------------------------
+    
+    vbox = QVBoxLayout()
+    
+    vbox.setContentsMargins(0,0,0,0)
+    vbox.setSpacing(0)
+
+    vbox.addWidget(upper)
+    vbox.addStretch(1)
+    gb.setLayout(vbox)
+    return gb
+
+
 def createNavigationControls():
     gb = QGroupBox("Navigation Controls")
 
@@ -687,11 +830,13 @@ def createGotoControls():
 def createControlWidgets():
     gb = QGroupBox()
     
-    layout = QHBoxLayout()
+    layout = QGridLayout()
     
-    layout.addWidget(createSpeedControls())
-    layout.addWidget(createCalibrationControls())
-    layout.addWidget(createNavigationControls())
+    layout.addWidget(createSpeedControls(),         0, 0, 1, 1)
+    layout.addWidget(createCalibrationControls(),   0, 1, 1, 1)
+    layout.addWidget(createGuiControls(),           1, 1, 1, 1)
+    layout.addWidget(createNavigationControls(),    0, 2, 2, 1)
+    
     
     layout.setContentsMargins(0,0,0,0)
     layout.setSpacing(5)
