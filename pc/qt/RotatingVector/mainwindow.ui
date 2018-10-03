@@ -193,42 +193,42 @@
                     <number>0</number>
                    </property>
                    <item>
-                    <widget class="QPushButton" name="pushButton">
+                    <widget class="QPushButton" name="speed1_btn">
                      <property name="text">
                       <string>1</string>
                      </property>
                     </widget>
                    </item>
                    <item>
-                    <widget class="QPushButton" name="pushButton_2">
+                    <widget class="QPushButton" name="speed2_btn">
                      <property name="text">
                       <string>2</string>
                      </property>
                     </widget>
                    </item>
                    <item>
-                    <widget class="QPushButton" name="pushButton_3">
+                    <widget class="QPushButton" name="speed3_btn">
                      <property name="text">
                       <string>3</string>
                      </property>
                     </widget>
                    </item>
                    <item>
-                    <widget class="QPushButton" name="pushButton_4">
+                    <widget class="QPushButton" name="speed4_btn">
                      <property name="text">
                       <string>4</string>
                      </property>
                     </widget>
                    </item>
                    <item>
-                    <widget class="QPushButton" name="pushButton_5">
+                    <widget class="QPushButton" name="speed5_btn">
                      <property name="text">
                       <string>5</string>
                      </property>
                     </widget>
                    </item>
                    <item>
-                    <widget class="QPushButton" name="pushButton_6">
+                    <widget class="QPushButton" name="speed6_btn">
                      <property name="text">
                       <string>6</string>
                      </property>
@@ -305,7 +305,13 @@
                           </widget>
                          </item>
                          <item>
-                          <widget class="QDoubleSpinBox" name="doubleSpinBox">
+                          <widget class="QDoubleSpinBox" name="calAt180_sb">
+                           <property name="maximumSize">
+                            <size>
+                             <width>50</width>
+                             <height>16777215</height>
+                            </size>
+                           </property>
                            <property name="decimals">
                             <number>1</number>
                            </property>
@@ -345,21 +351,21 @@
                           <number>0</number>
                          </property>
                          <item>
-                          <widget class="QPushButton" name="pushButton_10">
+                          <widget class="QPushButton" name="setPcCalOffFrom180ToMinus2p5_btn">
                            <property name="text">
                             <string>-2.5</string>
                            </property>
                           </widget>
                          </item>
                          <item>
-                          <widget class="QPushButton" name="pushButton_11">
+                          <widget class="QPushButton" name="setPcCalOffFrom180ToMinus3p0_btn">
                            <property name="text">
                             <string>-3.0</string>
                            </property>
                           </widget>
                          </item>
                          <item>
-                          <widget class="QPushButton" name="pushButton_12">
+                          <widget class="QPushButton" name="setPcCalOffFrom180ToMinus3p5_btn">
                            <property name="text">
                             <string>-3.5</string>
                            </property>
@@ -462,7 +468,7 @@
                           </widget>
                          </item>
                          <item>
-                          <widget class="QLineEdit" name="lineEdit">
+                          <widget class="QLineEdit" name="curPos_le">
                            <property name="maximumSize">
                             <size>
                              <width>30</width>
@@ -479,7 +485,7 @@
                           </widget>
                          </item>
                          <item>
-                          <widget class="QPushButton" name="pushButton_9">
+                          <widget class="QPushButton" name="setCurPos_btn">
                            <property name="maximumSize">
                             <size>
                              <width>40</width>
@@ -513,14 +519,14 @@
                           <number>0</number>
                          </property>
                          <item>
-                          <widget class="QPushButton" name="pushButton_7">
+                          <widget class="QPushButton" name="setAs0_btn">
                            <property name="text">
                             <string>Set as 0</string>
                            </property>
                           </widget>
                          </item>
                          <item>
-                          <widget class="QPushButton" name="pushButton_8">
+                          <widget class="QPushButton" name="setAs180_btn">
                            <property name="text">
                             <string>Set as 180</string>
                            </property>
@@ -589,7 +595,7 @@
                        </widget>
                       </item>
                       <item row="0" column="1">
-                       <widget class="QSpinBox" name="spinBox_2">
+                       <widget class="QSpinBox" name="timeDelay_sb">
                         <property name="minimumSize">
                          <size>
                           <width>50</width>
@@ -605,16 +611,16 @@
                        </widget>
                       </item>
                       <item row="1" column="1">
-                       <widget class="QSpinBox" name="spinBox_3"/>
+                       <widget class="QSpinBox" name="sineAmplitude_sb"/>
                       </item>
                       <item row="5" column="1">
-                       <widget class="QSpinBox" name="spinBox_4"/>
+                       <widget class="QSpinBox" name="penWidth_sb"/>
                       </item>
                       <item row="7" column="1">
-                       <widget class="QSpinBox" name="spinBox_5"/>
+                       <widget class="QSpinBox" name="xAxisOffFromTop_sb"/>
                       </item>
                       <item row="9" column="1">
-                       <widget class="QSpinBox" name="spinBox_6"/>
+                       <widget class="QSpinBox" name="xAxisOffFromRight_sb"/>
                       </item>
                      </layout>
                     </widget>
@@ -644,7 +650,7 @@
                     <number>0</number>
                    </property>
                    <item>
-                    <widget class="QCheckBox" name="checkBox">
+                    <widget class="QCheckBox" name="drawShadow_cb">
                      <property name="text">
                       <string>Draw shadow</string>
                      </property>
@@ -654,7 +660,7 @@
                     </widget>
                    </item>
                    <item>
-                    <widget class="QCheckBox" name="checkBox_2">
+                    <widget class="QCheckBox" name="drawRotatingVector_cb">
                      <property name="text">
                       <string>Draw rotating vector and projection</string>
                      </property>
@@ -719,7 +725,7 @@
                        </widget>
                       </item>
                       <item>
-                       <widget class="QLineEdit" name="lineEdit_3">
+                       <widget class="QLineEdit" name="curAngle_le">
                         <property name="maximumSize">
                          <size>
                           <width>40</width>
@@ -736,7 +742,7 @@
                        </widget>
                       </item>
                       <item>
-                       <widget class="QLineEdit" name="lineEdit_4">
+                       <widget class="QLineEdit" name="curHalfSteps_le">
                         <property name="maximumSize">
                          <size>
                           <width>40</width>
@@ -801,10 +807,10 @@
                        <number>0</number>
                       </property>
                       <item row="0" column="0">
-                       <widget class="QPushButton" name="pushButton_13">
+                       <widget class="QPushButton" name="pauseVectorAndTime_btn">
                         <property name="maximumSize">
                          <size>
-                          <width>80</width>
+                          <width>120</width>
                           <height>16777215</height>
                          </size>
                         </property>
@@ -814,49 +820,49 @@
                        </widget>
                       </item>
                       <item row="3" column="1">
-                       <widget class="QPushButton" name="pushButton_19">
+                       <widget class="QPushButton" name="cwHalfStep_btn">
                         <property name="text">
                          <string>=&gt; half step</string>
                         </property>
                        </widget>
                       </item>
                       <item row="4" column="0">
-                       <widget class="QPushButton" name="pushButton_17">
+                       <widget class="QPushButton" name="ccwDirection_btn">
                         <property name="text">
                          <string>CCW direction</string>
                         </property>
                        </widget>
                       </item>
                       <item row="4" column="1">
-                       <widget class="QPushButton" name="pushButton_20">
+                       <widget class="QPushButton" name="cwDirection_btn">
                         <property name="text">
                          <string>CW direction</string>
                         </property>
                        </widget>
                       </item>
                       <item row="3" column="0">
-                       <widget class="QPushButton" name="pushButton_16">
+                       <widget class="QPushButton" name="ccwHalfStep_btn">
                         <property name="text">
                          <string>&lt;= half step</string>
                         </property>
                        </widget>
                       </item>
                       <item row="2" column="0">
-                       <widget class="QPushButton" name="pushButton_15">
+                       <widget class="QPushButton" name="pauseTime_btn">
                         <property name="text">
                          <string>Pause time</string>
                         </property>
                        </widget>
                       </item>
                       <item row="1" column="0">
-                       <widget class="QPushButton" name="pushButton_14">
+                       <widget class="QPushButton" name="pauseVector_btn">
                         <property name="text">
                          <string>Pause vector</string>
                         </property>
                        </widget>
                       </item>
                       <item row="0" column="1" rowspan="3">
-                       <widget class="QPushButton" name="pushButton_18">
+                       <widget class="QPushButton" name="continue_btn">
                         <property name="sizePolicy">
                          <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
                           <horstretch>0</horstretch>
@@ -865,7 +871,7 @@
                         </property>
                         <property name="maximumSize">
                          <size>
-                          <width>80</width>
+                          <width>120</width>
                           <height>16777215</height>
                          </size>
                         </property>
@@ -921,7 +927,7 @@
                           </widget>
                          </item>
                          <item>
-                          <widget class="QLineEdit" name="lineEdit_2">
+                          <widget class="QLineEdit" name="gotoAngle_le">
                            <property name="maximumSize">
                             <size>
                              <width>40</width>
@@ -931,7 +937,7 @@
                           </widget>
                          </item>
                          <item>
-                          <widget class="QPushButton" name="pushButton_22">
+                          <widget class="QPushButton" name="gotoAngle_btn">
                            <property name="maximumSize">
                             <size>
                              <width>40</width>
@@ -965,7 +971,7 @@
                           <number>0</number>
                          </property>
                          <item>
-                          <widget class="QPushButton" name="pushButton_23">
+                          <widget class="QPushButton" name="goto0_btn">
                            <property name="maximumSize">
                             <size>
                              <width>40</width>
@@ -978,7 +984,7 @@
                           </widget>
                          </item>
                          <item>
-                          <widget class="QPushButton" name="pushButton_24">
+                          <widget class="QPushButton" name="goto90_btn">
                            <property name="maximumSize">
                             <size>
                              <width>40</width>
@@ -991,7 +997,7 @@
                           </widget>
                          </item>
                          <item>
-                          <widget class="QPushButton" name="pushButton_25">
+                          <widget class="QPushButton" name="goto180_btn">
                            <property name="maximumSize">
                             <size>
                              <width>40</width>
@@ -1004,7 +1010,7 @@
                           </widget>
                          </item>
                          <item>
-                          <widget class="QPushButton" name="pushButton_26">
+                          <widget class="QPushButton" name="goto270_btn">
                            <property name="maximumSize">
                             <size>
                              <width>40</width>
@@ -1023,7 +1029,7 @@
                     </widget>
                    </item>
                    <item>
-                    <widget class="QPushButton" name="pushButton_21">
+                    <widget class="QPushButton" name="releaseCoils_btn">
                      <property name="text">
                       <string>Release coils</string>
                      </property>
@@ -1077,7 +1083,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QWidget" name="widget_14" native="true">
+        <widget class="QWidget" name="screenWidget" native="true">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
            <horstretch>0</horstretch>
@@ -1091,7 +1097,7 @@
           </size>
          </property>
          <property name="styleSheet">
-          <string notr="true">background: lightgreen</string>
+          <string notr="true"/>
          </property>
         </widget>
        </item>
