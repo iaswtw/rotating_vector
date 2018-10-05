@@ -75,14 +75,23 @@
        </size>
       </property>
       <layout class="QVBoxLayout" name="topWidgetLayout">
+       <property name="spacing">
+        <number>0</number>
+       </property>
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
        <item>
         <widget class="QWidget" name="widget_2" native="true">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Maximum" vsizetype="Minimum">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
          <property name="minimumSize">
           <size>
            <width>0</width>
@@ -112,6 +121,22 @@
            <number>0</number>
           </property>
           <item>
+           <spacer name="horizontalSpacer_3">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeType">
+             <enum>QSizePolicy::MinimumExpanding</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>0</width>
+              <height>0</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
            <widget class="QWidget" name="widget" native="true">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
@@ -120,7 +145,7 @@
              </sizepolicy>
             </property>
             <property name="styleSheet">
-             <string notr="true">background: lightyellow</string>
+             <string notr="true"/>
             </property>
             <layout class="QVBoxLayout" name="verticalLayout">
              <property name="spacing">
@@ -144,7 +169,7 @@
              <item>
               <widget class="QWidget" name="widget_3" native="true">
                <property name="sizePolicy">
-                <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+                <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
                  <horstretch>0</horstretch>
                  <verstretch>0</verstretch>
                 </sizepolicy>
@@ -239,6 +264,12 @@
                 </item>
                 <item row="0" column="1">
                  <widget class="QGroupBox" name="groupBox_2">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
                   <property name="title">
                    <string>Calibration</string>
                   </property>
@@ -661,6 +692,12 @@
                 </item>
                 <item row="1" column="1">
                  <widget class="QGroupBox" name="groupBox_4">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
                   <property name="title">
                    <string>GUI Controls</string>
                   </property>
@@ -700,13 +737,20 @@
                      </property>
                     </widget>
                    </item>
+                   <item>
+                    <spacer name="verticalSpacer_2">
+                     <property name="orientation">
+                      <enum>Qt::Vertical</enum>
+                     </property>
+                    </spacer>
+                   </item>
                   </layout>
                  </widget>
                 </item>
                 <item row="2" column="0" colspan="3">
                  <widget class="QGroupBox" name="groupBox_9">
                   <property name="sizePolicy">
-                   <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+                   <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
                     <horstretch>0</horstretch>
                     <verstretch>0</verstretch>
                    </sizepolicy>
@@ -803,10 +847,19 @@
                 </item>
                 <item row="0" column="2" rowspan="2">
                  <widget class="QGroupBox" name="groupBox_3">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
                   <property name="title">
                    <string>GroupBox</string>
                   </property>
                   <layout class="QVBoxLayout" name="verticalLayout_6">
+                   <property name="spacing">
+                    <number>0</number>
+                   </property>
                    <property name="leftMargin">
                     <number>0</number>
                    </property>
@@ -920,6 +973,9 @@
                       <string>Goto controls</string>
                      </property>
                      <layout class="QVBoxLayout" name="verticalLayout_7">
+                      <property name="spacing">
+                       <number>0</number>
+                      </property>
                       <property name="leftMargin">
                        <number>0</number>
                       </property>
@@ -1080,31 +1136,6 @@
                <property name="sizeType">
                 <enum>QSizePolicy::Preferred</enum>
                </property>
-               <property name="sizeHint" stdset="0">
-                <size>
-                 <width>20</width>
-                 <height>40</height>
-                </size>
-               </property>
-              </spacer>
-             </item>
-            </layout>
-           </widget>
-          </item>
-          <item>
-           <widget class="QWidget" name="widget_15" native="true">
-            <layout class="QHBoxLayout" name="horizontalLayout_11">
-             <item>
-              <spacer name="horizontalSpacer_3">
-               <property name="orientation">
-                <enum>Qt::Horizontal</enum>
-               </property>
-               <property name="sizeHint" stdset="0">
-                <size>
-                 <width>40</width>
-                 <height>20</height>
-                </size>
-               </property>
               </spacer>
              </item>
             </layout>
@@ -1136,22 +1167,6 @@
      </widget>
     </item>
    </layout>
-  </widget>
-  <widget class="QMenuBar" name="menuBar">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>1900</width>
-     <height>21</height>
-    </rect>
-   </property>
-   <widget class="QMenu" name="menuRotating_Vector">
-    <property name="title">
-     <string>Rotating Vector</string>
-    </property>
-   </widget>
-   <addaction name="menuRotating_Vector"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
    <attribute name="toolBarArea">

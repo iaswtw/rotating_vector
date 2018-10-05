@@ -16,7 +16,7 @@ MainWindow::MainWindow(QWidget *parent) :
     curAngleInRadians(0.0),
     curAngleInDegrees(0.0),
     isTimePaused(false),
-    xAxisOffFromTop(248),
+    xAxisOffFromTop(388),
     xAxisOffFromRight(523),
     amplitude(220),
     penWidth(10),
