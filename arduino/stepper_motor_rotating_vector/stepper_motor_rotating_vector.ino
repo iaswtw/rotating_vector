@@ -94,7 +94,7 @@ void ReadAndExecuteCommand()
   if (Serial.available())
   {
     data = Serial.read();
-    Serial.println(data);
+    // Serial.println(data);
 
     if (data == '\n')
       data = 0;

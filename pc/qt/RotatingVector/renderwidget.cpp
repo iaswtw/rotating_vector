@@ -16,10 +16,14 @@ RenderWidget::RenderWidget(QWidget *parent, MainWindow *data) : QWidget(parent),
     QRandomGenerator randomGen(0);
 
     //----------------------------------------------------------------
+    for (int i = 0; i < NUM_ORDINATES; i++)
+    {
+        ordinates[i] = 0;
+    }
     for (int i = 0; i < NUM_BACKGROUND_TEXT_POINTS; i++)
     {
-        bkTextPoints[i].x = randomGen.bounded(0, 1900);
-        bkTextPoints[i].y = randomGen.bounded(0, 800);
+        bkTextPoints[i].x = randomGen.bounded(-200, 1900);
+        bkTextPoints[i].y = randomGen.bounded(-200, 800);
         bkTextPoints[i].text = "Background";
     }
     for (int i = 0; i < NUM_TIME_TEXT_POINTS; i++)
@@ -32,6 +36,12 @@ RenderWidget::RenderWidget(QWidget *parent, MainWindow *data) : QWidget(parent),
 
 
 }
+
+void RenderWidget::updateTimerInterval()
+{
+    timer->start(data->timerInterval);
+}
+
 
 void RenderWidget::renderTimerEvent()
 {
@@ -98,17 +108,14 @@ void RenderWidget::draw(QPainter * p)
     //--------------------------------------------------------------------
     if (data->drawRotatingVector)
     {
-//        vector_origin = Point()
         int vector_origin_x = width() - data->xAxisOffFromRight + 20 + data->amplitude;
         int vector_origin_y = data->xAxisOffFromTop;
 
         int vector_width  = int(data->amplitude * cos(data->curAngleInRadians));
         int vector_height = int(data->amplitude * sin(data->curAngleInRadians));
 
-//        vector_tip = Point()
         int vector_tip_x = vector_origin_x + vector_width;
         int vector_tip_y = vector_origin_y - vector_height;
-
 
         //----------------------------------------------------
         // Draw vector axis and tracing circle
@@ -140,7 +147,6 @@ void RenderWidget::draw(QPainter * p)
 
         p->setOpacity(1);
 
-
         //----------------------------------------------------
         // Draw vector itself.
         pen = QPen(QColor(220, 20, 20));
@@ -155,7 +161,6 @@ void RenderWidget::draw(QPainter * p)
                     vector_tip_y
         );
         p->setOpacity(1);
-
 
         //----------------------------------------------------
         // Draw vector tip projection
@@ -210,5 +215,37 @@ void RenderWidget::draw(QPainter * p)
         }
     }
     p->setOpacity(1);
+
+    //--------------------------------------------------------------------
+    // Draw points
+    //--------------------------------------------------------------------
+    //         pen = QPen(QColor(120, 60, 60))
+    pen = QPen(QColor(220, 20, 20));
+    pen.setWidth(data->penWidth);
+    pen.setCapStyle(Qt::RoundCap);
+    p->setPen(pen);
+    //         qp.setBrush(QBrush(Qt.black))
+
+    if (!data->isTimePaused)
+    {
+        // Copy height of each point to the point on its left (older point)
+        for (int i = NUM_ORDINATES-2; i >= 0; i--)
+        {
+            ordinates[i+1] = ordinates[i];
+        }
+    }
+    //print("Using current height of " + str(self.current_height))
+    ordinates[0] = -data->curHeight;            // set height of "current" (rightmost) sample
+
+    for (int i = NUM_ORDINATES-2; i >= 0; i--)
+    {
+        p->drawLine(width() -        data->xAxisOffFromRight - i*data->timeXInc,
+                    ordinates[i] +   data->xAxisOffFromTop,
+                    width() -        data->xAxisOffFromRight - (i+1)*data->timeXInc,
+                    ordinates[i+1] + data->xAxisOffFromTop
+        );
+    }
+
+
 
 }

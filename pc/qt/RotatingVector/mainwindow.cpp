@@ -5,7 +5,6 @@
 #include <iostream>
 #include <QPen>
 #include <QPainter>
-#include "rotatingvectordata.h"
 #include <math.h>
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -67,8 +66,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->xAxisOffFromRight_sb->setValue(xAxisOffFromRight);
     ui->xAxisOffFromTop_sb->setValue(xAxisOffFromTop);
     ui->sineAmplitude_sb->setValue(amplitude);
-
-
+    ui->timeDelay_sb->setValue(timerInterval);
 
     printf("Hello world\n");
     fflush(stdout);
@@ -123,6 +121,8 @@ void MainWindow::readData()
             printf("Angle: %.2f\n", double(curAngleInDegrees));
             ui->curAngle_le->setText(qstr.toLocal8Bit().constData());
 
+
+            curAngleInDegrees += ui->angleAdvanceOffset_sb->value();
             curAngleInRadians = curAngleInDegrees * M_PI / 180;
             curHeight = int(amplitude * sin(curAngleInRadians));
 
@@ -176,6 +176,7 @@ void MainWindow::on_speed6_btn_clicked()
 void MainWindow::on_continue_btn_clicked()
 {
     sendCmd("c\n");
+    isTimePaused = false;
 }
 
 void MainWindow::on_ccwHalfStep_btn_clicked()
@@ -208,7 +209,7 @@ void MainWindow::on_cwDirection_btn_clicked()
 
 void MainWindow::on_pauseTime_btn_clicked()
 {
-    // TODO
+    isTimePaused = true;
 }
 
 void MainWindow::on_pauseVector_btn_clicked()
@@ -218,7 +219,7 @@ void MainWindow::on_pauseVector_btn_clicked()
 
 void MainWindow::on_pauseVectorAndTime_btn_clicked()
 {
-    // TODO pause time
+    isTimePaused = true;
     sendCmd("p\n");
 }
 
@@ -234,7 +235,15 @@ void MainWindow::on_goto90_btn_clicked()
 
 void MainWindow::on_goto180_btn_clicked()
 {
-    sendCmd("g180\n");
+    QString cmd;
+    cmd.append("g");
+    double angle = 180 + ui->calAt180_sb->value();
+    cmd.append(QString::number(angle));
+    cmd.append("\n");
+
+    printf("Sending cmd: %s", cmd.toLocal8Bit().constData());
+
+    sendCmd(cmd.toLocal8Bit().constData());
 }
 
 void MainWindow::on_goto270_btn_clicked()
@@ -276,49 +285,42 @@ void MainWindow::on_setCurPos_btn_clicked()
 
 void MainWindow::on_setPcCalOffFrom180ToMinus2p5_btn_clicked()
 {
-
+    ui->calAt180_sb->setValue(-2.5);
 }
 
 void MainWindow::on_setPcCalOffFrom180ToMinus3p0_btn_clicked()
 {
-
+    ui->calAt180_sb->setValue(-3.0);
 }
 
 void MainWindow::on_setPcCalOffFrom180ToMinus3p5_btn_clicked()
 {
-
+    ui->calAt180_sb->setValue(-3.5);
 }
 
-void MainWindow::on_timeDelay_sb_valueChanged(int arg1)
-{
-
-}
-
-void MainWindow::on_sineAmplitude_sb_valueChanged(int arg1)
-{
-
-}
-
-void MainWindow::on_penWidth_sb_valueChanged(int arg1)
-{
-
-}
-
-void MainWindow::on_xAxisOffFromTop_sb_valueChanged(int arg1)
-{
-
-}
-
-void MainWindow::on_xAxisOffFromRight_sb_valueChanged(int arg1)
-{
-
-}
-
-void MainWindow::on_sineAmplitude_sb_valueChanged(const QString &arg1)
+void MainWindow::on_sineAmplitude_sb_valueChanged(int /*arg1*/)
 {
     amplitude = ui->sineAmplitude_sb->value();
-    printf("Amplitude = %d\n", amplitude);
+}
 
+void MainWindow::on_penWidth_sb_valueChanged(int /*arg1*/)
+{
+    penWidth = ui->penWidth_sb->value();
+}
+
+void MainWindow::on_xAxisOffFromTop_sb_valueChanged(int /*arg1*/)
+{
+    xAxisOffFromTop = ui->xAxisOffFromTop_sb->value();
+}
+
+void MainWindow::on_xAxisOffFromRight_sb_valueChanged(int /*arg1*/)
+{
+    xAxisOffFromRight = ui->xAxisOffFromRight_sb->value();
+}
+
+void MainWindow::on_sineAmplitude_sb_valueChanged(const QString &/*arg1*/)
+{
+    amplitude = ui->sineAmplitude_sb->value();
 }
 
 void MainWindow::on_drawShadow_cb_stateChanged(int /*arg1*/)
@@ -330,3 +332,10 @@ void MainWindow::on_drawRotatingVector_cb_stateChanged(int /*arg1*/)
 {
     drawRotatingVector = ui->drawRotatingVector_cb->isChecked();
 }
+
+void MainWindow::on_timeDelay_sb_valueChanged(int)
+{
+    timerInterval = ui->timeDelay_sb->value();
+    renderWidget->updateTimerInterval();
+}
+

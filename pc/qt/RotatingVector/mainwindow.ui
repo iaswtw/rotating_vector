@@ -400,7 +400,7 @@
                           </widget>
                          </item>
                          <item>
-                          <widget class="QSpinBox" name="spinBox">
+                          <widget class="QSpinBox" name="angleAdvanceOffset_sb">
                            <property name="maximumSize">
                             <size>
                              <width>40</width>
@@ -608,6 +608,15 @@
                           <height>16777215</height>
                          </size>
                         </property>
+                        <property name="minimum">
+                         <number>5</number>
+                        </property>
+                        <property name="maximum">
+                         <number>100</number>
+                        </property>
+                        <property name="singleStep">
+                         <number>5</number>
+                        </property>
                        </widget>
                       </item>
                       <item row="1" column="1">
@@ -621,13 +630,28 @@
                        </widget>
                       </item>
                       <item row="5" column="1">
-                       <widget class="QSpinBox" name="penWidth_sb"/>
+                       <widget class="QSpinBox" name="penWidth_sb">
+                        <property name="minimum">
+                         <number>1</number>
+                        </property>
+                        <property name="maximum">
+                         <number>30</number>
+                        </property>
+                       </widget>
                       </item>
                       <item row="7" column="1">
-                       <widget class="QSpinBox" name="xAxisOffFromTop_sb"/>
+                       <widget class="QSpinBox" name="xAxisOffFromTop_sb">
+                        <property name="maximum">
+                         <number>500</number>
+                        </property>
+                       </widget>
                       </item>
                       <item row="9" column="1">
-                       <widget class="QSpinBox" name="xAxisOffFromRight_sb"/>
+                       <widget class="QSpinBox" name="xAxisOffFromRight_sb">
+                        <property name="maximum">
+                         <number>1000</number>
+                        </property>
+                       </widget>
                       </item>
                      </layout>
                     </widget>
