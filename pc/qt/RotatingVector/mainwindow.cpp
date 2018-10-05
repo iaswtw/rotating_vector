@@ -1,36 +1,52 @@
 #include "mainwindow.h"
+#include "renderwidget.h"
 #include "ui_mainwindow.h"
 #include <stdio.h>
 #include <iostream>
 #include <QPen>
 #include <QPainter>
+#include "rotatingvectordata.h"
+#include <math.h>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow),
     serial(new QSerialPort(this)),
-    timer(new QTimer()),
 
     curHeight(0),
     curAngleInRadians(0.0),
+    curAngleInDegrees(0.0),
     isTimePaused(false),
-    xAxisOffFromTop(300),
-    xAxisOffFromRight(400),
-    amplitude(0),
-    penWidth(4),
+    xAxisOffFromTop(248),
+    xAxisOffFromRight(523),
+    amplitude(220),
+    penWidth(10),
     timeXInc(1),
     drawRotatingVector(true),
     drawShadow(true),
-    timerInterval(20)
+    timerInterval(20),
+    halfSteps(0),
+    serialData(new QByteArray())
 {
-    setbuf(stdout, NULL);
+    setbuf(stdout, nullptr);
     ui->setupUi(this);
+
+
+    renderWidget = new RenderWidget(ui->topWidget, this);
+    renderWidget->setObjectName(QStringLiteral("renderWidget"));
+    QSizePolicy sizePolicy5(QSizePolicy::Preferred, QSizePolicy::Minimum);
+    sizePolicy5.setHorizontalStretch(0);
+    sizePolicy5.setVerticalStretch(1);
+    sizePolicy5.setHeightForWidth(renderWidget->sizePolicy().hasHeightForWidth());
+    renderWidget->setSizePolicy(sizePolicy5);
+    renderWidget->setMinimumSize(QSize(0, 400));
+    renderWidget->setStyleSheet(QStringLiteral("background: green"));
+
+    ui->topWidgetLayout->addWidget(renderWidget);
+
 
     //-------------- Connect signals to slots ------------------
     connect(serial, &QSerialPort::readyRead, this, &MainWindow::readData);
-    connect(timer, &QTimer::timeout, this, &MainWindow::timerEvent);
-
-    timer->start(timerInterval);
 
 
     // ----------------- Serial port -----------------
@@ -42,12 +58,16 @@ MainWindow::MainWindow(QWidget *parent) :
         printf("Serial port opened successfully\n");
     }
 
+
+    //----------------------------------------------------------------------------
+    // Set initial values in GUI widgets
     ui->penWidth_sb->setValue(penWidth);
     ui->drawShadow_cb->setChecked(drawShadow);
     ui->drawRotatingVector_cb->setChecked(drawRotatingVector);
     ui->xAxisOffFromRight_sb->setValue(xAxisOffFromRight);
     ui->xAxisOffFromTop_sb->setValue(xAxisOffFromTop);
     ui->sineAmplitude_sb->setValue(amplitude);
+
 
 
     printf("Hello world\n");
@@ -60,39 +80,12 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::timerEvent()
-{
-//    printf("Timer event\n");
-    repaint();
-}
 
 void MainWindow::update()
 {
 
 }
 
-void MainWindow::paintEvent(QPaintEvent *pe)
-{
-    QPainter p(ui->screenWidget);
-
-//    p.begin(ui->screenWidget);
-    this->draw(&p);
-//    p.end();
-
-}
-
-void MainWindow::draw(QPainter * p)
-{
-    QPen pen = QPen(QColor(120, 120, 120));
-    pen.setWidth(2);
-    pen.setCapStyle(Qt::RoundCap);
-    p->setPen(pen);
-    p->drawLine(0,
-                xAxisOffFromTop,
-                ui->screenWidget->width() - xAxisOffFromRight,
-                xAxisOffFromTop);
-
-}
 
 void MainWindow::sendCmd(const char * pCmd)
 {
@@ -101,11 +94,53 @@ void MainWindow::sendCmd(const char * pCmd)
 
 void MainWindow::readData()
 {
+    QRegExp re("(\\d+\\.\\d+)[ ]+(\\d+)");
+
     const QByteArray data = serial->readAll();
-//    console->putData(data);
-    for (int i = 0; i < data.length(); i++)
-//        printf("%02X", data[i]);
-        printf("%c", data[i]);
+    serialData->append(data);
+
+    // did we get a comple line?
+    if (serialData->contains('\n'))
+    {
+        // print the line
+        int newlineIndex = serialData->indexOf('\n');
+        QByteArray line = serialData->left(newlineIndex);
+
+        printf("%s", line.data());
+
+
+        int pos = re.indexIn(line.data());
+        QStringList list = re.capturedTexts();
+
+//        printf("regex match result contains %d results. pos = %d\n", list.size(), pos);
+        if ((pos != -1) && (list.size() == 3))
+        {
+            QString qstr;
+
+            // Extract angle
+            qstr = list.at(1);
+            curAngleInDegrees = qstr.toDouble();
+            printf("Angle: %.2f\n", double(curAngleInDegrees));
+            ui->curAngle_le->setText(qstr.toLocal8Bit().constData());
+
+            curAngleInRadians = curAngleInDegrees * M_PI / 180;
+            curHeight = int(amplitude * sin(curAngleInRadians));
+
+
+            // Extract half steps
+            qstr = list.at(2);
+            halfSteps = qstr.toInt();
+            printf("Half steps: %d\n", halfSteps);
+            ui->curHalfSteps_le->setText(qstr.toLocal8Bit().constData());
+        }
+        printf("\n");
+
+
+
+        serialData->remove(0, newlineIndex+1);
+
+    }
+
 }
 
 void MainWindow::on_speed1_btn_clicked()
@@ -277,4 +312,21 @@ void MainWindow::on_xAxisOffFromTop_sb_valueChanged(int arg1)
 void MainWindow::on_xAxisOffFromRight_sb_valueChanged(int arg1)
 {
 
+}
+
+void MainWindow::on_sineAmplitude_sb_valueChanged(const QString &arg1)
+{
+    amplitude = ui->sineAmplitude_sb->value();
+    printf("Amplitude = %d\n", amplitude);
+
+}
+
+void MainWindow::on_drawShadow_cb_stateChanged(int /*arg1*/)
+{
+    drawShadow = ui->drawShadow_cb->isChecked();
+}
+
+void MainWindow::on_drawRotatingVector_cb_stateChanged(int /*arg1*/)
+{
+    drawRotatingVector = ui->drawRotatingVector_cb->isChecked();
 }

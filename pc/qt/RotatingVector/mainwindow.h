@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QtSerialPort/QSerialPort>
 #include <QTimer>
+#include "renderwidget.h"
 
 namespace Ui {
 class MainWindow;
@@ -19,7 +20,6 @@ public:
 
 public slots:
     void readData();
-    void timerEvent();
 
 private slots:
     void on_speed1_btn_clicked();
@@ -85,16 +85,25 @@ private slots:
     void on_xAxisOffFromRight_sb_valueChanged(int arg1);
 
 
+    void on_sineAmplitude_sb_valueChanged(const QString &arg1);
+
+    void on_drawShadow_cb_stateChanged(int arg1);
+
+    void on_drawRotatingVector_cb_stateChanged(int arg1);
+
 protected:
-    void paintEvent(QPaintEvent *event);
 
 private:
+    void sendCmd(const char * pCmd);
+    void update();
+
+public:
     Ui::MainWindow *ui;
     QSerialPort *serial;
-    QTimer *timer;
-
+    RenderWidget *renderWidget;
     int curHeight;
-    float curAngleInRadians;
+    double curAngleInRadians;
+    double curAngleInDegrees;
     bool isTimePaused;
     int xAxisOffFromTop;
     int xAxisOffFromRight;
@@ -104,12 +113,9 @@ private:
     bool drawRotatingVector;
     bool drawShadow;
     int timerInterval;
+    int halfSteps;
 
-
-    void sendCmd(const char * pCmd);
-    void update();
-    void draw(QPainter * p);
-
+    QByteArray *serialData;
 
 };
 

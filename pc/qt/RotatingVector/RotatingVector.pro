@@ -26,10 +26,14 @@ CONFIG += c++11
 
 SOURCES += \
         main.cpp \
-        mainwindow.cpp
+        mainwindow.cpp \
+    renderwidget.cpp \
+    rotatingvectordata.cpp
 
 HEADERS += \
-        mainwindow.h
+        mainwindow.h \
+    renderwidget.h \
+    rotatingvectordata.h
 
 FORMS += \
         mainwindow.ui
