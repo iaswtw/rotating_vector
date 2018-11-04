@@ -44,9 +44,31 @@ private:
 
     MainWindow *data;
 
-    int ordinates[NUM_ORDINATES];
-    Point bkTextPoints[NUM_BACKGROUND_TEXT_POINTS];
-    Point timeTextPoints[NUM_TIME_TEXT_POINTS];
+    int sinOrdinates[NUM_ORDINATES];
+    int cosOrdinates[NUM_ORDINATES];
+
+    Point hzBkTextPoints[NUM_BACKGROUND_TEXT_POINTS];
+    Point hzTimeTextPoints[NUM_TIME_TEXT_POINTS];
+    Point vtBkTextPoints[NUM_BACKGROUND_TEXT_POINTS];
+    Point vtTimeTextPoints[NUM_TIME_TEXT_POINTS];
+
+    // Red and green
+//    QColor sinColor = QColor(220, 50, 0);
+//    QColor cosColor = QColor(50, 220, 0);
+//    QColor vectorColor = QColor(220, 220, 0);
+
+    // Red and blue
+//    QColor sinColor = QColor(220, 50, 0);
+//    QColor cosColor = QColor(50, 0, 220);
+//    QColor vectorColor = QColor(220, 0, 220);
+
+    // Green and Blue
+    QColor sinColor = QColor(0, 220, 0);
+    QColor cosColor = QColor(0, 0, 220);
+    QColor vectorColor = QColor(0, 220, 220);
+    QColor vectorSweepColor = QColor(0, 50, 50);
+    QColor scrollingBackgroundColor = QColor(150, 150, 150);
+
 };
 
 #endif // RENDERWIDGET_H
