@@ -4,8 +4,11 @@
 #include <QRandomGenerator>
 #include "mainwindow.h"
 
-RenderWidget::RenderWidget(QWidget *parent, MainWindow *data) : QWidget(parent),
-    timer(new QTimer(this))
+RenderWidget::RenderWidget(QWidget *parent, MainWindow *data) :
+    QWidget(parent),
+    timer(new QTimer(this)),
+    vtScrollingBackground(NUM_BACKGROUND_TEXT_POINTS/2, NUM_TIME_TEXT_POINTS/2, NUM_ANGLE_TEXT_POINTS/2),
+    hzScrollingBackground(NUM_BACKGROUND_TEXT_POINTS, NUM_TIME_TEXT_POINTS, NUM_ANGLE_TEXT_POINTS)
 {
     this->data = data;
 
@@ -13,7 +16,6 @@ RenderWidget::RenderWidget(QWidget *parent, MainWindow *data) : QWidget(parent),
 
     timer->start(data->timerInterval);
 
-    QRandomGenerator randomGen(0);
 
     //----------------------------------------------------------------
     for (int i = 0; i < NUM_ORDINATES; i++)
@@ -23,33 +25,14 @@ RenderWidget::RenderWidget(QWidget *parent, MainWindow *data) : QWidget(parent),
     }
 
 
-    for (int i = 0; i < NUM_BACKGROUND_TEXT_POINTS; i++)
-    {
-        hzBkTextPoints[i].x = randomGen.bounded(-200, 1900);
-        hzBkTextPoints[i].y = randomGen.bounded(0, 800);
-        hzBkTextPoints[i].text = "Background";
-    }
-    for (int i = 0; i < NUM_TIME_TEXT_POINTS; i++)
-    {
-        hzTimeTextPoints[i].x = randomGen.bounded(-200, 1700);
-        hzTimeTextPoints[i].y = randomGen.bounded(0, 1700);
-        hzTimeTextPoints[i].text = "Time";
-    }
+    QRandomGenerator randomGen(10);
+    hzScrollingBackground.generateRandomAnglePoints(      -200, 1700, 0, 800, randomGen);
+    hzScrollingBackground.generateRandomBackgroundPoints( -200, 1900, 0, 800, randomGen);
+    hzScrollingBackground.generateRandomTimePoints(       -200, 1700, 0, 800, randomGen);
 
-    for (int i = 0; i < NUM_BACKGROUND_TEXT_POINTS/3; i++)
-    {
-        vtBkTextPoints[i].x = randomGen.bounded(0, 500);
-        vtBkTextPoints[i].y = randomGen.bounded(0, 800);
-        vtBkTextPoints[i].text = "Background";
-    }
-    for (int i = 0; i < NUM_TIME_TEXT_POINTS/3; i++)
-    {
-        vtTimeTextPoints[i].x = randomGen.bounded(0, 500);
-        vtTimeTextPoints[i].y = randomGen.bounded(0, 800);
-        vtTimeTextPoints[i].text = "Time";
-    }
-
-
+    vtScrollingBackground.generateRandomAnglePoints(      0, 500, 0, 800, randomGen);
+    vtScrollingBackground.generateRandomBackgroundPoints( 0, 500, 0, 800, randomGen);
+    vtScrollingBackground.generateRandomTimePoints(       0, 500, 0, 800, randomGen);
 }
 
 void RenderWidget::updateTimerInterval()
@@ -319,36 +302,29 @@ void RenderWidget::draw(QPainter * p)
     p->setBrush(Qt::green);
     p->setFont(font);
     p->setOpacity(0.2);
-    for (int i = 0; i < NUM_BACKGROUND_TEXT_POINTS; i++)
-    {
-        p->drawText(vector_origin_x - data->amplitude - hzBkTextPoints[i].x,
-                    vector_origin_y - data->amplitude + hzBkTextPoints[i].y,
-                    hzBkTextPoints[i].text);
 
-        //--------------------------------------------------
-        // If time isn't paused, shift all background objects left
-        if (!data->isTimePaused)
-        {
-            hzBkTextPoints[i].x += data->timeXInc;
-            if (hzBkTextPoints[i].x >= 2000)
-                hzBkTextPoints[i].x = 0;
-        }
-    }
-    for (int i = 0; i < NUM_TIME_TEXT_POINTS; i++)
-    {
-        p->drawText(vector_origin_x - data->amplitude - hzTimeTextPoints[i].x,
-                    vector_origin_y - data->amplitude + hzTimeTextPoints[i].y,
-                    hzTimeTextPoints[i].text);
+    hzScrollingBackground.draw(*p,
+                               0,                                               // x offset
+                               vector_origin_y - data->amplitude,               // y offset
+                               vector_origin_x - data->amplitude,               // width of rectangle to draw in
+                               data->amplitude * 2                              // height of rectangle to draw in
+    );
 
-        //--------------------------------------------------
-        // If time isn't paused, shift all background objects left
-        if (!data->isTimePaused)
-        {
-            hzTimeTextPoints[i].x += data->timeXInc;
-            if (hzTimeTextPoints[i].x >= 2000)
-                hzTimeTextPoints[i].x = 0;
-        }
+    if (!data->isTimePaused)
+    {
+        hzScrollingBackground.shiftLeft(data->timeXInc);
     }
+
+    pen = QPen(cosColor);
+    p->setPen(pen);
+    p->setBrush(sinColor);
+    p->setOpacity(0.05);
+    p->drawRect(0,
+                vector_origin_y - data->amplitude - 20,
+                vector_origin_x - data->amplitude - 30,
+                data->amplitude * 2 + 40);
+
+
     p->setOpacity(1);
 
 
@@ -361,39 +337,30 @@ void RenderWidget::draw(QPainter * p)
         font.setPixelSize(30);
         pen = QPen(scrollingBackgroundColor);
         p->setPen(pen);
-        p->setBrush(Qt::green);
         p->setFont(font);
         p->setOpacity(0.2);
-        for (int i = 0; i < NUM_BACKGROUND_TEXT_POINTS/3; i++)
-        {
-            p->drawText(vector_origin_x - data->amplitude + vtBkTextPoints[i].x,
-                        vector_origin_y - data->amplitude - vtBkTextPoints[i].y,
-                        vtBkTextPoints[i].text);
 
-            //--------------------------------------------------
-            // If time isn't paused, shift all background objects left
-            if (!data->isTimePaused)
-            {
-                vtBkTextPoints[i].y += data->timeXInc;
-                if (vtBkTextPoints[i].y >= 500)
-                    vtBkTextPoints[i].y = 0;
-            }
-        }
-        for (int i = 0; i < NUM_TIME_TEXT_POINTS/3; i++)
-        {
-            p->drawText(vector_origin_x - data->amplitude + vtTimeTextPoints[i].x,
-                        vector_origin_y - data->amplitude - vtTimeTextPoints[i].y,
-                        vtTimeTextPoints[i].text);
+        vtScrollingBackground.draw(*p,
+                                   vector_origin_x - data->amplitude,               // x offset
+                                   0,                                               // y offset
+                                   data->amplitude * 2,                             // width of rectangle to draw in
+                                   vector_origin_y - data->amplitude                // height of rectangle to draw in
+        );
 
-            //--------------------------------------------------
-            // If time isn't paused, shift all background objects left
-            if (!data->isTimePaused)
-            {
-                vtTimeTextPoints[i].y += data->timeXInc;
-                if (vtTimeTextPoints[i].y >= 500)
-                    vtTimeTextPoints[i].y = 0;
-            }
+        if (!data->isTimePaused)
+        {
+            vtScrollingBackground.shiftUp(data->timeXInc);
         }
+
+        pen = QPen(cosColor);
+        p->setPen(pen);
+        p->setBrush(cosColor);
+        p->setOpacity(0.05);
+        p->drawRect(vector_origin_x - data->amplitude - 20,
+                    0,
+                    data->amplitude * 2 + 40,
+                    vector_origin_y - data->amplitude - 30);
+
         p->setOpacity(1);
     }
 
@@ -469,9 +436,9 @@ void RenderWidget::draw(QPainter * p)
         p->setPen(pen);
         for (int i = NUM_ORDINATES-2; i >= 0; i--)
         {
-            p->drawLine(width() -        data->xAxisOffFromRight - i*data->timeXInc,
-                        - cosOrdinates[i] +   data->xAxisOffFromTop,
-                        width() -        data->xAxisOffFromRight - (i+1)*data->timeXInc,
+            p->drawLine(width() - data->xAxisOffFromRight - i*data->timeXInc,
+                        - cosOrdinates[i]   + data->xAxisOffFromTop,
+                        width() - data->xAxisOffFromRight - (i+1)*data->timeXInc,
                         - cosOrdinates[i+1] + data->xAxisOffFromTop
             );
         }

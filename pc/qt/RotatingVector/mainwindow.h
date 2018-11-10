@@ -22,7 +22,7 @@ public:
     void setControlWindow(ControlWindow *cw);
 
 public slots:
-    void readData();
+    void readSerialData();
 
 private slots:
 
@@ -31,6 +31,7 @@ protected:
 private:
     void sendCmd(const char * pCmd);
     void update();
+    void processSerialLine(QByteArray line);
 
     ControlWindow *cw;
 
@@ -54,6 +55,7 @@ public:
     bool showCosOnXAxis;
     int timerInterval;
     int halfSteps;
+    bool useArduino;
 
     QByteArray *serialData;
 

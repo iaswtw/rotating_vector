@@ -62,6 +62,7 @@ private slots:
     void on_drawRotatingVector_cb_stateChanged(int arg1);
     void on_showCosOnXAxis_cb_stateChanged(int arg1);
     void on_showCosOnYAxis_cb_stateChanged(int arg1);
+    void on_useArduino_cb_stateChanged(int arg1);
 };
 
 #endif // CONTROLWINDOW_H

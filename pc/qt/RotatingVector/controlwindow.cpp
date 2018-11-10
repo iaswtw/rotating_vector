@@ -20,6 +20,7 @@ ControlWindow::ControlWindow(QWidget *parent, MainWindow * mw) :
     ui->timeDelay_sb->setValue(mw->timerInterval);
     ui->showCosOnXAxis_cb->setChecked(mw->showCosOnXAxis);
     ui->showCosOnYAxis_cb->setChecked(mw->showCosOnYAxis);
+    ui->useArduino_cb->setChecked(mw->useArduino);
 
 }
 
@@ -237,4 +238,9 @@ void ControlWindow::on_showCosOnXAxis_cb_stateChanged(int /*arg1*/)
 void ControlWindow::on_showCosOnYAxis_cb_stateChanged(int arg1)
 {
     mw->showCosOnYAxis = ui->showCosOnYAxis_cb->isChecked();
+}
+
+void ControlWindow::on_useArduino_cb_stateChanged(int arg1)
+{
+    mw->useArduino = ui->useArduino_cb->isChecked();
 }

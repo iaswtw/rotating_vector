@@ -24,12 +24,13 @@ MainWindow::MainWindow(QWidget *parent) :
     curWidth(amplitude),
     penWidth(10),
     timeXInc(1),
-    drawRotatingVector(true),
-    drawShadow(true),
+    drawRotatingVector(false),
+    drawShadow(false),
     showCosOnYAxis(false),
     showCosOnXAxis(false),
     timerInterval(50),
     halfSteps(0),
+    useArduino(true),
     serialData(new QByteArray())
 {
     setbuf(stdout, nullptr);
@@ -50,7 +51,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
 
     //-------------- Connect signals to slots ------------------
-    connect(serial, &QSerialPort::readyRead, this, &MainWindow::readData);
+    connect(serial, &QSerialPort::readyRead, this, &MainWindow::readSerialData);
 
 
     // ----------------- Serial port -----------------
@@ -86,10 +87,8 @@ void MainWindow::setControlWindow(ControlWindow *cw)
 }
 
 
-void MainWindow::readData()
+void MainWindow::readSerialData()
 {
-    QRegExp re("(\\d+\\.\\d+)[ ]+(\\d+)");
-
     const QByteArray data = serial->readAll();
     serialData->append(data);
 
@@ -100,40 +99,47 @@ void MainWindow::readData()
         int newlineIndex = serialData->indexOf('\n');
         QByteArray line = serialData->left(newlineIndex);
 
-        printf("%s", line.data());
-
-
-        int pos = re.indexIn(line.data());
-        QStringList list = re.capturedTexts();
-
-//        printf("regex match result contains %d results. pos = %d\n", list.size(), pos);
-        if ((pos != -1) && (list.size() == 3))
+        if (useArduino)
         {
-            QString qstr;
-
-            // Extract angle
-            qstr = list.at(1);
-            curAngleInDegrees = qstr.toDouble();
-            printf("Angle: %.2f\n", double(curAngleInDegrees));
-            cw->ui->curAngle_le->setText(qstr.toLocal8Bit().constData());
-
-
-            curAngleInDegrees += cw->ui->angleAdvanceOffset_sb->value();
-            curAngleInRadians = curAngleInDegrees * M_PI / 180;
-            curHeight = int(amplitude * sin(curAngleInRadians));
-            curWidth  = int(amplitude * cos(curAngleInRadians));
-
-            // Extract half steps
-            qstr = list.at(2);
-            halfSteps = qstr.toInt();
-            printf("Half steps: %d\n", halfSteps);
-            cw->ui->curHalfSteps_le->setText(qstr.toLocal8Bit().constData());
+            processSerialLine(line);
         }
-        printf("\n");
-
-
 
         serialData->remove(0, newlineIndex+1);
-
     }
+}
+
+
+void MainWindow::processSerialLine(QByteArray line)
+{
+    QRegExp re("(\\d+\\.\\d+)[ ]+(\\d+)");
+
+    printf("%s", line.data());
+
+    int pos = re.indexIn(line.data());
+    QStringList list = re.capturedTexts();
+
+//        printf("regex match result contains %d results. pos = %d\n", list.size(), pos);
+    if ((pos != -1) && (list.size() == 3))
+    {
+        QString qstr;
+
+        // Extract angle
+        qstr = list.at(1);
+        curAngleInDegrees = qstr.toDouble();
+        printf("Angle: %.2f\n", double(curAngleInDegrees));
+        cw->ui->curAngle_le->setText(qstr.toLocal8Bit().constData());
+
+
+        curAngleInDegrees += cw->ui->angleAdvanceOffset_sb->value();
+        curAngleInRadians = curAngleInDegrees * M_PI / 180;
+        curHeight = int(amplitude * sin(curAngleInRadians));
+        curWidth  = int(amplitude * cos(curAngleInRadians));
+
+        // Extract half steps
+        qstr = list.at(2);
+        halfSteps = qstr.toInt();
+        printf("Half steps: %d\n", halfSteps);
+        cw->ui->curHalfSteps_le->setText(qstr.toLocal8Bit().constData());
+    }
+    printf("\n");
 }
