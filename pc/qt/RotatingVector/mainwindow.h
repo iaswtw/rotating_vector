@@ -50,6 +50,7 @@ public:
     int timeXInc;
     bool drawRotatingVector;
     bool drawShadow;
+    bool showCosOnYAxis;
     bool showCosOnXAxis;
     int timerInterval;
     int halfSteps;

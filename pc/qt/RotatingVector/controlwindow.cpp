@@ -18,6 +18,9 @@ ControlWindow::ControlWindow(QWidget *parent, MainWindow * mw) :
     ui->xAxisOffFromTop_sb->setValue(mw->xAxisOffFromTop);
     ui->sineAmplitude_sb->setValue(mw->amplitude);
     ui->timeDelay_sb->setValue(mw->timerInterval);
+    ui->showCosOnXAxis_cb->setChecked(mw->showCosOnXAxis);
+    ui->showCosOnYAxis_cb->setChecked(mw->showCosOnYAxis);
+
 }
 
 ControlWindow::~ControlWindow()
@@ -229,4 +232,9 @@ void ControlWindow::on_timeDelay_sb_valueChanged(int)
 void ControlWindow::on_showCosOnXAxis_cb_stateChanged(int /*arg1*/)
 {
     mw->showCosOnXAxis = ui->showCosOnXAxis_cb->isChecked();
+}
+
+void ControlWindow::on_showCosOnYAxis_cb_stateChanged(int arg1)
+{
+    mw->showCosOnYAxis = ui->showCosOnYAxis_cb->isChecked();
 }

@@ -99,10 +99,13 @@ void RenderWidget::draw(QPainter * p)
                 width() - data->xAxisOffFromRight,
                 vector_origin_y);
 
-    p->drawLine(vector_origin_x,
-                0,
-                vector_origin_x,
-                vector_origin_y - data->amplitude - 20 - data->penWidth/2);
+    if (data->showCosOnYAxis)
+    {
+        p->drawLine(vector_origin_x,
+                    0,
+                    vector_origin_x,
+                    vector_origin_y - data->amplitude - 20 - data->penWidth/2);
+    }
 
     //-------------------------------------------------------------------
     // Draw rectangle that will have the vector's vertical shadow
@@ -119,45 +122,53 @@ void RenderWidget::draw(QPainter * p)
     p->setOpacity(1);
 
 
-    //-------------------------------------------------------------------
-    // Draw rectangle that will have the vector's horizontal projection (not shadow. no vector casting horizontal shadow)
-    //-------------------------------------------------------------------
-    pen = QPen(QColor(100, 100, 100));
-    pen.setWidth(2);
-    pen.setCapStyle(Qt::RoundCap);
-    p->setPen(pen);
-    p->setOpacity(0.2);
-    p->drawRect(vector_origin_x - data->amplitude - 2,
-                vector_origin_y - data->amplitude - 20 - data->penWidth/2 - 2,
-                data->amplitude*2 + data->penWidth + 2,
-                data->penWidth + 2);
+    if (data->showCosOnYAxis)
+    {
+        //-------------------------------------------------------------------
+        // Draw rectangle that will have the vector's horizontal projection (not shadow. no vector casting horizontal shadow)
+        //-------------------------------------------------------------------
+        pen = QPen(QColor(100, 100, 100));
+        pen.setWidth(2);
+        pen.setCapStyle(Qt::RoundCap);
+        p->setPen(pen);
+        p->setOpacity(0.2);
+        p->drawRect(vector_origin_x - data->amplitude - 2,
+                    vector_origin_y - data->amplitude - 20 - data->penWidth/2 - 2,
+                    data->amplitude*2 + data->penWidth + 2,
+                    data->penWidth + 2);
 
-    p->setOpacity(1);
-
+        p->setOpacity(1);
+    }
 
     //---------------------------------------------------------
+    int w;
+    QString str;
     pen.setColor(QColor(150,150,150));
     p->setPen(pen);
     font = QFont();
     font.setPixelSize(13);
 //    font.setStretch(2.0);
     p->setFont(font);
-    QString str("H o r i z o n t a l   p r o j e c t i o n");
     QFontMetrics fm(font);
-    int w = fm.width(str);
 
-    p->drawText(vector_origin_x - w / 2,
-                vector_origin_y - data->amplitude - 4,
-                str);
-    p->drawText(vector_origin_x - data->amplitude,
-                vector_origin_y - data->amplitude - data->penWidth - 20,
-                "-1");
-    p->drawText(vector_origin_x + data->amplitude,
-                vector_origin_y - data->amplitude - data->penWidth - 20,
-                "+1");
+    if (data->showCosOnYAxis)
+    {
+        str = "H o r i z o n t a l   p r o j e c t i o n";
+        w = fm.width(str);
+
+        p->drawText(vector_origin_x - w / 2,
+                    vector_origin_y - data->amplitude - 4,
+                    str);
+        p->drawText(vector_origin_x - data->amplitude,
+                    vector_origin_y - data->amplitude - data->penWidth - 20,
+                    "-1");
+        p->drawText(vector_origin_x + data->amplitude,
+                    vector_origin_y - data->amplitude - data->penWidth - 20,
+                    "+1");
+    }
 
     //---------------------------------------------------------
-    str = QString("V e r t i c a l   p r o j e c t i o n");
+    str = "V e r t i c a l   p r o j e c t i o n";
     w = fm.width(str);
 
     p->save();
@@ -197,21 +208,23 @@ void RenderWidget::draw(QPainter * p)
                     data->curHeight);
         p->setOpacity(1);
 
-        //--------------------------------------------------------------------
-        // Horizontal projection
-        //--------------------------------------------------------------------
-        pen = QPen(cosColor);
-        pen.setWidth(2);
-        pen.setCapStyle(Qt::RoundCap);
-        p->setPen(pen);
-        p->setBrush(cosColor);
-        p->setOpacity(1);
-        p->drawRect(vector_origin_x,
-                    vector_origin_y - data->amplitude - 20 - data->penWidth/2,
-                    data->curWidth,
-                    data->penWidth);
-        p->setOpacity(1);
-
+        if (data->showCosOnYAxis)
+        {
+            //--------------------------------------------------------------------
+            // Horizontal projection
+            //--------------------------------------------------------------------
+            pen = QPen(cosColor);
+            pen.setWidth(2);
+            pen.setCapStyle(Qt::RoundCap);
+            p->setPen(pen);
+            p->setBrush(cosColor);
+            p->setOpacity(1);
+            p->drawRect(vector_origin_x,
+                        vector_origin_y - data->amplitude - 20 - data->penWidth/2,
+                        data->curWidth,
+                        data->penWidth);
+            p->setOpacity(1);
+        }
 
     }
     //--------------------------------------------------------------------
@@ -278,20 +291,22 @@ void RenderWidget::draw(QPainter * p)
         );
         p->setOpacity(1);
 
-        //----------------------------------------------------
-        // Draw vector tip horizontal projection
-        pen = QPen(QColor(20, 20, 20));
-        pen.setWidth(data->penWidth);
-        pen.setStyle(Qt::DotLine);
-        p->setPen(pen);
-        p->setOpacity(0.2);
-        p->drawLine(vector_tip_x,
-                    vector_tip_y,
-                    vector_tip_x,
-                    vector_origin_y - data->amplitude - 20
-        );
-        p->setOpacity(1);
-
+        if (data->showCosOnYAxis)
+        {
+            //----------------------------------------------------
+            // Draw vector tip horizontal projection
+            pen = QPen(QColor(20, 20, 20));
+            pen.setWidth(data->penWidth);
+            pen.setStyle(Qt::DotLine);
+            p->setPen(pen);
+            p->setOpacity(0.2);
+            p->drawLine(vector_tip_x,
+                        vector_tip_y,
+                        vector_tip_x,
+                        vector_origin_y - data->amplitude - 20
+            );
+            p->setOpacity(1);
+        }
     }
 
     //--------------------------------------------------------------------
@@ -337,48 +352,50 @@ void RenderWidget::draw(QPainter * p)
     p->setOpacity(1);
 
 
-    //--------------------------------------------------------------------
-    // Draw Vertical background
-    //--------------------------------------------------------------------
-    font = QFont();
-    font.setPixelSize(30);
-    pen = QPen(scrollingBackgroundColor);
-    p->setPen(pen);
-    p->setBrush(Qt::green);
-    p->setFont(font);
-    p->setOpacity(0.2);
-    for (int i = 0; i < NUM_BACKGROUND_TEXT_POINTS/3; i++)
+    if (data->showCosOnYAxis)
     {
-        p->drawText(vector_origin_x - data->amplitude + vtBkTextPoints[i].x,
-                    vector_origin_y - data->amplitude - vtBkTextPoints[i].y,
-                    vtBkTextPoints[i].text);
-
-        //--------------------------------------------------
-        // If time isn't paused, shift all background objects left
-        if (!data->isTimePaused)
+        //--------------------------------------------------------------------
+        // Draw Vertical background
+        //--------------------------------------------------------------------
+        font = QFont();
+        font.setPixelSize(30);
+        pen = QPen(scrollingBackgroundColor);
+        p->setPen(pen);
+        p->setBrush(Qt::green);
+        p->setFont(font);
+        p->setOpacity(0.2);
+        for (int i = 0; i < NUM_BACKGROUND_TEXT_POINTS/3; i++)
         {
-            vtBkTextPoints[i].y += data->timeXInc;
-            if (vtBkTextPoints[i].y >= 500)
-                vtBkTextPoints[i].y = 0;
-        }
-    }
-    for (int i = 0; i < NUM_TIME_TEXT_POINTS/3; i++)
-    {
-        p->drawText(vector_origin_x - data->amplitude + vtTimeTextPoints[i].x,
-                    vector_origin_y - data->amplitude - vtTimeTextPoints[i].y,
-                    vtTimeTextPoints[i].text);
+            p->drawText(vector_origin_x - data->amplitude + vtBkTextPoints[i].x,
+                        vector_origin_y - data->amplitude - vtBkTextPoints[i].y,
+                        vtBkTextPoints[i].text);
 
-        //--------------------------------------------------
-        // If time isn't paused, shift all background objects left
-        if (!data->isTimePaused)
+            //--------------------------------------------------
+            // If time isn't paused, shift all background objects left
+            if (!data->isTimePaused)
+            {
+                vtBkTextPoints[i].y += data->timeXInc;
+                if (vtBkTextPoints[i].y >= 500)
+                    vtBkTextPoints[i].y = 0;
+            }
+        }
+        for (int i = 0; i < NUM_TIME_TEXT_POINTS/3; i++)
         {
-            vtTimeTextPoints[i].y += data->timeXInc;
-            if (vtTimeTextPoints[i].y >= 500)
-                vtTimeTextPoints[i].y = 0;
-        }
-    }
-    p->setOpacity(1);
+            p->drawText(vector_origin_x - data->amplitude + vtTimeTextPoints[i].x,
+                        vector_origin_y - data->amplitude - vtTimeTextPoints[i].y,
+                        vtTimeTextPoints[i].text);
 
+            //--------------------------------------------------
+            // If time isn't paused, shift all background objects left
+            if (!data->isTimePaused)
+            {
+                vtTimeTextPoints[i].y += data->timeXInc;
+                if (vtTimeTextPoints[i].y >= 500)
+                    vtTimeTextPoints[i].y = 0;
+            }
+        }
+        p->setOpacity(1);
+    }
 
 
     //--------------------------------------------------------------------
@@ -432,15 +449,18 @@ void RenderWidget::draw(QPainter * p)
     //print("Using current height of " + str(self.current_height))
     cosOrdinates[0] = data->curWidth;            // set width of "current" (rightmost) sample
 
-    for (int i = NUM_ORDINATES-2; i >= 0; i--)
+    if (data->showCosOnYAxis)
     {
-        p->drawLine(
-                    vector_origin_x + cosOrdinates[i],
-                    vector_origin_y - data->amplitude - 20 - i*data->timeXInc,
+        for (int i = NUM_ORDINATES-2; i >= 0; i--)
+        {
+            p->drawLine(
+                        vector_origin_x + cosOrdinates[i],
+                        vector_origin_y - data->amplitude - 20 - i*data->timeXInc,
 
-                    vector_origin_x + cosOrdinates[i+1],
-                    vector_origin_y - data->amplitude - 20 - (i+1)*data->timeXInc
-        );
+                        vector_origin_x + cosOrdinates[i+1],
+                        vector_origin_y - data->amplitude - 20 - (i+1)*data->timeXInc
+            );
+        }
     }
 
     if (data->showCosOnXAxis)
