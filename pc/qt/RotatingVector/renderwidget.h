@@ -163,6 +163,8 @@ class RenderWidget : public QWidget
 public:
     explicit RenderWidget(QWidget *parent = nullptr, MainWindow *data = nullptr);
     void updateTimerInterval();
+    void clearSinOrdinates();
+    void clearCosOrdinates();
 
 public slots:
     void renderTimerEvent();

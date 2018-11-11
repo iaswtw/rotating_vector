@@ -75,7 +75,7 @@ void ArduinoSimulator::readAndExecuteCommand()
                 printf("Calibrating current position to: %d\n", calibrationAngle);
 
                 halfSteps = int(round(calibrationAngle * NUM_HALF_STEPS_PER_DEGREE));
-                printf("New half steps = $d\n", halfSteps);
+                printf("New half steps = %d\n", halfSteps);
             }
 
 

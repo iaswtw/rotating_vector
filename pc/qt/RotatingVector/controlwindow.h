@@ -58,7 +58,7 @@ private slots:
     void on_xAxisOffFromTop_sb_valueChanged(int arg1);
     void on_xAxisOffFromRight_sb_valueChanged(int arg1);
     void on_sineAmplitude_sb_valueChanged(const QString &arg1);
-    void on_drawShadow_cb_stateChanged(int arg1);
+    void on_drawVerticalShadow_cb_stateChanged(int arg1);
     void on_drawRotatingVector_cb_stateChanged(int arg1);
     void on_showCosOnXAxis_cb_stateChanged(int arg1);
     void on_showCosOnYAxis_cb_stateChanged(int arg1);
@@ -71,6 +71,8 @@ private slots:
     void on_showVerticalProjectionBox_cb_stateChanged(int arg1);
     void on_showHorizontalProjectionBox_cb_stateChanged(int arg1);
     void on_drawHorizontalShadow_cb_stateChanged(int arg1);
+    void on_clearSinValues_btn_clicked();
+    void on_clearCosValues_btn_clicked();
 };
 
 #endif // CONTROLWINDOW_H

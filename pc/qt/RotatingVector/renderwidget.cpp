@@ -18,11 +18,8 @@ RenderWidget::RenderWidget(QWidget *parent, MainWindow *data) :
 
 
     //----------------------------------------------------------------
-    for (int i = 0; i < NUM_ORDINATES; i++)
-    {
-        sinOrdinates[i] = 0;
-        cosOrdinates[i] = 0;
-    }
+    clearSinOrdinates();
+    clearCosOrdinates();
 
 
     QRandomGenerator randomGen(10);
@@ -33,6 +30,22 @@ RenderWidget::RenderWidget(QWidget *parent, MainWindow *data) :
     vtScrollingBackground.generateRandomAnglePoints(      0, 500, 0, 800, randomGen);
     vtScrollingBackground.generateRandomBackgroundPoints( 0, 500, 0, 800, randomGen);
     vtScrollingBackground.generateRandomTimePoints(       0, 500, 0, 800, randomGen);
+}
+
+void RenderWidget::clearSinOrdinates()
+{
+    for (int i = 0; i < NUM_ORDINATES; i++)
+    {
+        sinOrdinates[i] = 0;
+    }
+}
+
+void RenderWidget::clearCosOrdinates()
+{
+    for (int i = 0; i < NUM_ORDINATES; i++)
+    {
+        cosOrdinates[i] = 0;
+    }
 }
 
 void RenderWidget::updateTimerInterval()

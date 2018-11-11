@@ -12,7 +12,7 @@ ControlWindow::ControlWindow(QWidget *parent, MainWindow * mw) :
     //----------------------------------------------------------------------------
     // Set initial values in GUI widgets
     ui->penWidth_sb->setValue(mw->penWidth);
-    ui->drawShadow_cb->setChecked(mw->drawVerticalShadow);
+    ui->drawVerticalShadow_cb->setChecked(mw->drawVerticalShadow);
     ui->drawHorizontalShadow_cb->setChecked(mw->drawHorizontalShadow);
 
     ui->drawRotatingVector_cb->setChecked(mw->drawRotatingVector);
@@ -247,9 +247,9 @@ void ControlWindow::on_sineAmplitude_sb_valueChanged(const QString &/*arg1*/)
     mw->amplitude = ui->sineAmplitude_sb->value();
 }
 
-void ControlWindow::on_drawShadow_cb_stateChanged(int /*arg1*/)
+void ControlWindow::on_drawVerticalShadow_cb_stateChanged(int /*arg1*/)
 {
-    mw->drawVerticalShadow = ui->drawShadow_cb->isChecked();
+    mw->drawVerticalShadow = ui->drawVerticalShadow_cb->isChecked();
 }
 
 void ControlWindow::on_drawRotatingVector_cb_stateChanged(int /*arg1*/)
@@ -301,4 +301,14 @@ void ControlWindow::on_showHorizontalProjectionBox_cb_stateChanged(int /*arg1*/)
 void ControlWindow::on_drawHorizontalShadow_cb_stateChanged(int arg1)
 {
     mw->drawHorizontalShadow = ui->drawHorizontalShadow_cb->isChecked();
+}
+
+void ControlWindow::on_clearSinValues_btn_clicked()
+{
+    mw->renderWidget->clearSinOrdinates();
+}
+
+void ControlWindow::on_clearCosValues_btn_clicked()
+{
+    mw->renderWidget->clearCosOrdinates();
 }
