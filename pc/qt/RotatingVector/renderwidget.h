@@ -142,6 +142,18 @@ public:
 };
 
 
+struct VectorDrawingCoordinates
+{
+    int vector_origin_x;
+    int vector_origin_y;
+
+    int vector_width;
+    int vector_height;
+
+    int vector_tip_x;
+    int vector_tip_y;
+};
+
 /*************************************************************************************************
 
  *************************************************************************************************/
@@ -163,7 +175,13 @@ protected:
 
 
 private:
-    void draw(QPainter * p);
+    void draw(QPainter *p);
+    void drawProjectionBoxs(QPainter *p, VectorDrawingCoordinates v);
+    void drawBackground(QPainter *p, VectorDrawingCoordinates v);
+    void drawRotatingVector(QPainter *p, VectorDrawingCoordinates v);
+    void drawVectorShadow(QPainter *p, VectorDrawingCoordinates v);
+    void drawAxis(QPainter *p, VectorDrawingCoordinates v);
+    void drawSineAndCosinePoints(QPainter *p, VectorDrawingCoordinates v);
 
 //    RotatingVectorData *data;
 
@@ -173,13 +191,6 @@ private:
 
     int sinOrdinates[NUM_ORDINATES];
     int cosOrdinates[NUM_ORDINATES];
-
-//    BackgroundText hzBkTextPoints[NUM_BACKGROUND_TEXT_POINTS];
-//    BackgroundText hzTimeTextPoints[NUM_TIME_TEXT_POINTS];
-//    BackgroundText hzAngleTextPoints[NUM_ANGLE_TEXT_POINTS];
-//    BackgroundText vtBkTextPoints[NUM_BACKGROUND_TEXT_POINTS];
-//    BackgroundText vtTimeTextPoints[NUM_TIME_TEXT_POINTS];
-//    BackgroundText vtAngleTextPoints[NUM_ANGLE_TEXT_POINTS];
 
     ScrollingBackground vtScrollingBackground;
     ScrollingBackground hzScrollingBackground;

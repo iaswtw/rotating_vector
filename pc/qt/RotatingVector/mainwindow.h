@@ -5,6 +5,7 @@
 #include <QtSerialPort/QSerialPort>
 #include <QTimer>
 #include "renderwidget.h"
+#include "arduinosimulator.h"
 
 namespace Ui {
 class MainWindow;
@@ -20,6 +21,7 @@ public:
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
     void setControlWindow(ControlWindow *cw);
+    void processSerialLine(QByteArray line);
 
 public slots:
     void readSerialData();
@@ -31,7 +33,6 @@ protected:
 private:
     void sendCmd(const char * pCmd);
     void update();
-    void processSerialLine(QByteArray line);
 
     ControlWindow *cw;
 
@@ -39,6 +40,8 @@ public:
     Ui::MainWindow *ui;
     QSerialPort *serial;
     RenderWidget *renderWidget;
+    ArduinoSimulator *arduinoSimulator;
+
     double curAngleInRadians;
     double curAngleInDegrees;
     bool isTimePaused;
@@ -50,9 +53,18 @@ public:
     int penWidth;
     int timeXInc;
     bool drawRotatingVector;
-    bool drawShadow;
+
+    bool drawVerticalShadow;
+    bool drawHorizontalShadow;
+
+    bool showVerticalProjectionBox;
+    bool showHorizontalProjectionBox;
+
+    bool showSinOnXAxis;
     bool showCosOnYAxis;
     bool showCosOnXAxis;
+
+
     int timerInterval;
     int halfSteps;
     bool useArduino;

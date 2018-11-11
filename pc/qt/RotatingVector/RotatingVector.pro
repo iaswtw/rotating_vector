@@ -28,12 +28,14 @@ SOURCES += \
         main.cpp \
         mainwindow.cpp \
     renderwidget.cpp \
-    controlwindow.cpp
+    controlwindow.cpp \
+    arduinosimulator.cpp
 
 HEADERS += \
         mainwindow.h \
     renderwidget.h \
-    controlwindow.h
+    controlwindow.h \
+    arduinosimulator.h
 
 FORMS += \
         mainwindow.ui \

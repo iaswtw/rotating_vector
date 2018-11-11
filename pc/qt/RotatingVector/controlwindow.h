@@ -63,6 +63,14 @@ private slots:
     void on_showCosOnXAxis_cb_stateChanged(int arg1);
     void on_showCosOnYAxis_cb_stateChanged(int arg1);
     void on_useArduino_cb_stateChanged(int arg1);
+    void on_showSinOnXAxis_cb_stateChanged(int arg1);
+    void on_goto30_btn_clicked();
+    void on_goto45_btn_clicked();
+    void on_goto60_btn_clicked();
+    void on_angleAdvanceOffset_sb_valueChanged(const QString &arg1);
+    void on_showVerticalProjectionBox_cb_stateChanged(int arg1);
+    void on_showHorizontalProjectionBox_cb_stateChanged(int arg1);
+    void on_drawHorizontalShadow_cb_stateChanged(int arg1);
 };
 
 #endif // CONTROLWINDOW_H

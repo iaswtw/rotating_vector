@@ -12,12 +12,19 @@ ControlWindow::ControlWindow(QWidget *parent, MainWindow * mw) :
     //----------------------------------------------------------------------------
     // Set initial values in GUI widgets
     ui->penWidth_sb->setValue(mw->penWidth);
-    ui->drawShadow_cb->setChecked(mw->drawShadow);
+    ui->drawShadow_cb->setChecked(mw->drawVerticalShadow);
+    ui->drawHorizontalShadow_cb->setChecked(mw->drawHorizontalShadow);
+
     ui->drawRotatingVector_cb->setChecked(mw->drawRotatingVector);
     ui->xAxisOffFromRight_sb->setValue(mw->xAxisOffFromRight);
     ui->xAxisOffFromTop_sb->setValue(mw->xAxisOffFromTop);
     ui->sineAmplitude_sb->setValue(mw->amplitude);
     ui->timeDelay_sb->setValue(mw->timerInterval);
+
+    ui->showVerticalProjectionBox_cb->setChecked(mw->showVerticalProjectionBox);
+    ui->showHorizontalProjectionBox_cb->setChecked(mw->showHorizontalProjectionBox);
+
+    ui->showSinOnXAxis_cb->setChecked(mw->showSinOnXAxis);
     ui->showCosOnXAxis_cb->setChecked(mw->showCosOnXAxis);
     ui->showCosOnYAxis_cb->setChecked(mw->showCosOnYAxis);
     ui->useArduino_cb->setChecked(mw->useArduino);
@@ -31,7 +38,14 @@ ControlWindow::~ControlWindow()
 
 void ControlWindow::sendCmd(const char * pCmd)
 {
-    mw->serial->write(pCmd, strlen(pCmd));
+    if (mw->useArduino)
+    {
+        mw->serial->write(pCmd, strlen(pCmd));
+    }
+    else
+    {
+        mw->arduinoSimulator->postCmd(pCmd);
+    }
 }
 
 void ControlWindow::on_continue_btn_clicked()
@@ -119,6 +133,21 @@ void ControlWindow::on_goto0_btn_clicked()
     sendCmd("g0\n");
 }
 
+void ControlWindow::on_goto30_btn_clicked()
+{
+    sendCmd("g30\n");
+}
+
+void ControlWindow::on_goto45_btn_clicked()
+{
+    sendCmd("g45\n");
+}
+
+void ControlWindow::on_goto60_btn_clicked()
+{
+    sendCmd("g60\n");
+}
+
 void ControlWindow::on_goto90_btn_clicked()
 {
     sendCmd("g90\n");
@@ -128,7 +157,11 @@ void ControlWindow::on_goto180_btn_clicked()
 {
     QString cmd;
     cmd.append("g");
-    double angle = 180 + ui->calAt180_sb->value();
+
+    double angle = 180;
+    if (mw->useArduino)
+        angle += ui->calAt180_sb->value();
+
     cmd.append(QString::number(angle));
     cmd.append("\n");
 
@@ -216,7 +249,7 @@ void ControlWindow::on_sineAmplitude_sb_valueChanged(const QString &/*arg1*/)
 
 void ControlWindow::on_drawShadow_cb_stateChanged(int /*arg1*/)
 {
-    mw->drawShadow = ui->drawShadow_cb->isChecked();
+    mw->drawVerticalShadow = ui->drawShadow_cb->isChecked();
 }
 
 void ControlWindow::on_drawRotatingVector_cb_stateChanged(int /*arg1*/)
@@ -235,12 +268,37 @@ void ControlWindow::on_showCosOnXAxis_cb_stateChanged(int /*arg1*/)
     mw->showCosOnXAxis = ui->showCosOnXAxis_cb->isChecked();
 }
 
-void ControlWindow::on_showCosOnYAxis_cb_stateChanged(int arg1)
+void ControlWindow::on_showCosOnYAxis_cb_stateChanged(int /*arg1*/)
 {
     mw->showCosOnYAxis = ui->showCosOnYAxis_cb->isChecked();
 }
 
-void ControlWindow::on_useArduino_cb_stateChanged(int arg1)
+void ControlWindow::on_useArduino_cb_stateChanged(int /*arg1*/)
 {
     mw->useArduino = ui->useArduino_cb->isChecked();
+}
+
+void ControlWindow::on_showSinOnXAxis_cb_stateChanged(int /*arg1*/)
+{
+    mw->showSinOnXAxis = ui->showSinOnXAxis_cb->isChecked();
+}
+
+void ControlWindow::on_angleAdvanceOffset_sb_valueChanged(const QString &/*arg1*/)
+{
+
+}
+
+void ControlWindow::on_showVerticalProjectionBox_cb_stateChanged(int /*arg1*/)
+{
+    mw->showVerticalProjectionBox = ui->showVerticalProjectionBox_cb->isChecked();
+}
+
+void ControlWindow::on_showHorizontalProjectionBox_cb_stateChanged(int /*arg1*/)
+{
+    mw->showHorizontalProjectionBox = ui->showHorizontalProjectionBox_cb->isChecked();
+}
+
+void ControlWindow::on_drawHorizontalShadow_cb_stateChanged(int arg1)
+{
+    mw->drawHorizontalShadow = ui->drawHorizontalShadow_cb->isChecked();
 }

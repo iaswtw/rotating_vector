@@ -13,6 +13,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow),
     serial(new QSerialPort(this)),
+    arduinoSimulator(nullptr),
 
     curAngleInRadians(0.0),
     curAngleInDegrees(0.0),
@@ -25,7 +26,14 @@ MainWindow::MainWindow(QWidget *parent) :
     penWidth(10),
     timeXInc(1),
     drawRotatingVector(false),
-    drawShadow(false),
+
+    drawVerticalShadow(false),
+    drawHorizontalShadow(false),
+
+    showVerticalProjectionBox(false),
+    showHorizontalProjectionBox(false),
+
+    showSinOnXAxis(false),
     showCosOnYAxis(false),
     showCosOnXAxis(false),
     timerInterval(50),
@@ -63,7 +71,9 @@ MainWindow::MainWindow(QWidget *parent) :
         printf("Serial port opened successfully\n");
     }
 
-    printf("Hello world\n");
+    arduinoSimulator = new ArduinoSimulator(this, this);
+
+    //printf("Hello world\n");
     fflush(stdout);
 //    std::cout << "Hello world" << std::endl;
 }
@@ -129,8 +139,9 @@ void MainWindow::processSerialLine(QByteArray line)
         printf("Angle: %.2f\n", double(curAngleInDegrees));
         cw->ui->curAngle_le->setText(qstr.toLocal8Bit().constData());
 
+        if (useArduino)
+            curAngleInDegrees += cw->ui->angleAdvanceOffset_sb->value();
 
-        curAngleInDegrees += cw->ui->angleAdvanceOffset_sb->value();
         curAngleInRadians = curAngleInDegrees * M_PI / 180;
         curHeight = int(amplitude * sin(curAngleInRadians));
         curWidth  = int(amplitude * cos(curAngleInRadians));
