@@ -127,15 +127,15 @@ void RenderWidget::drawProjectionBoxes(QPainter *p, VectorDrawingCoordinates v)
         p->setOpacity(1);
 
         //---------------------------------------------------------
-        str = "V e r t i c a l   p r o j e c t i o n";
-        w = fm.width(str);
+//        str = "V e r t i c a l   p r o j e c t i o n";
+//        w = fm.width(str);
 
-        p->save();
-        p->translate(v.vector_origin_x - data->amplitude - 4,
-                     v.vector_origin_y + w / 2);
-        p->rotate(-90);
-        p->drawText(0, 0, str);
-        p->restore();
+//        p->save();
+//        p->translate(v.vector_origin_x - data->amplitude - 4,
+//                     v.vector_origin_y + w / 2);
+//        p->rotate(-90);
+//        p->drawText(0, 0, str);
+//        p->restore();
 
         p->drawText(v.vector_origin_x - data->amplitude - data->penWidth - 20 - 15,
                     v.vector_origin_y + data->amplitude,
@@ -166,12 +166,12 @@ void RenderWidget::drawProjectionBoxes(QPainter *p, VectorDrawingCoordinates v)
 
         p->setOpacity(1);
 
-        str = "H o r i z o n t a l   p r o j e c t i o n";
-        w = fm.width(str);
+//        str = "H o r i z o n t a l   p r o j e c t i o n";
+//        w = fm.width(str);
 
-        p->drawText(v.vector_origin_x - w / 2,
-                    v.vector_origin_y - data->amplitude - 4,
-                    str);
+//        p->drawText(v.vector_origin_x - w / 2,
+//                    v.vector_origin_y - data->amplitude - 4,
+//                    str);
         p->drawText(v.vector_origin_x - data->amplitude,
                     v.vector_origin_y - data->amplitude - data->penWidth - 20,
                     "-1");
