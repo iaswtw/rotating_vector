@@ -86,18 +86,20 @@ void RenderWidget::draw(QPainter * p)
     v.vector_tip_y = v.vector_origin_y - v.vector_height;
 
     drawAxis(p, v);
-    drawProjectionBoxs(p, v);
-    drawVectorShadow(p, v);
+    drawProjectionBoxes(p, v);
 
-
-    drawRotatingVector(p, v);
     drawBackground(p, v);
     drawSineAndCosinePoints(p, v);
 
+    drawRotatingVector(p, v);
+    drawVectorShadow(p, v);
+
+    // For the projection tip circle to show correctly, draw this after drawing sin & cos points and vector projection dotted line.
+    drawTipCircles(p, v);
 }
 
 
-void RenderWidget::drawProjectionBoxs(QPainter *p, VectorDrawingCoordinates v)
+void RenderWidget::drawProjectionBoxes(QPainter *p, VectorDrawingCoordinates v)
 {
     //-------------------------------------------------------------------
     // Draw rectangle that will have the vector's vertical shadow
@@ -361,10 +363,13 @@ void RenderWidget::drawVectorShadow(QPainter *p, VectorDrawingCoordinates v)
                     data->penWidth,
                     data->curHeight);
         p->setOpacity(1);
+    }
 
+    if (data->drawVerticalProjectionDottedLine)
+    {
         //----------------------------------------------------
         // Draw vector tip vertical projection
-        pen = QPen(QColor(20, 20, 20));
+        QPen pen = QPen(QColor(20, 20, 20));
         pen.setWidth(data->penWidth);
         pen.setStyle(Qt::DotLine);
         p->setPen(pen);
@@ -393,10 +398,13 @@ void RenderWidget::drawVectorShadow(QPainter *p, VectorDrawingCoordinates v)
                     data->curWidth,
                     data->penWidth);
         p->setOpacity(1);
+    }
 
+    if (data->drawHorizontalProjectionDottedLine)
+    {
         //----------------------------------------------------
         // Draw vector tip horizontal projection
-        pen = QPen(QColor(20, 20, 20));
+        QPen pen = QPen(QColor(20, 20, 20));
         pen.setWidth(data->penWidth);
         pen.setStyle(Qt::DotLine);
         p->setPen(pen);
@@ -493,4 +501,57 @@ void RenderWidget::drawSineAndCosinePoints(QPainter *p, VectorDrawingCoordinates
         }
     }
 
+}
+
+
+void RenderWidget::drawTipCircles(QPainter *p, VectorDrawingCoordinates v)
+{
+    if (data->drawRotatingVector)
+    {
+        // Draw a circle at the tip of the vector
+        QPen pen = QPen(vectorTipCircleColor);
+        pen.setWidth(2);
+        pen.setCapStyle(Qt::RoundCap);
+        p->setPen(pen);
+        p->setBrush(Qt::white);
+        p->setOpacity(1);
+        p->drawEllipse(v.vector_tip_x - data->penWidth / 2,
+                       v.vector_tip_y - data->penWidth / 2,
+                       data->penWidth,
+                       data->penWidth
+        );
+        p->setOpacity(1);
+    }
+    if (data->drawVerticalProjectionTipCircle)
+    {
+        // Draw a circle at the tip of the vector's vertical projection
+        QPen pen = QPen(vectorTipCircleColor);
+        pen.setWidth(2);
+        pen.setCapStyle(Qt::RoundCap);
+        p->setPen(pen);
+        p->setBrush(Qt::white);
+        p->setOpacity(1);
+        p->drawEllipse(width() - data->xAxisOffFromRight - data->penWidth/2,
+                       v.vector_tip_y - data->penWidth/2,
+                       data->penWidth,
+                       data->penWidth
+        );
+        p->setOpacity(1);
+    }
+    if (data->drawHorizontalProjectionTipCircle)
+    {
+        // Draw a circle at the tip of the vector's vertical projection
+        QPen pen = QPen(vectorTipCircleColor);
+        pen.setWidth(2);
+        pen.setCapStyle(Qt::RoundCap);
+        p->setPen(pen);
+        p->setBrush(Qt::white);
+        p->setOpacity(1);
+        p->drawEllipse(v.vector_tip_x - data->penWidth/2,
+                       v.vector_origin_y - data->amplitude - 20 - data->penWidth/2,
+                       data->penWidth,
+                       data->penWidth
+        );
+        p->setOpacity(1);
+    }
 }

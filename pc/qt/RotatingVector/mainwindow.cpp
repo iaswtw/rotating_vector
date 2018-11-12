@@ -25,10 +25,16 @@ MainWindow::MainWindow(QWidget *parent) :
     curWidth(amplitude),
     penWidth(10),
     timeXInc(1),
-    drawRotatingVector(false),
+    drawRotatingVector(true),
 
     drawVerticalShadow(false),
     drawHorizontalShadow(false),
+
+    drawVerticalProjectionDottedLine(false),
+    drawHorizontalProjectionDottedLine(false),
+
+    drawVerticalProjectionTipCircle(false),
+    drawHorizontalProjectionTipCircle(false),
 
     showVerticalProjectionBox(false),
     showHorizontalProjectionBox(false),
@@ -36,9 +42,9 @@ MainWindow::MainWindow(QWidget *parent) :
     showSinOnXAxis(false),
     showCosOnYAxis(false),
     showCosOnXAxis(false),
-    timerInterval(50),
+    timerInterval(30),
     halfSteps(0),
-    useArduino(true),
+    useArduino(false),
     serialData(new QByteArray())
 {
     setbuf(stdout, nullptr);

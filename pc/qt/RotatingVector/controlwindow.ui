@@ -10,8 +10,14 @@
     <height>480</height>
    </rect>
   </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>Rotating Vector Control Panel</string>
   </property>
   <widget class="QWidget" name="widget_3" native="true">
    <property name="geometry">
@@ -57,7 +63,7 @@
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_6">
        <property name="spacing">
-        <number>0</number>
+        <number>5</number>
        </property>
        <property name="leftMargin">
         <number>0</number>
@@ -95,26 +101,92 @@
           <property name="spacing">
            <number>0</number>
           </property>
-          <item row="3" column="1">
+          <item row="7" column="0">
+           <widget class="QPushButton" name="ccwHalfStep_btn">
+            <property name="text">
+             <string>&lt;= half step</string>
+            </property>
+           </widget>
+          </item>
+          <item row="9" column="0" colspan="2">
+           <widget class="QPushButton" name="releaseCoils_btn">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>30</height>
+             </size>
+            </property>
+            <property name="autoFillBackground">
+             <bool>false</bool>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">background: rgb(255, 130, 130)</string>
+            </property>
+            <property name="text">
+             <string>Release coils</string>
+            </property>
+           </widget>
+          </item>
+          <item row="7" column="1">
            <widget class="QPushButton" name="cwHalfStep_btn">
             <property name="text">
              <string>=&gt; half step</string>
             </property>
            </widget>
           </item>
-          <item row="4" column="0">
+          <item row="8" column="0">
            <widget class="QPushButton" name="ccwDirection_btn">
             <property name="text">
              <string>CCW direction</string>
             </property>
            </widget>
           </item>
-          <item row="0" column="0">
-           <widget class="QPushButton" name="pauseVectorAndTime_btn">
+          <item row="8" column="1">
+           <widget class="QPushButton" name="cwDirection_btn">
+            <property name="text">
+             <string>CW direction</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="0">
+           <widget class="QPushButton" name="pauseTime_btn">
+            <property name="text">
+             <string>Pause Time</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0">
+           <widget class="QPushButton" name="pauseVector_btn">
+            <property name="text">
+             <string>Pause Vector</string>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="0" colspan="2">
+           <widget class="Line" name="line">
             <property name="minimumSize">
              <size>
               <width>0</width>
-              <height>60</height>
+              <height>10</height>
+             </size>
+            </property>
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0">
+           <widget class="QPushButton" name="pauseVectorAndTime_btn">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>50</height>
              </size>
             </property>
             <property name="maximumSize">
@@ -123,36 +195,18 @@
               <height>16777215</height>
              </size>
             </property>
+            <property name="styleSheet">
+             <string notr="true">background : rgb(212, 212, 105)</string>
+            </property>
             <property name="text">
              <string>Pause vector &amp;&amp; time</string>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="0" colspan="2">
-           <widget class="QPushButton" name="pauseTime_btn">
-            <property name="text">
-             <string>Pause time</string>
-            </property>
-           </widget>
-          </item>
-          <item row="4" column="1">
-           <widget class="QPushButton" name="cwDirection_btn">
-            <property name="text">
-             <string>CW direction</string>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="0">
-           <widget class="QPushButton" name="ccwHalfStep_btn">
-            <property name="text">
-             <string>&lt;= half step</string>
             </property>
            </widget>
           </item>
           <item row="0" column="1">
            <widget class="QPushButton" name="continue_btn">
             <property name="sizePolicy">
-             <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+             <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
@@ -163,28 +217,31 @@
               <height>16777215</height>
              </size>
             </property>
+            <property name="font">
+             <font>
+              <weight>50</weight>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">background: rgb(93, 176, 93)</string>
+            </property>
             <property name="text">
              <string>Continue</string>
             </property>
            </widget>
           </item>
-          <item row="1" column="0" colspan="2">
-           <widget class="QPushButton" name="pauseVector_btn">
+          <item row="3" column="1">
+           <widget class="QPushButton" name="unpauseVector_btn">
             <property name="text">
-             <string>Pause vector</string>
+             <string>Unpause Vector</string>
             </property>
            </widget>
           </item>
-          <item row="5" column="0" colspan="2">
-           <widget class="QPushButton" name="releaseCoils_btn">
-            <property name="minimumSize">
-             <size>
-              <width>0</width>
-              <height>30</height>
-             </size>
-            </property>
+          <item row="4" column="1">
+           <widget class="QPushButton" name="unpauseTime_btn">
             <property name="text">
-             <string>Release coils</string>
+             <string>Unpause Time</string>
             </property>
            </widget>
           </item>
@@ -411,7 +468,7 @@
           <string>Use Arduino</string>
          </property>
          <property name="checked">
-          <bool>true</bool>
+          <bool>false</bool>
          </property>
         </widget>
        </item>
@@ -421,7 +478,7 @@
           <string>Draw rotating vector and projection</string>
          </property>
          <property name="checked">
-          <bool>false</bool>
+          <bool>true</bool>
          </property>
         </widget>
        </item>
@@ -954,10 +1011,24 @@
           <item>
            <widget class="QCheckBox" name="drawVerticalShadow_cb">
             <property name="text">
-             <string>Draw Vertical shadow</string>
+             <string>Draw Vertical Projection</string>
             </property>
             <property name="checked">
              <bool>false</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="drawVerticalProjectionTipCircle_cb">
+            <property name="text">
+             <string>Draw Vertical Projection Tip Circle</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="drawVerticalProjectionDottedLine_cb">
+            <property name="text">
+             <string>Draw Vertical Projection dotted line</string>
             </property>
            </widget>
           </item>
@@ -1034,7 +1105,21 @@
           <item>
            <widget class="QCheckBox" name="drawHorizontalShadow_cb">
             <property name="text">
-             <string>Draw Horizontal shadow</string>
+             <string>Draw Horizontal Projection</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="drawHorizontalProjectionTipCircle_cb">
+            <property name="text">
+             <string>Draw Horizontal Projection Tip Circle</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="drawHorizontalProjectionDottedLine_cb">
+            <property name="text">
+             <string>Draw Horizontal Projection dotted line</string>
             </property>
            </widget>
           </item>

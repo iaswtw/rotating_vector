@@ -178,12 +178,13 @@ protected:
 
 private:
     void draw(QPainter *p);
-    void drawProjectionBoxs(QPainter *p, VectorDrawingCoordinates v);
+    void drawProjectionBoxes(QPainter *p, VectorDrawingCoordinates v);
     void drawBackground(QPainter *p, VectorDrawingCoordinates v);
     void drawRotatingVector(QPainter *p, VectorDrawingCoordinates v);
     void drawVectorShadow(QPainter *p, VectorDrawingCoordinates v);
     void drawAxis(QPainter *p, VectorDrawingCoordinates v);
     void drawSineAndCosinePoints(QPainter *p, VectorDrawingCoordinates v);
+    void drawTipCircles(QPainter *p, VectorDrawingCoordinates v);
 
 //    RotatingVectorData *data;
 
@@ -212,6 +213,7 @@ private:
     QColor sinColor = QColor(0, 220, 0);
     QColor cosColor = QColor(0, 0, 220);
     QColor vectorColor = QColor(0, 220, 220);
+    QColor vectorTipCircleColor = QColor(40, 40, 40);
     QColor vectorSweepColor = QColor(0, 50, 50);
     QColor scrollingBackgroundColor = QColor(150, 150, 150);
 

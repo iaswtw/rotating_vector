@@ -24,6 +24,12 @@ ControlWindow::ControlWindow(QWidget *parent, MainWindow * mw) :
     ui->showVerticalProjectionBox_cb->setChecked(mw->showVerticalProjectionBox);
     ui->showHorizontalProjectionBox_cb->setChecked(mw->showHorizontalProjectionBox);
 
+    ui->drawVerticalProjectionDottedLine_cb->setChecked(mw->drawVerticalProjectionDottedLine);
+    ui->drawHorizontalProjectionDottedLine_cb->setChecked(mw->drawHorizontalProjectionDottedLine);
+
+    ui->drawVerticalProjectionTipCircle_cb->setChecked(mw->drawVerticalProjectionTipCircle);
+    ui->drawHorizontalProjectionTipCircle_cb->setChecked(mw->drawHorizontalProjectionTipCircle);
+
     ui->showSinOnXAxis_cb->setChecked(mw->showSinOnXAxis);
     ui->showCosOnXAxis_cb->setChecked(mw->showCosOnXAxis);
     ui->showCosOnYAxis_cb->setChecked(mw->showCosOnYAxis);
@@ -51,6 +57,16 @@ void ControlWindow::sendCmd(const char * pCmd)
 void ControlWindow::on_continue_btn_clicked()
 {
     sendCmd("c\n");
+    mw->isTimePaused = false;
+}
+
+void ControlWindow::on_unpauseVector_btn_clicked()
+{
+    sendCmd("c\n");
+}
+
+void ControlWindow::on_unpauseTime_btn_clicked()
+{
     mw->isTimePaused = false;
 }
 
@@ -298,7 +314,7 @@ void ControlWindow::on_showHorizontalProjectionBox_cb_stateChanged(int /*arg1*/)
     mw->showHorizontalProjectionBox = ui->showHorizontalProjectionBox_cb->isChecked();
 }
 
-void ControlWindow::on_drawHorizontalShadow_cb_stateChanged(int arg1)
+void ControlWindow::on_drawHorizontalShadow_cb_stateChanged(int /*arg1*/)
 {
     mw->drawHorizontalShadow = ui->drawHorizontalShadow_cb->isChecked();
 }
@@ -311,4 +327,24 @@ void ControlWindow::on_clearSinValues_btn_clicked()
 void ControlWindow::on_clearCosValues_btn_clicked()
 {
     mw->renderWidget->clearCosOrdinates();
+}
+
+void ControlWindow::on_drawVerticalProjectionDottedLine_cb_stateChanged(int /*arg1*/)
+{
+    mw->drawVerticalProjectionDottedLine = ui->drawVerticalProjectionDottedLine_cb->isChecked();
+}
+
+void ControlWindow::on_drawHorizontalProjectionDottedLine_cb_stateChanged(int /*arg1*/)
+{
+    mw->drawHorizontalProjectionDottedLine = ui->drawHorizontalProjectionDottedLine_cb->isChecked();
+}
+
+void ControlWindow::on_drawVerticalProjectionTipCircle_cb_stateChanged(int /*arg1*/)
+{
+    mw->drawVerticalProjectionTipCircle = ui->drawVerticalProjectionTipCircle_cb->isChecked();
+}
+
+void ControlWindow::on_drawHorizontalProjectionTipCircle_cb_stateChanged(int /*arg1*/)
+{
+    mw->drawHorizontalProjectionTipCircle = ui->drawHorizontalProjectionTipCircle_cb->isChecked();
 }

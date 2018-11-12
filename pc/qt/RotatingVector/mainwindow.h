@@ -57,6 +57,12 @@ public:
     bool drawVerticalShadow;
     bool drawHorizontalShadow;
 
+    bool drawVerticalProjectionDottedLine;
+    bool drawHorizontalProjectionDottedLine;
+
+    bool drawVerticalProjectionTipCircle;
+    bool drawHorizontalProjectionTipCircle;
+
     bool showVerticalProjectionBox;
     bool showHorizontalProjectionBox;
 

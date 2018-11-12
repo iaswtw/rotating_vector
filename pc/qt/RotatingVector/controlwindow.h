@@ -73,6 +73,12 @@ private slots:
     void on_drawHorizontalShadow_cb_stateChanged(int arg1);
     void on_clearSinValues_btn_clicked();
     void on_clearCosValues_btn_clicked();
+    void on_drawVerticalProjectionDottedLine_cb_stateChanged(int arg1);
+    void on_drawHorizontalProjectionDottedLine_cb_stateChanged(int arg1);
+    void on_unpauseVector_btn_clicked();
+    void on_unpauseTime_btn_clicked();
+    void on_drawVerticalProjectionTipCircle_cb_stateChanged(int arg1);
+    void on_drawHorizontalProjectionTipCircle_cb_stateChanged(int arg1);
 };
 
 #endif // CONTROLWINDOW_H
