@@ -21,6 +21,8 @@ ControlWindow::ControlWindow(QWidget *parent, MainWindow * mw) :
     ui->sineAmplitude_sb->setValue(mw->amplitude);
     ui->timeDelay_sb->setValue(mw->timerInterval);
 
+    ui->drawAngleArc_cb->setChecked(mw->drawAngleArc);
+
     ui->showVerticalProjectionBox_cb->setChecked(mw->showVerticalProjectionBox);
     ui->showHorizontalProjectionBox_cb->setChecked(mw->showHorizontalProjectionBox);
 
@@ -347,4 +349,9 @@ void ControlWindow::on_drawVerticalProjectionTipCircle_cb_stateChanged(int /*arg
 void ControlWindow::on_drawHorizontalProjectionTipCircle_cb_stateChanged(int /*arg1*/)
 {
     mw->drawHorizontalProjectionTipCircle = ui->drawHorizontalProjectionTipCircle_cb->isChecked();
+}
+
+void ControlWindow::on_drawAngleArc_cb_stateChanged(int /*arg1*/)
+{
+    mw->drawAngleArc = ui->drawAngleArc_cb->isChecked();
 }

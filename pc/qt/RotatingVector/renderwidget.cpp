@@ -104,7 +104,6 @@ void RenderWidget::drawProjectionBoxes(QPainter *p, VectorDrawingCoordinates v)
     //-------------------------------------------------------------------
     // Draw rectangle that will have the vector's vertical shadow
     //-------------------------------------------------------------------
-    int w;
     QFont font = QFont();
     font.setPixelSize(13);
 //    font.setStretch(2.0);
@@ -127,6 +126,7 @@ void RenderWidget::drawProjectionBoxes(QPainter *p, VectorDrawingCoordinates v)
         p->setOpacity(1);
 
         //---------------------------------------------------------
+//        int w;
 //        str = "V e r t i c a l   p r o j e c t i o n";
 //        w = fm.width(str);
 
@@ -311,6 +311,25 @@ void RenderWidget::drawRotatingVector(QPainter *p, VectorDrawingCoordinates v)
                     v.vector_tip_y
         );
         p->setOpacity(1);
+
+        //----------------------------------------------------
+        // Draw arc showing the region from 0 degrees that forms the current angle.
+        if (data->drawAngleArc)
+        {
+            pen = QPen(Qt::black);
+            pen.setWidth(2);
+            pen.setCapStyle(Qt::RoundCap);
+            p->setPen(pen);
+            p->setBrush(vectorColor);
+            p->setOpacity(0.3);
+            p->drawArc(v.vector_origin_x - 30,
+                       v.vector_origin_y - 30,
+                       60,
+                       60,
+                       0 * 16,
+                       int(data->curAngleInDegrees * 16)
+            );
+        }
     }
 
 }

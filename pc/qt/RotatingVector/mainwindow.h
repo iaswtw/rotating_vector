@@ -53,6 +53,7 @@ public:
     int penWidth;
     int timeXInc;
     bool drawRotatingVector;
+    bool drawAngleArc;
 
     bool drawVerticalShadow;
     bool drawHorizontalShadow;

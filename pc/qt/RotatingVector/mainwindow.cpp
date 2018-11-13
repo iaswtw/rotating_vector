@@ -26,6 +26,7 @@ MainWindow::MainWindow(QWidget *parent) :
     penWidth(10),
     timeXInc(1),
     drawRotatingVector(true),
+    drawAngleArc(false),
 
     drawVerticalShadow(false),
     drawHorizontalShadow(false),
