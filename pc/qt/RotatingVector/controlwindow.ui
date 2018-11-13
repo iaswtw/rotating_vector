@@ -25,7 +25,7 @@
      <x>0</x>
      <y>0</y>
      <width>671</width>
-     <height>516</height>
+     <height>535</height>
     </rect>
    </property>
    <layout class="QGridLayout" name="gridLayout">
@@ -224,7 +224,7 @@
              <string notr="true">background: rgb(255, 130, 130)</string>
             </property>
             <property name="text">
-             <string>Release coils</string>
+             <string>Release coils / Reset</string>
             </property>
            </widget>
           </item>
@@ -566,7 +566,7 @@
        <item>
         <widget class="QCheckBox" name="useArduino_cb">
          <property name="text">
-          <string>Use Arduino</string>
+          <string>Use Arduino (to read current angle)</string>
          </property>
          <property name="checked">
           <bool>false</bool>

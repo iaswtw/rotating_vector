@@ -17,7 +17,7 @@ ArduinoSimulator::ArduinoSimulator(QObject *parent, MainWindow *mw_) :
     timer(new QTimer(this)),
     iterationInterval(30),
     runMotor(false),
-    halfSteps(300),
+    halfSteps(0),
     targetHalfSteps(-1),
     isCounterClockwise(true),
     doHalfStep(false),
@@ -56,7 +56,7 @@ void ArduinoSimulator::readAndExecuteCommand()
             else if (cmd == "r")
             {
                 runMotor = false;
-                halfSteps = 300;
+                halfSteps = 0;
             }
             else if (cmd.at(0) == 'g')
             {
