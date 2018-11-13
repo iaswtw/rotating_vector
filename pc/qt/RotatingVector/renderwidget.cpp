@@ -7,6 +7,10 @@
 RenderWidget::RenderWidget(QWidget *parent, MainWindow *data) :
     QWidget(parent),
     timer(new QTimer(this)),
+
+    xAxisOrdinates(AxisOrdinates(NUM_ORDINATES)),
+    yAxisOrdinates(AxisOrdinates(NUM_ORDINATES)),
+
     vtScrollingBackground(NUM_BACKGROUND_TEXT_POINTS/2, NUM_TIME_TEXT_POINTS/2, NUM_ANGLE_TEXT_POINTS/2),
     hzScrollingBackground(NUM_BACKGROUND_TEXT_POINTS, NUM_TIME_TEXT_POINTS, NUM_ANGLE_TEXT_POINTS)
 {
@@ -16,12 +20,7 @@ RenderWidget::RenderWidget(QWidget *parent, MainWindow *data) :
 
     timer->start(data->timerInterval);
 
-
     //----------------------------------------------------------------
-    clearSinOrdinates();
-    clearCosOrdinates();
-
-
     QRandomGenerator randomGen(10);
     hzScrollingBackground.generateRandomAnglePoints(      -200, 1700, 0, 800, randomGen);
     hzScrollingBackground.generateRandomBackgroundPoints( -200, 1900, 0, 800, randomGen);
@@ -34,18 +33,12 @@ RenderWidget::RenderWidget(QWidget *parent, MainWindow *data) :
 
 void RenderWidget::clearSinOrdinates()
 {
-    for (int i = 0; i < NUM_ORDINATES; i++)
-    {
-        sinOrdinates[i] = 0;
-    }
+    xAxisOrdinates.clear();
 }
 
 void RenderWidget::clearCosOrdinates()
 {
-    for (int i = 0; i < NUM_ORDINATES; i++)
-    {
-        cosOrdinates[i] = 0;
-    }
+    yAxisOrdinates.clear();
 }
 
 void RenderWidget::updateTimerInterval()
@@ -76,7 +69,7 @@ void RenderWidget::draw(QPainter * p)
 
     VectorDrawingCoordinates v;
 
-    v.vector_origin_x = width() - data->xAxisOffFromRight + 20 + data->amplitude;
+    v.vector_origin_x = width() - data->xAxisOffFromRight + wallSeparation + data->amplitude;
     v.vector_origin_y = data->xAxisOffFromTop;
 
     v.vector_width  = int(data->amplitude * cos(data->curAngleInRadians));
@@ -119,10 +112,10 @@ void RenderWidget::drawProjectionBoxes(QPainter *p, VectorDrawingCoordinates v)
         pen.setCapStyle(Qt::RoundCap);
         p->setPen(pen);
         p->setOpacity(0.2);
-        p->drawRect(width() - data->xAxisOffFromRight - data->penWidth/2 - 2,
-                    data->xAxisOffFromTop - data->amplitude - data->penWidth/2 - 2,
-                    data->penWidth + 2,
-                    data->amplitude*2 + data->penWidth + 2);
+        p->drawRect(v.vector_origin_x - data->amplitude - wallSeparation - data->penWidth/2,
+                    v.vector_origin_y - data->amplitude,
+                    data->penWidth,
+                    data->amplitude*2);
         p->setOpacity(1);
 
         //---------------------------------------------------------
@@ -137,12 +130,14 @@ void RenderWidget::drawProjectionBoxes(QPainter *p, VectorDrawingCoordinates v)
 //        p->drawText(0, 0, str);
 //        p->restore();
 
-        p->drawText(v.vector_origin_x - data->amplitude - data->penWidth - 20 - 15,
-                    v.vector_origin_y + data->amplitude,
-                    "-1");
-        p->drawText(v.vector_origin_x - data->amplitude - data->penWidth - 20 - 15,
-                    v.vector_origin_y - data->amplitude,
+        font.setPixelSize(20);
+        p->setFont(font);
+        p->drawText(v.vector_origin_x - data->amplitude - wallSeparation - data->penWidth - 25,
+                    v.vector_origin_y - data->amplitude - 5,
                     "+1");
+        p->drawText(v.vector_origin_x - data->amplitude - wallSeparation - data->penWidth - 18,
+                    v.vector_origin_y + data->amplitude + 20,
+                    "-1");
 
     }
 
@@ -159,10 +154,10 @@ void RenderWidget::drawProjectionBoxes(QPainter *p, VectorDrawingCoordinates v)
         pen.setCapStyle(Qt::RoundCap);
         p->setPen(pen);
         p->setOpacity(0.2);
-        p->drawRect(v.vector_origin_x - data->amplitude - 2,
-                    v.vector_origin_y - data->amplitude - 20 - data->penWidth/2 - 2,
-                    data->amplitude*2 + data->penWidth + 2,
-                    data->penWidth + 2);
+        p->drawRect(v.vector_origin_x - data->amplitude,
+                    v.vector_origin_y - data->amplitude - wallSeparation - data->penWidth/2,
+                    data->amplitude*2,
+                    data->penWidth);
 
         p->setOpacity(1);
 
@@ -172,11 +167,11 @@ void RenderWidget::drawProjectionBoxes(QPainter *p, VectorDrawingCoordinates v)
 //        p->drawText(v.vector_origin_x - w / 2,
 //                    v.vector_origin_y - data->amplitude - 4,
 //                    str);
-        p->drawText(v.vector_origin_x - data->amplitude,
-                    v.vector_origin_y - data->amplitude - data->penWidth - 20,
+        p->drawText(v.vector_origin_x - data->amplitude - 23,
+                    v.vector_origin_y - data->amplitude - wallSeparation - data->penWidth,
                     "-1");
-        p->drawText(v.vector_origin_x + data->amplitude,
-                    v.vector_origin_y - data->amplitude - data->penWidth - 20,
+        p->drawText(v.vector_origin_x + data->amplitude + 3,
+                    v.vector_origin_y - data->amplitude - wallSeparation - data->penWidth,
                     "+1");
     }
 
@@ -215,9 +210,9 @@ void RenderWidget::drawBackground(QPainter *p, VectorDrawingCoordinates v)
         p->setBrush(sinColor);
         p->setOpacity(0.05);
         p->drawRect(0,
-                    v.vector_origin_y - data->amplitude - 20,
-                    v.vector_origin_x - data->amplitude - 30,
-                    data->amplitude * 2 + 40);
+                    v.vector_origin_y - data->amplitude - wallSeparation,
+                    v.vector_origin_x - data->amplitude - wallSeparation - data->penWidth/2,
+                    2 * (data->amplitude + wallSeparation));
 
 
         p->setOpacity(1);
@@ -251,10 +246,10 @@ void RenderWidget::drawBackground(QPainter *p, VectorDrawingCoordinates v)
         p->setPen(pen);
         p->setBrush(cosColor);
         p->setOpacity(0.05);
-        p->drawRect(v.vector_origin_x - data->amplitude - 20,
+        p->drawRect(v.vector_origin_x - data->amplitude - wallSeparation,
                     0,
-                    data->amplitude * 2 + 40,
-                    v.vector_origin_y - data->amplitude - 30);
+                    2 * (data->amplitude + wallSeparation),
+                    v.vector_origin_y - data->amplitude - wallSeparation - data->penWidth/2);
 
         p->setOpacity(1);
     }
@@ -329,36 +324,22 @@ void RenderWidget::drawRotatingVector(QPainter *p, VectorDrawingCoordinates v)
                        0 * 16,
                        int(data->curAngleInDegrees * 16)
             );
+
+            QFont font = QFont();
+            font.setPixelSize(40);
+            p->setFont(font);
+            p->setOpacity(0.7);
+
+            QFontMetrics fm(font);
+            QString angleString = QString::number(int(round(data->curAngleInDegrees)));
+            int w = fm.width(angleString);
+
+            p->drawText(v.vector_origin_x - w/2,
+                        v.vector_origin_y + data->amplitude + 50,
+                        angleString);
         }
     }
 
-}
-
-void RenderWidget::drawAxis(QPainter *p, VectorDrawingCoordinates v)
-{
-    //-------------------------------------------------------------------
-    // Draw X & Y axis
-    //--------------------------------------------------------------------
-    QPen pen = QPen(QColor(120, 120, 120));
-    pen.setWidth(2);
-    pen.setCapStyle(Qt::RoundCap);
-    p->setPen(pen);
-
-    if (data->showSinOnXAxis)
-    {
-        p->drawLine(0,
-                    v.vector_origin_y,
-                    width() - data->xAxisOffFromRight,
-                    v.vector_origin_y);
-    }
-
-    if (data->showCosOnYAxis)
-    {
-        p->drawLine(v.vector_origin_x,
-                    0,
-                    v.vector_origin_x,
-                    v.vector_origin_y - data->amplitude - 20 - data->penWidth/2);
-    }
 }
 
 void RenderWidget::drawVectorShadow(QPainter *p, VectorDrawingCoordinates v)
@@ -413,7 +394,7 @@ void RenderWidget::drawVectorShadow(QPainter *p, VectorDrawingCoordinates v)
         p->setBrush(cosColor);
         p->setOpacity(1);
         p->drawRect(v.vector_origin_x,
-                    v.vector_origin_y - data->amplitude - 20 - data->penWidth/2,
+                    v.vector_origin_y - data->amplitude - wallSeparation - data->penWidth/2,
                     data->curWidth,
                     data->penWidth);
         p->setOpacity(1);
@@ -431,7 +412,7 @@ void RenderWidget::drawVectorShadow(QPainter *p, VectorDrawingCoordinates v)
         p->drawLine(v.vector_tip_x,
                     v.vector_tip_y,
                     v.vector_tip_x,
-                    v.vector_origin_y - data->amplitude - 20
+                    v.vector_origin_y - data->amplitude - wallSeparation
         );
         p->setOpacity(1);
     }
@@ -442,34 +423,25 @@ void RenderWidget::drawSineAndCosinePoints(QPainter *p, VectorDrawingCoordinates
     //--------------------------------------------------------------------
     // Draw sine points
     //--------------------------------------------------------------------
-    //         pen = QPen(QColor(120, 60, 60))
     QPen pen = QPen(sinColor);
     pen.setWidth(data->penWidth);
     pen.setCapStyle(Qt::RoundCap);
     p->setPen(pen);
-    //         qp.setBrush(QBrush(Qt.black))
-
     if (data->showSinOnXAxis)
     {
         if (!data->isTimePaused)
         {
-            // Copy height of each point to the point on its left (older point)
-            for (int i = NUM_ORDINATES-2; i >= 0; i--)
-            {
-                sinOrdinates[i+1] = sinOrdinates[i];
-            }
+            // Copy value of each point to the previous (older) point.
+            xAxisOrdinates.shift(data->curHeight);
         }
         //print("Using current height of " + str(self.current_height))
-        sinOrdinates[0] = -data->curHeight;            // set height of "current" (rightmost) sample
 
-        for (int i = NUM_ORDINATES-2; i >= 0; i--)
-        {
-            p->drawLine(width() -        data->xAxisOffFromRight - i*data->timeXInc,
-                        sinOrdinates[i] +   data->xAxisOffFromTop,
-                        width() -        data->xAxisOffFromRight - (i+1)*data->timeXInc,
-                        sinOrdinates[i+1] + data->xAxisOffFromTop
-            );
-        }
+        // Draw straight lines between consecutive ordinate values.
+        xAxisOrdinates.drawLines(p,
+                                 RIGHT_TO_LEFT,
+                                 v.vector_origin_x - data->amplitude - wallSeparation,
+                                 v.vector_origin_y,
+                                 data->timeXInc);
     }
 
     //--------------------------------------------------------------------
@@ -479,45 +451,33 @@ void RenderWidget::drawSineAndCosinePoints(QPainter *p, VectorDrawingCoordinates
     pen.setWidth(data->penWidth);
     pen.setCapStyle(Qt::RoundCap);
     p->setPen(pen);
-    //         qp.setBrush(QBrush(Qt.black))
-
     if (data->showCosOnYAxis)
     {
         if (!data->isTimePaused)
         {
             // Copy height of each point to the point on its left (older point)
-            for (int i = NUM_ORDINATES-2; i >= 0; i--)
-            {
-                cosOrdinates[i+1] = cosOrdinates[i];
-            }
+            yAxisOrdinates.shift(data->curWidth);
         }
+
         //print("Using current height of " + str(self.current_height))
-        cosOrdinates[0] = data->curWidth;            // set width of "current" (rightmost) sample
-
-        for (int i = NUM_ORDINATES-2; i >= 0; i--)
-        {
-            p->drawLine(
-                        v.vector_origin_x + cosOrdinates[i],
-                        v.vector_origin_y - data->amplitude - 20 - i*data->timeXInc,
-
-                        v.vector_origin_x + cosOrdinates[i+1],
-                        v.vector_origin_y - data->amplitude - 20 - (i+1)*data->timeXInc
-            );
-        }
+        yAxisOrdinates.drawLines(p,
+                                 BOTTOM_TO_TOP,
+                                 v.vector_origin_x,
+                                 v.vector_origin_y - data->amplitude - wallSeparation,
+                                 data->timeXInc);
     }
 
+    //--------------------------------------------------------------------
+    // Draw cosine on X axis along with sine so as to compare the 90 degree phase shift.
     if (data->showCosOnXAxis)
     {
         pen.setColor(cosColor);
         p->setPen(pen);
-        for (int i = NUM_ORDINATES-2; i >= 0; i--)
-        {
-            p->drawLine(width() - data->xAxisOffFromRight - i*data->timeXInc,
-                        - cosOrdinates[i]   + data->xAxisOffFromTop,
-                        width() - data->xAxisOffFromRight - (i+1)*data->timeXInc,
-                        - cosOrdinates[i+1] + data->xAxisOffFromTop
-            );
-        }
+        yAxisOrdinates.drawLines(p,
+                                 RIGHT_TO_LEFT,
+                                 v.vector_origin_x - data->amplitude - wallSeparation,
+                                 v.vector_origin_y,
+                                 data->timeXInc);
     }
 
 }
@@ -567,10 +527,38 @@ void RenderWidget::drawTipCircles(QPainter *p, VectorDrawingCoordinates v)
         p->setBrush(Qt::white);
         p->setOpacity(1);
         p->drawEllipse(v.vector_tip_x - data->penWidth/2,
-                       v.vector_origin_y - data->amplitude - 20 - data->penWidth/2,
+                       v.vector_origin_y - data->amplitude - wallSeparation - data->penWidth/2,
                        data->penWidth,
                        data->penWidth
         );
         p->setOpacity(1);
     }
 }
+
+void RenderWidget::drawAxis(QPainter *p, VectorDrawingCoordinates v)
+{
+    //-------------------------------------------------------------------
+    // Draw X & Y axis
+    //--------------------------------------------------------------------
+    QPen pen = QPen(QColor(120, 120, 120));
+    pen.setWidth(2);
+    pen.setCapStyle(Qt::RoundCap);
+    p->setPen(pen);
+
+    if (data->showSinOnXAxis)
+    {
+        p->drawLine(0,
+                    v.vector_origin_y,
+                    v.vector_origin_x - data->amplitude - wallSeparation - data->penWidth/2,
+                    v.vector_origin_y);
+    }
+
+    if (data->showCosOnYAxis)
+    {
+        p->drawLine(v.vector_origin_x,
+                    0,
+                    v.vector_origin_x,
+                    v.vector_origin_y - data->amplitude - wallSeparation - data->penWidth/2);
+    }
+}
+

@@ -154,6 +154,69 @@ struct VectorDrawingCoordinates
     int vector_tip_y;
 };
 
+enum AxisOrientation
+{
+    RIGHT_TO_LEFT,
+    BOTTOM_TO_TOP
+};
+
+/*************************************************************************************************
+
+ *************************************************************************************************/
+struct AxisOrdinates
+{
+    int *ordinates;
+    int maxOrdinates;
+
+public:
+    AxisOrdinates(int maxOrdinates_)
+    {
+        maxOrdinates = maxOrdinates_;
+        ordinates = new int[maxOrdinates];
+        clear();
+    }
+    void clear()
+    {
+        for (int i=0; i<maxOrdinates; i++)
+        {
+            ordinates[i] = 0;
+        }
+    }
+    void shift(int currentValue)
+    {
+        for (int i=maxOrdinates-2; i>=0; i--)
+        {
+            ordinates[i+1] = ordinates[i];
+        }
+        ordinates[0] = currentValue;
+    }
+    // Draw straight lines between consecutive ordinate values.
+    void drawLines(QPainter *p, AxisOrientation orientation, int xOffset, int yOffset, int abscissaScale)
+    {
+        for (int i=0; i<maxOrdinates-1; i++)
+        {
+            if (orientation == RIGHT_TO_LEFT)
+            {
+                p->drawLine(xOffset - i*abscissaScale,
+                            yOffset - ordinates[i],
+                            xOffset - (i+1)*abscissaScale,
+                            yOffset - ordinates[i+1]);
+            }
+            else if (orientation == BOTTOM_TO_TOP)
+            {
+                p->drawLine(xOffset + ordinates[i],
+                            yOffset - i*abscissaScale,
+                            xOffset + ordinates[i+1],
+                            yOffset - (i+1)*abscissaScale);
+            }
+            else
+            {
+                qFatal("Unknown axis orientation!");
+            }
+        }
+    }
+};
+
 /*************************************************************************************************
 
  *************************************************************************************************/
@@ -192,12 +255,11 @@ private:
 
     MainWindow *data;
 
-    int sinOrdinates[NUM_ORDINATES];
-    int cosOrdinates[NUM_ORDINATES];
+    AxisOrdinates xAxisOrdinates;
+    AxisOrdinates yAxisOrdinates;
 
     ScrollingBackground vtScrollingBackground;
     ScrollingBackground hzScrollingBackground;
-
 
     // Red and green
 //    QColor sinColor = QColor(220, 50, 0);
@@ -210,12 +272,14 @@ private:
 //    QColor vectorColor = QColor(220, 0, 220);
 
     // Green and Blue
-    QColor sinColor = QColor(0, 220, 0);
-    QColor cosColor = QColor(0, 0, 220);
-    QColor vectorColor = QColor(0, 220, 220);
-    QColor vectorTipCircleColor = QColor(40, 40, 40);
-    QColor vectorSweepColor = QColor(0, 50, 50);
-    QColor scrollingBackgroundColor = QColor(150, 150, 150);
+    const QColor sinColor = QColor(0, 220, 0);
+    const QColor cosColor = QColor(0, 0, 220);
+    const QColor vectorColor = QColor(0, 220, 220);
+    const QColor vectorTipCircleColor = QColor(40, 40, 40);
+    const QColor vectorSweepColor = QColor(0, 50, 50);
+    const QColor scrollingBackgroundColor = QColor(150, 150, 150);
+
+    const int wallSeparation = 30;
 
 };
 
