@@ -80,6 +80,8 @@ private slots:
     void on_drawVerticalProjectionTipCircle_cb_stateChanged(int arg1);
     void on_drawHorizontalProjectionTipCircle_cb_stateChanged(int arg1);
     void on_drawAngleArc_cb_stateChanged(int arg1);
+    void on_drawSinComponent_cb_stateChanged(int arg1);
+    void on_drawCosComponent_cb_stateChanged(int arg1);
 };
 
 #endif // CONTROLWINDOW_H

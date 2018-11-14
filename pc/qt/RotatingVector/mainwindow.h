@@ -55,6 +55,9 @@ public:
     bool drawRotatingVector;
     bool drawAngleArc;
 
+    bool drawSinComponent;
+    bool drawCosComponent;
+
     bool drawVerticalShadow;
     bool drawHorizontalShadow;
 

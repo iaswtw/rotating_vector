@@ -23,6 +23,9 @@ ControlWindow::ControlWindow(QWidget *parent, MainWindow * mw) :
 
     ui->drawAngleArc_cb->setChecked(mw->drawAngleArc);
 
+    ui->drawSinComponent_cb->setChecked(mw->drawSinComponent);
+    ui->drawCosComponent_cb->setChecked(mw->drawCosComponent);
+
     ui->showVerticalProjectionBox_cb->setChecked(mw->showVerticalProjectionBox);
     ui->showHorizontalProjectionBox_cb->setChecked(mw->showHorizontalProjectionBox);
 
@@ -354,4 +357,14 @@ void ControlWindow::on_drawHorizontalProjectionTipCircle_cb_stateChanged(int /*a
 void ControlWindow::on_drawAngleArc_cb_stateChanged(int /*arg1*/)
 {
     mw->drawAngleArc = ui->drawAngleArc_cb->isChecked();
+}
+
+void ControlWindow::on_drawSinComponent_cb_stateChanged(int /*arg1*/)
+{
+    mw->drawSinComponent = ui->drawSinComponent_cb->isChecked();
+}
+
+void ControlWindow::on_drawCosComponent_cb_stateChanged(int /*arg1*/)
+{
+    mw->drawCosComponent = ui->drawCosComponent_cb->isChecked();
 }

@@ -84,6 +84,7 @@ void RenderWidget::draw(QPainter * p)
     drawBackground(p, v);
     drawSineAndCosinePoints(p, v);
 
+    drawRotatingVectorComponents(p, v);
     drawRotatingVector(p, v);
     drawVectorShadow(p, v);
 
@@ -255,6 +256,40 @@ void RenderWidget::drawBackground(QPainter *p, VectorDrawingCoordinates v)
     }
 }
 
+void RenderWidget::drawRotatingVectorComponents(QPainter *p, VectorDrawingCoordinates v)
+{
+    if (data->drawSinComponent)
+    {
+        QPen pen = QPen(sinColor);
+        pen.setWidth(data->penWidth);
+        pen.setCapStyle(Qt::RoundCap);
+        p->setPen(pen);
+        p->setBrush(sinColor);
+        p->setOpacity(sinCosOpacity);
+        p->drawLine(v.vector_tip_x,
+                    v.vector_tip_y,
+                    v.vector_tip_x,
+                    v.vector_origin_y);
+        p->setOpacity(1);
+    }
+
+    if (data->drawCosComponent)
+    {
+        QPen pen = QPen(cosColor);
+        pen.setWidth(data->penWidth);
+        pen.setCapStyle(Qt::RoundCap);
+        p->setPen(pen);
+        p->setBrush(cosColor);
+        p->setOpacity(sinCosOpacity);
+        p->drawLine(v.vector_origin_x,
+                    v.vector_origin_y,
+                    v.vector_tip_x,
+                    v.vector_origin_y);
+        p->setOpacity(1);
+    }
+}
+
+
 void RenderWidget::drawRotatingVector(QPainter *p, VectorDrawingCoordinates v)
 {
     //--------------------------------------------------------------------
@@ -344,6 +379,11 @@ void RenderWidget::drawRotatingVector(QPainter *p, VectorDrawingCoordinates v)
 
 void RenderWidget::drawVectorShadow(QPainter *p, VectorDrawingCoordinates v)
 {
+    QPen pen = QPen();
+    pen.setWidth(1);
+    pen.setCapStyle(Qt::RoundCap);
+    p->setOpacity(0.7);
+
     //--------------------------------------------------------------------
     // Draw vector shadow, if enabled
     //--------------------------------------------------------------------
@@ -352,33 +392,13 @@ void RenderWidget::drawVectorShadow(QPainter *p, VectorDrawingCoordinates v)
         //--------------------------------------------------------------------
         // Vertical shadow
         //--------------------------------------------------------------------
-        QPen pen = QPen(sinColor);
-        pen.setWidth(2);
-        pen.setCapStyle(Qt::RoundCap);
+        pen.setColor(sinColor);
         p->setPen(pen);
         p->setBrush(sinColor);
-        p->setOpacity(1);
         p->drawRect(width() - data->xAxisOffFromRight - data->penWidth/2,
                     data->xAxisOffFromTop - data->curHeight,
                     data->penWidth,
                     data->curHeight);
-        p->setOpacity(1);
-    }
-
-    if (data->drawVerticalProjectionDottedLine)
-    {
-        //----------------------------------------------------
-        // Draw vector tip vertical projection
-        QPen pen = QPen(QColor(20, 20, 20));
-        pen.setWidth(data->penWidth);
-        pen.setStyle(Qt::DotLine);
-        p->setPen(pen);
-        p->setOpacity(0.2);
-        p->drawLine(v.vector_tip_x,
-                    v.vector_tip_y,
-                    width() - data->xAxisOffFromRight,
-                    data->xAxisOffFromTop - v.vector_height
-        );
         p->setOpacity(1);
     }
 
@@ -387,12 +407,9 @@ void RenderWidget::drawVectorShadow(QPainter *p, VectorDrawingCoordinates v)
         //--------------------------------------------------------------------
         // Horizontal projection
         //--------------------------------------------------------------------
-        QPen pen = QPen(cosColor);
-        pen.setWidth(2);
-        pen.setCapStyle(Qt::RoundCap);
+        pen.setColor(cosColor);
         p->setPen(pen);
         p->setBrush(cosColor);
-        p->setOpacity(1);
         p->drawRect(v.vector_origin_x,
                     v.vector_origin_y - data->amplitude - wallSeparation - data->penWidth/2,
                     data->curWidth,
@@ -400,22 +417,35 @@ void RenderWidget::drawVectorShadow(QPainter *p, VectorDrawingCoordinates v)
         p->setOpacity(1);
     }
 
+    //--------------------------------------------------------------------
+    // Dotted line showing projection
+    //--------------------------------------------------------------------
+    pen = QPen(QColor(20, 20, 20));
+    pen.setWidth(5);
+    pen.setStyle(Qt::DotLine);
+    p->setPen(pen);
+    p->setOpacity(0.1);
+
+    if (data->drawVerticalProjectionDottedLine)
+    {
+        // Draw vector tip vertical projection
+        p->drawLine(v.vector_tip_x,
+                    v.vector_tip_y,
+                    width() - data->xAxisOffFromRight,
+                    data->xAxisOffFromTop - v.vector_height
+        );
+    }
+
     if (data->drawHorizontalProjectionDottedLine)
     {
-        //----------------------------------------------------
         // Draw vector tip horizontal projection
-        QPen pen = QPen(QColor(20, 20, 20));
-        pen.setWidth(data->penWidth);
-        pen.setStyle(Qt::DotLine);
-        p->setPen(pen);
-        p->setOpacity(0.2);
         p->drawLine(v.vector_tip_x,
                     v.vector_tip_y,
                     v.vector_tip_x,
                     v.vector_origin_y - data->amplitude - wallSeparation
         );
-        p->setOpacity(1);
     }
+    p->setOpacity(1);
 }
 
 void RenderWidget::drawSineAndCosinePoints(QPainter *p, VectorDrawingCoordinates v)
@@ -427,6 +457,7 @@ void RenderWidget::drawSineAndCosinePoints(QPainter *p, VectorDrawingCoordinates
     pen.setWidth(data->penWidth);
     pen.setCapStyle(Qt::RoundCap);
     p->setPen(pen);
+    p->setOpacity(sinCosOpacity);
     if (data->showSinOnXAxis)
     {
         if (!data->isTimePaused)
@@ -451,6 +482,7 @@ void RenderWidget::drawSineAndCosinePoints(QPainter *p, VectorDrawingCoordinates
     pen.setWidth(data->penWidth);
     pen.setCapStyle(Qt::RoundCap);
     p->setPen(pen);
+    p->setOpacity(sinCosOpacity);
     if (data->showCosOnYAxis)
     {
         if (!data->isTimePaused)
@@ -473,6 +505,7 @@ void RenderWidget::drawSineAndCosinePoints(QPainter *p, VectorDrawingCoordinates
     {
         pen.setColor(cosColor);
         p->setPen(pen);
+        p->setOpacity(sinCosOpacity);
         yAxisOrdinates.drawLines(p,
                                  RIGHT_TO_LEFT,
                                  v.vector_origin_x - data->amplitude - wallSeparation,
@@ -480,59 +513,57 @@ void RenderWidget::drawSineAndCosinePoints(QPainter *p, VectorDrawingCoordinates
                                  data->timeXInc);
     }
 
+    p->setOpacity(1);
 }
 
 
 void RenderWidget::drawTipCircles(QPainter *p, VectorDrawingCoordinates v)
 {
+    QPen pen = QPen(vectorTipCircleColor);
+    pen.setWidth(2);
+    pen.setCapStyle(Qt::RoundCap);
+    p->setPen(pen);
+    p->setBrush(Qt::white);
+    p->setOpacity(1);
+
     if (data->drawRotatingVector)
     {
         // Draw a circle at the tip of the vector
-        QPen pen = QPen(vectorTipCircleColor);
-        pen.setWidth(2);
-        pen.setCapStyle(Qt::RoundCap);
-        p->setPen(pen);
-        p->setBrush(Qt::white);
-        p->setOpacity(1);
         p->drawEllipse(v.vector_tip_x - data->penWidth / 2,
                        v.vector_tip_y - data->penWidth / 2,
                        data->penWidth,
                        data->penWidth
         );
-        p->setOpacity(1);
     }
     if (data->drawVerticalProjectionTipCircle)
     {
         // Draw a circle at the tip of the vector's vertical projection
-        QPen pen = QPen(vectorTipCircleColor);
-        pen.setWidth(2);
-        pen.setCapStyle(Qt::RoundCap);
-        p->setPen(pen);
-        p->setBrush(Qt::white);
-        p->setOpacity(1);
         p->drawEllipse(width() - data->xAxisOffFromRight - data->penWidth/2,
                        v.vector_tip_y - data->penWidth/2,
                        data->penWidth,
                        data->penWidth
         );
-        p->setOpacity(1);
     }
     if (data->drawHorizontalProjectionTipCircle)
     {
         // Draw a circle at the tip of the vector's vertical projection
-        QPen pen = QPen(vectorTipCircleColor);
-        pen.setWidth(2);
-        pen.setCapStyle(Qt::RoundCap);
-        p->setPen(pen);
-        p->setBrush(Qt::white);
-        p->setOpacity(1);
         p->drawEllipse(v.vector_tip_x - data->penWidth/2,
                        v.vector_origin_y - data->amplitude - wallSeparation - data->penWidth/2,
                        data->penWidth,
                        data->penWidth
         );
-        p->setOpacity(1);
+
+        if (data->showCosOnXAxis)
+        {
+            p->drawEllipse(v.vector_origin_x - data->amplitude - wallSeparation - data->penWidth/2,
+                           v.vector_origin_y - (v.vector_tip_x - v.vector_origin_x) - data->penWidth/2,
+                           data->penWidth,
+                           data->penWidth
+            );
+        }
     }
+
+    p->setOpacity(1);
 }
 
 void RenderWidget::drawAxis(QPainter *p, VectorDrawingCoordinates v)

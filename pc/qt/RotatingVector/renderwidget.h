@@ -243,6 +243,7 @@ private:
     void draw(QPainter *p);
     void drawProjectionBoxes(QPainter *p, VectorDrawingCoordinates v);
     void drawBackground(QPainter *p, VectorDrawingCoordinates v);
+    void drawRotatingVectorComponents(QPainter *p, VectorDrawingCoordinates v);
     void drawRotatingVector(QPainter *p, VectorDrawingCoordinates v);
     void drawVectorShadow(QPainter *p, VectorDrawingCoordinates v);
     void drawAxis(QPainter *p, VectorDrawingCoordinates v);
@@ -272,14 +273,19 @@ private:
 //    QColor vectorColor = QColor(220, 0, 220);
 
     // Green and Blue
-    const QColor sinColor = QColor(0, 220, 0);
-    const QColor cosColor = QColor(0, 0, 220);
+//    const QColor sinColor = QColor(0, 220, 0);
+//    const QColor cosColor = QColor(0, 0, 220);
+
+    const QColor sinColor = QColor(80, 220, 80);
+    const QColor cosColor = QColor(80, 80, 220);
+
     const QColor vectorColor = QColor(0, 220, 220);
     const QColor vectorTipCircleColor = QColor(40, 40, 40);
     const QColor vectorSweepColor = QColor(0, 50, 50);
     const QColor scrollingBackgroundColor = QColor(150, 150, 150);
 
     const int wallSeparation = 30;
+    const double sinCosOpacity = 0.7;
 
 };
 

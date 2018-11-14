@@ -23,10 +23,13 @@ MainWindow::MainWindow(QWidget *parent) :
     amplitude(220),
     curHeight(0),
     curWidth(amplitude),
-    penWidth(10),
+    penWidth(12),
     timeXInc(1),
     drawRotatingVector(true),
     drawAngleArc(false),
+
+    drawSinComponent(false),
+    drawCosComponent(false),
 
     drawVerticalShadow(false),
     drawHorizontalShadow(false),
