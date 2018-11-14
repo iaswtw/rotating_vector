@@ -75,35 +75,12 @@ void ControlWindow::on_unpauseTime_btn_clicked()
     mw->isTimePaused = false;
 }
 
-void ControlWindow::on_speed1_btn_clicked()
-{
-    sendCmd("1\n");
-}
-
-void ControlWindow::on_speed2_btn_clicked()
-{
-    sendCmd("2\n");
-}
-
-void ControlWindow::on_speed3_btn_clicked()
-{
-    sendCmd("3\n");
-}
-
-void ControlWindow::on_speed4_btn_clicked()
-{
-    sendCmd("4\n");
-}
-
-void ControlWindow::on_speed5_btn_clicked()
-{
-    sendCmd("5\n");
-}
-
-void ControlWindow::on_speed6_btn_clicked()
-{
-    sendCmd("6\n");
-}
+void ControlWindow::on_speed1_btn_clicked()   {    sendCmd("1\n");   }
+void ControlWindow::on_speed2_btn_clicked()   {    sendCmd("2\n");   }
+void ControlWindow::on_speed3_btn_clicked()   {    sendCmd("3\n");   }
+void ControlWindow::on_speed4_btn_clicked()   {    sendCmd("4\n");   }
+void ControlWindow::on_speed5_btn_clicked()   {    sendCmd("5\n");   }
+void ControlWindow::on_speed6_btn_clicked()   {    sendCmd("6\n");   }
 
 void ControlWindow::on_ccwHalfStep_btn_clicked()
 {
@@ -118,30 +95,16 @@ void ControlWindow::on_cwHalfStep_btn_clicked()
     sendCmd("<\n");
 }
 
-void ControlWindow::on_releaseCoils_btn_clicked()
-{
-    sendCmd("r\n");
-}
-
-void ControlWindow::on_ccwDirection_btn_clicked()
-{
-    sendCmd("<\n");
-}
-
-void ControlWindow::on_cwDirection_btn_clicked()
-{
-    sendCmd(">\n");
-}
+void ControlWindow::on_releaseCoils_btn_clicked()           {    sendCmd("r\n");   }
+void ControlWindow::on_ccwDirection_btn_clicked()           {    sendCmd("<\n");   }
+void ControlWindow::on_cwDirection_btn_clicked()            {    sendCmd(">\n");   }
+void ControlWindow::on_pauseVector_btn_clicked()            {    sendCmd("p\n");   }
 
 void ControlWindow::on_pauseTime_btn_clicked()
 {
     mw->isTimePaused = true;
 }
 
-void ControlWindow::on_pauseVector_btn_clicked()
-{
-    sendCmd("p\n");
-}
 
 void ControlWindow::on_pauseVectorAndTime_btn_clicked()
 {
@@ -149,73 +112,51 @@ void ControlWindow::on_pauseVectorAndTime_btn_clicked()
     sendCmd("p\n");
 }
 
-void ControlWindow::on_goto0_btn_clicked()
+void ControlWindow::gotoAngle(double angle)
 {
-    sendCmd("g0\n");
+    QString cmd = "g";
+    cmd.append(QString::number(angle));
+    cmd.append("\n");
+
+    sendCmd(cmd.toStdString().c_str());
+    mw->isTimePaused = false;
 }
 
-void ControlWindow::on_goto30_btn_clicked()
-{
-    sendCmd("g30\n");
-}
-
-void ControlWindow::on_goto45_btn_clicked()
-{
-    sendCmd("g45\n");
-}
-
-void ControlWindow::on_goto60_btn_clicked()
-{
-    sendCmd("g60\n");
-}
-
-void ControlWindow::on_goto90_btn_clicked()
-{
-    sendCmd("g90\n");
-}
+void ControlWindow::on_goto0_btn_clicked()   {   gotoAngle(0);    }
+void ControlWindow::on_goto30_btn_clicked()  {   gotoAngle(30);   }
+void ControlWindow::on_goto45_btn_clicked()  {   gotoAngle(45);   }
+void ControlWindow::on_goto60_btn_clicked()  {   gotoAngle(60);   }
+void ControlWindow::on_goto90_btn_clicked()  {   gotoAngle(90);   }
+void ControlWindow::on_goto270_btn_clicked() {   gotoAngle(270);  }
+void ControlWindow::on_goto120_btn_clicked() {   gotoAngle(120);  }
+void ControlWindow::on_goto135_btn_clicked() {   gotoAngle(135);  }
+void ControlWindow::on_goto150_btn_clicked() {   gotoAngle(150);  }
+void ControlWindow::on_goto210_btn_clicked() {   gotoAngle(210);  }
+void ControlWindow::on_goto225_btn_clicked() {   gotoAngle(225);  }
+void ControlWindow::on_goto240_btn_clicked() {   gotoAngle(240);  }
+void ControlWindow::on_goto300_btn_clicked() {   gotoAngle(300);  }
+void ControlWindow::on_goto315_btn_clicked() {   gotoAngle(315);  }
+void ControlWindow::on_goto330_btn_clicked() {   gotoAngle(330);  }
 
 void ControlWindow::on_goto180_btn_clicked()
 {
-    QString cmd;
-    cmd.append("g");
-
     double angle = 180;
     if (mw->useArduino)
         angle += ui->calAt180_sb->value();
 
-    cmd.append(QString::number(angle));
-    cmd.append("\n");
-
-    printf("Sending cmd: %s", cmd.toLocal8Bit().constData());
-
-    sendCmd(cmd.toLocal8Bit().constData());
-}
-
-void ControlWindow::on_goto270_btn_clicked()
-{
-    sendCmd("g270\n");
+    gotoAngle(angle);
 }
 
 void ControlWindow::on_gotoAngle_btn_clicked()
 {
     QString text = ui->gotoAngle_le->displayText();
-    QString cmd;
+    double angle = atof(text.toStdString().c_str());
 
-    cmd.append("g");
-    cmd.append(text);
-    cmd.append("\n");
-    sendCmd(cmd.toLocal8Bit().data());
+    gotoAngle(angle);
 }
 
-void ControlWindow::on_setAs0_btn_clicked()
-{
-    sendCmd("=0\n");
-}
-
-void ControlWindow::on_setAs180_btn_clicked()
-{
-    sendCmd("=180\n");
-}
+void ControlWindow::on_setAs0_btn_clicked()    {   sendCmd("=0\n");    }
+void ControlWindow::on_setAs180_btn_clicked()  {   sendCmd("=180\n");  }
 
 void ControlWindow::on_setCurPos_btn_clicked()
 {
@@ -228,20 +169,9 @@ void ControlWindow::on_setCurPos_btn_clicked()
     sendCmd(cmd.toLocal8Bit().data());
 }
 
-void ControlWindow::on_setPcCalOffFrom180ToMinus2p5_btn_clicked()
-{
-    ui->calAt180_sb->setValue(-2.5);
-}
-
-void ControlWindow::on_setPcCalOffFrom180ToMinus3p0_btn_clicked()
-{
-    ui->calAt180_sb->setValue(-3.0);
-}
-
-void ControlWindow::on_setPcCalOffFrom180ToMinus3p5_btn_clicked()
-{
-    ui->calAt180_sb->setValue(-3.5);
-}
+void ControlWindow::on_setPcCalOffFrom180ToMinus2p5_btn_clicked()   {    ui->calAt180_sb->setValue(-2.5);   }
+void ControlWindow::on_setPcCalOffFrom180ToMinus3p0_btn_clicked()   {    ui->calAt180_sb->setValue(-3.0);   }
+void ControlWindow::on_setPcCalOffFrom180ToMinus3p5_btn_clicked()   {    ui->calAt180_sb->setValue(-3.5);   }
 
 void ControlWindow::on_sineAmplitude_sb_valueChanged(int /*arg1*/)
 {
@@ -368,3 +298,4 @@ void ControlWindow::on_drawCosComponent_cb_stateChanged(int /*arg1*/)
 {
     mw->drawCosComponent = ui->drawCosComponent_cb->isChecked();
 }
+

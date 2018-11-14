@@ -468,6 +468,19 @@
                </property>
               </widget>
              </item>
+             <item row="0" column="2">
+              <widget class="QPushButton" name="goto45_btn">
+               <property name="maximumSize">
+                <size>
+                 <width>40</width>
+                 <height>16777215</height>
+                </size>
+               </property>
+               <property name="text">
+                <string>45</string>
+               </property>
+              </widget>
+             </item>
              <item row="0" column="3">
               <widget class="QPushButton" name="goto60_btn">
                <property name="maximumSize">
@@ -481,8 +494,8 @@
                </property>
               </widget>
              </item>
-             <item row="0" column="2">
-              <widget class="QPushButton" name="goto45_btn">
+             <item row="2" column="1">
+              <widget class="QPushButton" name="goto210_btn">
                <property name="maximumSize">
                 <size>
                  <width>40</width>
@@ -490,7 +503,20 @@
                 </size>
                </property>
                <property name="text">
-                <string>45</string>
+                <string>210</string>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="0">
+              <widget class="QPushButton" name="goto180_btn">
+               <property name="maximumSize">
+                <size>
+                 <width>40</width>
+                 <height>16777215</height>
+                </size>
+               </property>
+               <property name="text">
+                <string>180</string>
                </property>
               </widget>
              </item>
@@ -507,8 +533,8 @@
                </property>
               </widget>
              </item>
-             <item row="1" column="1">
-              <widget class="QPushButton" name="goto180_btn">
+             <item row="1" column="3">
+              <widget class="QPushButton" name="goto150_btn">
                <property name="maximumSize">
                 <size>
                  <width>40</width>
@@ -516,11 +542,37 @@
                 </size>
                </property>
                <property name="text">
-                <string>180</string>
+                <string>150</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="1">
+              <widget class="QPushButton" name="goto120_btn">
+               <property name="maximumSize">
+                <size>
+                 <width>40</width>
+                 <height>16777215</height>
+                </size>
+               </property>
+               <property name="text">
+                <string>120</string>
                </property>
               </widget>
              </item>
              <item row="1" column="2">
+              <widget class="QPushButton" name="goto135_btn">
+               <property name="maximumSize">
+                <size>
+                 <width>40</width>
+                 <height>16777215</height>
+                </size>
+               </property>
+               <property name="text">
+                <string>135</string>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="0">
               <widget class="QPushButton" name="goto270_btn">
                <property name="maximumSize">
                 <size>
@@ -530,6 +582,71 @@
                </property>
                <property name="text">
                 <string>270</string>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="2">
+              <widget class="QPushButton" name="goto225_btn">
+               <property name="maximumSize">
+                <size>
+                 <width>40</width>
+                 <height>16777215</height>
+                </size>
+               </property>
+               <property name="text">
+                <string>225</string>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="3">
+              <widget class="QPushButton" name="goto240_btn">
+               <property name="maximumSize">
+                <size>
+                 <width>40</width>
+                 <height>16777215</height>
+                </size>
+               </property>
+               <property name="text">
+                <string>240</string>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="1">
+              <widget class="QPushButton" name="goto300_btn">
+               <property name="maximumSize">
+                <size>
+                 <width>40</width>
+                 <height>16777215</height>
+                </size>
+               </property>
+               <property name="text">
+                <string>300</string>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="2">
+              <widget class="QPushButton" name="goto315_btn">
+               <property name="maximumSize">
+                <size>
+                 <width>40</width>
+                 <height>16777215</height>
+                </size>
+               </property>
+               <property name="text">
+                <string>315</string>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="3">
+              <widget class="QPushButton" name="goto330_btn">
+               <property name="maximumSize">
+                <size>
+                 <width>40</width>
+                 <height>16777215</height>
+                </size>
+               </property>
+               <property name="text">
+                <string>330</string>
                </property>
               </widget>
              </item>

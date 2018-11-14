@@ -172,6 +172,7 @@ void ArduinoSimulator::iterationTimerEvent()
         {
             doHalfStep = false;
             runMotor = false;
+            mw->isTimePaused = true;
         }
 
         //----------------------------------------------
@@ -181,6 +182,7 @@ void ArduinoSimulator::iterationTimerEvent()
         {
             runMotor = false;
             targetHalfSteps = -1;
+            mw->isTimePaused = true;
         }
 
 

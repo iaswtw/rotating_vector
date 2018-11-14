@@ -21,6 +21,7 @@ private:
     MainWindow *mw;
 
     void sendCmd(const char * pCmd);
+    void gotoAngle(double angle);
 
 public:
     Ui::ControlWindow *ui;
@@ -82,6 +83,15 @@ private slots:
     void on_drawAngleArc_cb_stateChanged(int arg1);
     void on_drawSinComponent_cb_stateChanged(int arg1);
     void on_drawCosComponent_cb_stateChanged(int arg1);
+    void on_goto120_btn_clicked();
+    void on_goto135_btn_clicked();
+    void on_goto150_btn_clicked();
+    void on_goto210_btn_clicked();
+    void on_goto225_btn_clicked();
+    void on_goto240_btn_clicked();
+    void on_goto300_btn_clicked();
+    void on_goto315_btn_clicked();
+    void on_goto330_btn_clicked();
 };
 
 #endif // CONTROLWINDOW_H
