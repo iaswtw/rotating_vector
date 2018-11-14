@@ -90,6 +90,8 @@ void RenderWidget::draw(QPainter * p)
 
     // For the projection tip circle to show correctly, draw this after drawing sin & cos points and vector projection dotted line.
     drawTipCircles(p, v);
+
+    drawAliceAndBob(p, v);
 }
 
 
@@ -593,3 +595,37 @@ void RenderWidget::drawAxis(QPainter *p, VectorDrawingCoordinates v)
     }
 }
 
+void RenderWidget::drawAliceAndBob(QPainter *p, VectorDrawingCoordinates v)
+{
+    QRect target;
+    QRect source;
+    QImage image;
+
+    //------------------------------------------------------------
+    // Load and draw Alice
+    target = QRect(v.vector_origin_x + data->amplitude + 2*wallSeparation,
+                   v.vector_origin_y - 100,
+                   62,
+                   158);
+    source = QRect(0,
+                   0,
+                   62,
+                   158);
+    image = QImage("C:\\Users\\abhir\\Pictures\\alice.png");
+    p->drawImage(target, image, source);
+
+    //------------------------------------------------------------
+    // Load and draw Bob
+    target = QRect(v.vector_origin_x - 80,
+                   v.vector_origin_y + data->amplitude + 2*wallSeparation,
+                   155,
+                   61);
+    source = QRect(0,
+                   0,
+                   155,
+                   61);
+    image = QImage("C:\\Users\\abhir\\Pictures\\bob.png");
+    p->drawImage(target, image, source);
+
+
+}

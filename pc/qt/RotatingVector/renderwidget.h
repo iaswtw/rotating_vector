@@ -249,6 +249,7 @@ private:
     void drawAxis(QPainter *p, VectorDrawingCoordinates v);
     void drawSineAndCosinePoints(QPainter *p, VectorDrawingCoordinates v);
     void drawTipCircles(QPainter *p, VectorDrawingCoordinates v);
+    void drawAliceAndBob(QPainter *p, VectorDrawingCoordinates v);
 
 //    RotatingVectorData *data;
 
