@@ -8,6 +8,7 @@
 #include <QPen>
 #include <QPainter>
 #include <math.h>
+#include <QDir>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -83,6 +84,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     arduinoSimulator = new ArduinoSimulator(this, this);
 
+    printf("Current Dir: %s\n", QDir::currentPath().toStdString().c_str());
     //printf("Hello world\n");
     fflush(stdout);
 //    std::cout << "Hello world" << std::endl;

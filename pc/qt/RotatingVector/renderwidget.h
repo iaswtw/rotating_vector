@@ -263,6 +263,9 @@ private:
     ScrollingBackground vtScrollingBackground;
     ScrollingBackground hzScrollingBackground;
 
+    QImage *aliceImage = nullptr;
+    QImage *bobImage = nullptr;
+
     // Red and green
 //    QColor sinColor = QColor(220, 50, 0);
 //    QColor cosColor = QColor(50, 220, 0);

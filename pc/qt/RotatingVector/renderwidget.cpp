@@ -3,6 +3,8 @@
 #include <QPainter>
 #include <QRandomGenerator>
 #include "mainwindow.h"
+#include <QDir>
+#include <QImage>
 
 RenderWidget::RenderWidget(QWidget *parent, MainWindow *data) :
     QWidget(parent),
@@ -29,6 +31,45 @@ RenderWidget::RenderWidget(QWidget *parent, MainWindow *data) :
     vtScrollingBackground.generateRandomAnglePoints(      0, 500, 0, 800, randomGen);
     vtScrollingBackground.generateRandomBackgroundPoints( 0, 500, 0, 800, randomGen);
     vtScrollingBackground.generateRandomTimePoints(       0, 500, 0, 800, randomGen);
+
+    //----------------------------------------------------------------------------------
+    // Locate and open Alice and Bob stick figure png files.
+    //----------------------------------------------------------------------------------
+    QString curDir = QDir::currentPath();
+    QString alicePath;
+    QString bobPath;
+    QFile file;
+
+    file.setFileName(curDir + "\\alice.png");
+    if (file.exists())
+    {
+        aliceImage = new QImage(file.fileName());
+    }
+    else
+    {
+        file.setFileName(curDir + "\\..\\RotatingVector\\alice.png");
+        if (file.exists())
+        {
+            aliceImage = new QImage(file.fileName());
+        }
+    }
+
+    file.setFileName(curDir + "\\bob.png");
+    if (file.exists())
+    {
+        bobImage = new QImage(file.fileName());
+    }
+    else
+    {
+        file.setFileName(curDir + "\\..\\RotatingVector\\bob.png");
+        if (file.exists())
+        {
+            bobImage = new QImage(file.fileName());
+        }
+    }
+    //----------------------------------------------------------------------------------
+
+
 }
 
 void RenderWidget::clearSinOrdinates()
@@ -603,29 +644,32 @@ void RenderWidget::drawAliceAndBob(QPainter *p, VectorDrawingCoordinates v)
 
     //------------------------------------------------------------
     // Load and draw Alice
-    target = QRect(v.vector_origin_x + data->amplitude + 2*wallSeparation,
-                   v.vector_origin_y - 100,
-                   62,
-                   158);
-    source = QRect(0,
-                   0,
-                   62,
-                   158);
-    image = QImage("C:\\Users\\abhir\\Pictures\\alice.png");
-    p->drawImage(target, image, source);
+    if (aliceImage)
+    {
+        target = QRect(v.vector_origin_x + data->amplitude + 2*wallSeparation,
+                       v.vector_origin_y - 100,
+                       62,
+                       158);
+        source = QRect(0,
+                       0,
+                       62,
+                       158);
+        p->drawImage(target, *aliceImage, source);
+    }
 
     //------------------------------------------------------------
     // Load and draw Bob
-    target = QRect(v.vector_origin_x - 80,
-                   v.vector_origin_y + data->amplitude + 2*wallSeparation,
-                   155,
-                   61);
-    source = QRect(0,
-                   0,
-                   155,
-                   61);
-    image = QImage("C:\\Users\\abhir\\Pictures\\bob.png");
-    p->drawImage(target, image, source);
-
+    if (bobImage)
+    {
+        target = QRect(v.vector_origin_x - 80,
+                       v.vector_origin_y + data->amplitude + 2*wallSeparation,
+                       155,
+                       61);
+        source = QRect(0,
+                       0,
+                       155,
+                       61);
+        p->drawImage(target, *bobImage, source);
+    }
 
 }
