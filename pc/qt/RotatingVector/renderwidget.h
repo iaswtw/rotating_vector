@@ -167,12 +167,14 @@ struct AxisOrdinates
 {
     int *ordinates;
     int maxOrdinates;
+    int *angles;
 
 public:
     AxisOrdinates(int maxOrdinates_)
     {
         maxOrdinates = maxOrdinates_;
         ordinates = new int[maxOrdinates];
+        angles = new int[maxOrdinates];
         clear();
     }
     void clear()
@@ -180,15 +182,32 @@ public:
         for (int i=0; i<maxOrdinates; i++)
         {
             ordinates[i] = 0;
+            angles[i] = INT_MIN;
         }
     }
-    void shift(int currentValue)
+    /*
+     * Shift ordinate & angle values up by 1 index.  The last value in the array will fall off.
+     * Set the given current value as the value for ordinate & angle at index 0.
+     */
+    void shift(int currentValue, int currentAngle=INT_MIN)
     {
         for (int i=maxOrdinates-2; i>=0; i--)
         {
             ordinates[i+1] = ordinates[i];
+            angles[i+1] = angles[i];
         }
         ordinates[0] = currentValue;
+        angles[0] = INT_MIN;
+
+        // If a current angle is specified, set it as the angle for current ordinate only if
+        // the previous two ordinates didn't have any angle set.
+        if (currentAngle != INT_MIN)
+        {
+            if ((angles[1] == INT_MIN) && (angles[2] == INT_MIN))
+            {
+                angles[0] = currentAngle;
+            }
+        }
     }
     // Draw straight lines between consecutive ordinate values.
     void drawLines(QPainter *p, AxisOrientation orientation, int xOffset, int yOffset, int abscissaScale)
@@ -214,6 +233,89 @@ public:
                 qFatal("Unknown axis orientation!");
             }
         }
+    }
+    // Draw angle marks & angle value for ordinates on which it is set.
+    void drawAngles(QPainter *p, AxisOrientation orientation, int xOffset, int yOffset, int abscissaScale, int amplitude)
+    {
+        //-----------------------------------------------------------------------
+        // Draw angles if set
+        p->save();
+        QPen pen = QPen(QColor(50, 50, 50));
+        pen.setWidth(2);
+        p->setPen(pen);
+
+        QFont font;
+        int fontPixelSize = 20;
+        font.setPixelSize(fontPixelSize);
+        p->setFont(font);
+
+        QFontMetrics fm(font);
+        for (int i=0; i<maxOrdinates-1; i++)
+        {
+            if (orientation == RIGHT_TO_LEFT)
+            {
+                if (angles[i] != INT_MIN)
+                {
+                    // draw small vertical line on X axis
+                    p->drawLine(xOffset - i*abscissaScale,
+                                yOffset - 10,
+                                xOffset - i*abscissaScale,
+                                yOffset + 10);
+
+                    if (angles[i] == 0)
+                    {
+                        // draw a thin faint line from top to bottom
+                        p->save();
+                        p->setOpacity(0.1);
+                        p->drawLine(xOffset - i*abscissaScale,
+                                    yOffset - amplitude - 10,
+                                    xOffset - i*abscissaScale,
+                                    yOffset + amplitude + 10);
+                        p->restore();
+                    }
+
+                    QString str = QString::number(angles[i]);
+                    int w = fm.width(str);
+                    p->drawText(xOffset - i*abscissaScale - w/2,
+                                yOffset + 10 + fontPixelSize,
+                                str);
+                }
+            }
+            else if (orientation == BOTTOM_TO_TOP)
+            {
+                if (angles[i] != INT_MIN)
+                {
+                    // draw small horizontal line on Y axis
+                    p->drawLine(xOffset - 10,
+                                yOffset - i*abscissaScale,
+                                xOffset + 10,
+                                yOffset - i*abscissaScale);
+
+                    if (angles[i] == 0)
+                    {
+                        // draw a thin faint line from left to right
+                        p->save();
+                        p->setOpacity(0.1);
+                        p->drawLine(xOffset - amplitude - 10,
+                                    yOffset - i*abscissaScale,
+                                    xOffset + amplitude + 10,
+                                    yOffset - i*abscissaScale);
+                        p->restore();
+                    }
+
+                    QString str = QString::number(angles[i]);
+                    int w = fm.width(str);
+                    p->drawText(xOffset - 10 - w - 5,
+                                yOffset - i*abscissaScale + fontPixelSize/2,
+                                str);
+                }
+            }
+            else
+            {
+                qFatal("Unknown axis orientation!");
+            }
+        }
+        p->restore();
     }
 };
 
@@ -280,8 +382,8 @@ private:
 //    const QColor sinColor = QColor(0, 220, 0);
 //    const QColor cosColor = QColor(0, 0, 220);
 
-    const QColor sinColor = QColor(80, 220, 80);
-    const QColor cosColor = QColor(80, 80, 220);
+    const QColor sinColor = QColor(120, 220, 120);
+    const QColor cosColor = QColor(150, 150, 250);
 
     const QColor vectorColor = QColor(0, 220, 220);
     const QColor vectorTipCircleColor = QColor(40, 40, 40);

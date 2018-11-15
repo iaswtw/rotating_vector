@@ -52,6 +52,26 @@ MainWindow::MainWindow(QWidget *parent) :
     useArduino(false),
     serialData(new QByteArray())
 {
+    //---------------------------------------------------------------------------------
+    // Following values are set to I don't have to click checkboxes everytime I start the app for testing.
+    // Comment these values for actual demonstration.
+    showVerticalProjectionBox = true;
+    showHorizontalProjectionBox = true;
+
+    drawVerticalShadow = true;
+    drawHorizontalShadow = true;
+
+    drawVerticalProjectionTipCircle = true;
+    drawHorizontalProjectionTipCircle = true;
+
+    drawVerticalProjectionDottedLine = true;
+    drawHorizontalProjectionDottedLine = true;
+
+    showSinOnXAxis = true;
+    showCosOnYAxis = true;
+    showCosOnXAxis = true;
+    //---------------------------------------------------------------------------------
+
     setbuf(stdout, nullptr);
     ui->setupUi(this);
 

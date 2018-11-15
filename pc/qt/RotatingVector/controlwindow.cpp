@@ -38,6 +38,10 @@ ControlWindow::ControlWindow(QWidget *parent, MainWindow * mw) :
     ui->showSinOnXAxis_cb->setChecked(mw->showSinOnXAxis);
     ui->showCosOnXAxis_cb->setChecked(mw->showCosOnXAxis);
     ui->showCosOnYAxis_cb->setChecked(mw->showCosOnYAxis);
+
+    ui->showAnglesOnXAndYAxis_cb->setChecked(mw->showAnglesOnXAndYAxis);
+
+
     ui->useArduino_cb->setChecked(mw->useArduino);
 
 }
@@ -299,3 +303,7 @@ void ControlWindow::on_drawCosComponent_cb_stateChanged(int /*arg1*/)
     mw->drawCosComponent = ui->drawCosComponent_cb->isChecked();
 }
 
+void ControlWindow::on_showAnglesOnXAndYAxis_cb_stateChanged(int /*arg1*/)
+{
+    mw->showAnglesOnXAndYAxis = ui->showAnglesOnXAndYAxis_cb->isChecked();
+}

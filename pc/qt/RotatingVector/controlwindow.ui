@@ -713,6 +713,13 @@
          </property>
         </widget>
        </item>
+       <item>
+        <widget class="QCheckBox" name="showAnglesOnXAndYAxis_cb">
+         <property name="text">
+          <string>Show angles on X &amp;&amp; Y axis</string>
+         </property>
+        </widget>
+       </item>
       </layout>
      </widget>
     </item>

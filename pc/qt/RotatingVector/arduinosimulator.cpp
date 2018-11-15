@@ -14,9 +14,9 @@
 
 ArduinoSimulator::ArduinoSimulator(QObject *parent, MainWindow *mw_) :
     QObject(parent),
+    runMotor(false),
     timer(new QTimer(this)),
     iterationInterval(30),
-    runMotor(false),
     halfSteps(0),
     targetHalfSteps(-1),
     isCounterClockwise(true),

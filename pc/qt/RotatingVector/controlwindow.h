@@ -92,6 +92,7 @@ private slots:
     void on_goto300_btn_clicked();
     void on_goto315_btn_clicked();
     void on_goto330_btn_clicked();
+    void on_showAnglesOnXAndYAxis_cb_stateChanged(int arg1);
 };
 
 #endif // CONTROLWINDOW_H

@@ -505,8 +505,20 @@ void RenderWidget::drawSineAndCosinePoints(QPainter *p, VectorDrawingCoordinates
     {
         if (!data->isTimePaused)
         {
+            // If using arduino, don't set angles.... don't know if arduino is running or paused.
+            // Setting angle would lead to too many same angles being set in a row if the vector
+            // had stopped at 0, 90, 180 or 270.
+            int currentAngle = INT_MIN;
+            if (!data->useArduino && data->arduinoSimulator->runMotor)
+            {
+                currentAngle = int(round(data->curAngleInDegrees));
+                if ((currentAngle % 90) != 0)
+                {
+                    currentAngle = INT_MIN;
+                }
+            }
             // Copy value of each point to the previous (older) point.
-            xAxisOrdinates.shift(data->curHeight);
+            xAxisOrdinates.shift(data->curHeight, currentAngle);
         }
         //print("Using current height of " + str(self.current_height))
 
@@ -530,8 +542,20 @@ void RenderWidget::drawSineAndCosinePoints(QPainter *p, VectorDrawingCoordinates
     {
         if (!data->isTimePaused)
         {
+            // If using arduino, don't set angles.... don't know if arduino is running or paused.
+            // Setting angle would lead to too many same angles being set in a row if the vector
+            // had stopped at 0, 90, 180 or 270.
+            int currentAngle = INT_MIN;
+            if (!data->useArduino && data->arduinoSimulator->runMotor)
+            {
+                currentAngle = int(round(data->curAngleInDegrees));
+                if ((currentAngle % 90) != 0)
+                {
+                    currentAngle = INT_MIN;
+                }
+            }
             // Copy height of each point to the point on its left (older point)
-            yAxisOrdinates.shift(data->curWidth);
+            yAxisOrdinates.shift(data->curWidth, currentAngle);
         }
 
         //print("Using current height of " + str(self.current_height))
@@ -540,6 +564,16 @@ void RenderWidget::drawSineAndCosinePoints(QPainter *p, VectorDrawingCoordinates
                                  v.vector_origin_x,
                                  v.vector_origin_y - data->amplitude - wallSeparation,
                                  data->timeXInc);
+
+        if (data->showAnglesOnXAndYAxis)
+        {
+            yAxisOrdinates.drawAngles(p,
+                                      BOTTOM_TO_TOP,
+                                      v.vector_origin_x,
+                                      v.vector_origin_y - data->amplitude - wallSeparation,
+                                      data->timeXInc,
+                                      data->amplitude);
+        }
     }
 
     //--------------------------------------------------------------------
@@ -556,6 +590,20 @@ void RenderWidget::drawSineAndCosinePoints(QPainter *p, VectorDrawingCoordinates
                                  data->timeXInc);
     }
 
+
+    // Draw angles after potentially drawing Cosine on X axis. This will ensure the marks and angles are on top of sine & cosine lines.
+    if (data->showSinOnXAxis)
+    {
+        if (data->showAnglesOnXAndYAxis)
+        {
+            xAxisOrdinates.drawAngles(p,
+                                      RIGHT_TO_LEFT,
+                                      v.vector_origin_x - data->amplitude - wallSeparation,
+                                      v.vector_origin_y,
+                                      data->timeXInc,
+                                      data->amplitude);
+        }
+    }
     p->setOpacity(1);
 }
 

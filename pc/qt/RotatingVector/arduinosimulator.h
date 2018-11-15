@@ -13,6 +13,9 @@ public:
     explicit ArduinoSimulator(QObject *parent = nullptr, MainWindow *mw_ = nullptr);
     void postCmd(QString cmd);
 
+    bool runMotor;
+
+
 signals:
 
 public slots:
@@ -21,7 +24,6 @@ public slots:
 private:
     QTimer *timer;
     int iterationInterval;
-    bool runMotor;
     int halfSteps;
     int targetHalfSteps;
     bool isCounterClockwise;
