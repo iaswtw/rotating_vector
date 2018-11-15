@@ -47,6 +47,10 @@ MainWindow::MainWindow(QWidget *parent) :
     showSinOnXAxis(false),
     showCosOnYAxis(false),
     showCosOnXAxis(false),
+
+    showAnglesOnXAndYAxis(false),
+    showScrollingBackgroundText(true),
+
     timerInterval(30),
     halfSteps(0),
     useArduino(false),
@@ -155,7 +159,7 @@ void MainWindow::processSerialLine(QByteArray line)
 {
     QRegExp re("(\\d+\\.\\d+)[ ]+(\\d+)");
 
-    printf("%s", line.data());
+    //printf("%s", line.data());
 
     int pos = re.indexIn(line.data());
     QStringList list = re.capturedTexts();
@@ -168,7 +172,7 @@ void MainWindow::processSerialLine(QByteArray line)
         // Extract angle
         qstr = list.at(1);
         curAngleInDegrees = qstr.toDouble();
-        printf("Angle: %.2f\n", double(curAngleInDegrees));
+        //printf("Angle: %.2f\n", double(curAngleInDegrees));
         cw->ui->curAngle_le->setText(qstr.toLocal8Bit().constData());
 
         if (useArduino)
@@ -181,8 +185,8 @@ void MainWindow::processSerialLine(QByteArray line)
         // Extract half steps
         qstr = list.at(2);
         halfSteps = qstr.toInt();
-        printf("Half steps: %d\n", halfSteps);
+        //printf("Half steps: %d\n", halfSteps);
         cw->ui->curHalfSteps_le->setText(qstr.toLocal8Bit().constData());
     }
-    printf("\n");
+    //printf("\n");
 }

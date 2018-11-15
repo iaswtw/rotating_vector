@@ -40,7 +40,7 @@ ControlWindow::ControlWindow(QWidget *parent, MainWindow * mw) :
     ui->showCosOnYAxis_cb->setChecked(mw->showCosOnYAxis);
 
     ui->showAnglesOnXAndYAxis_cb->setChecked(mw->showAnglesOnXAndYAxis);
-
+    ui->showScrollingBackgroundText_cb->setChecked(mw->showScrollingBackgroundText);
 
     ui->useArduino_cb->setChecked(mw->useArduino);
 
@@ -306,4 +306,9 @@ void ControlWindow::on_drawCosComponent_cb_stateChanged(int /*arg1*/)
 void ControlWindow::on_showAnglesOnXAndYAxis_cb_stateChanged(int /*arg1*/)
 {
     mw->showAnglesOnXAndYAxis = ui->showAnglesOnXAndYAxis_cb->isChecked();
+}
+
+void ControlWindow::on_showScrollingBackgroundText_cb_stateChanged(int /*arg1*/)
+{
+    mw->showScrollingBackgroundText = ui->showScrollingBackgroundText_cb->isChecked();
 }

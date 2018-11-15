@@ -74,7 +74,8 @@ public:
     bool showCosOnYAxis;
     bool showCosOnXAxis;
 
-    bool showAnglesOnXAndYAxis = false;
+    bool showAnglesOnXAndYAxis;
+    bool showScrollingBackgroundText;
 
     int timerInterval;
     int halfSteps;

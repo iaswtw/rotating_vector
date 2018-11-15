@@ -223,79 +223,82 @@ void RenderWidget::drawProjectionBoxes(QPainter *p, VectorDrawingCoordinates v)
 
 void RenderWidget::drawBackground(QPainter *p, VectorDrawingCoordinates v)
 {
-    //--------------------------------------------------------------------
-    // Draw Horizontal background
-    //--------------------------------------------------------------------
-    QFont font = QFont();
-    font.setPixelSize(30);
-    QPen pen = QPen(scrollingBackgroundColor);
-    p->setPen(pen);
-    p->setBrush(Qt::green);
-    p->setFont(font);
-
-    if (data->showSinOnXAxis)
-    {
-        p->setOpacity(0.2);
-
-        hzScrollingBackground.draw(*p,
-                                   0,                                               // x offset
-                                   v.vector_origin_y - data->amplitude,               // y offset
-                                   v.vector_origin_x - data->amplitude,               // width of rectangle to draw in
-                                   data->amplitude * 2                              // height of rectangle to draw in
-        );
-
-        if (!data->isTimePaused)
-        {
-            hzScrollingBackground.shiftLeft(data->timeXInc);
-        }
-
-        pen = QPen(cosColor);
-        p->setPen(pen);
-        p->setBrush(sinColor);
-        p->setOpacity(0.05);
-        p->drawRect(0,
-                    v.vector_origin_y - data->amplitude - wallSeparation,
-                    v.vector_origin_x - data->amplitude - wallSeparation - data->penWidth/2,
-                    2 * (data->amplitude + wallSeparation));
-
-
-        p->setOpacity(1);
-    }
-
-    if (data->showCosOnYAxis)
+    if (data->showScrollingBackgroundText)
     {
         //--------------------------------------------------------------------
-        // Draw Vertical background
+        // Draw Horizontal background
         //--------------------------------------------------------------------
-        font = QFont();
+        QFont font = QFont();
         font.setPixelSize(30);
-        pen = QPen(scrollingBackgroundColor);
+        QPen pen = QPen(scrollingBackgroundColor);
         p->setPen(pen);
+        p->setBrush(Qt::green);
         p->setFont(font);
-        p->setOpacity(0.2);
 
-        vtScrollingBackground.draw(*p,
-                                   v.vector_origin_x - data->amplitude,               // x offset
-                                   0,                                               // y offset
-                                   data->amplitude * 2,                             // width of rectangle to draw in
-                                   v.vector_origin_y - data->amplitude                // height of rectangle to draw in
-        );
-
-        if (!data->isTimePaused)
+        if (data->showSinOnXAxis)
         {
-            vtScrollingBackground.shiftUp(data->timeXInc);
+            p->setOpacity(0.2);
+
+            hzScrollingBackground.draw(*p,
+                                       0,                                               // x offset
+                                       v.vector_origin_y - data->amplitude,               // y offset
+                                       v.vector_origin_x - data->amplitude,               // width of rectangle to draw in
+                                       data->amplitude * 2                              // height of rectangle to draw in
+            );
+
+            if (!data->isTimePaused)
+            {
+                hzScrollingBackground.shiftLeft(data->timeXInc);
+            }
+
+            pen = QPen(cosColor);
+            p->setPen(pen);
+            p->setBrush(sinColor);
+            p->setOpacity(0.05);
+            p->drawRect(0,
+                        v.vector_origin_y - data->amplitude - wallSeparation,
+                        v.vector_origin_x - data->amplitude - wallSeparation - data->penWidth/2,
+                        2 * (data->amplitude + wallSeparation));
+
+
+            p->setOpacity(1);
         }
 
-        pen = QPen(cosColor);
-        p->setPen(pen);
-        p->setBrush(cosColor);
-        p->setOpacity(0.05);
-        p->drawRect(v.vector_origin_x - data->amplitude - wallSeparation,
-                    0,
-                    2 * (data->amplitude + wallSeparation),
-                    v.vector_origin_y - data->amplitude - wallSeparation - data->penWidth/2);
+        if (data->showCosOnYAxis)
+        {
+            //--------------------------------------------------------------------
+            // Draw Vertical background
+            //--------------------------------------------------------------------
+            font = QFont();
+            font.setPixelSize(30);
+            pen = QPen(scrollingBackgroundColor);
+            p->setPen(pen);
+            p->setFont(font);
+            p->setOpacity(0.2);
 
-        p->setOpacity(1);
+            vtScrollingBackground.draw(*p,
+                                       v.vector_origin_x - data->amplitude,               // x offset
+                                       0,                                               // y offset
+                                       data->amplitude * 2,                             // width of rectangle to draw in
+                                       v.vector_origin_y - data->amplitude                // height of rectangle to draw in
+            );
+
+            if (!data->isTimePaused)
+            {
+                vtScrollingBackground.shiftUp(data->timeXInc);
+            }
+
+            pen = QPen(cosColor);
+            p->setPen(pen);
+            p->setBrush(cosColor);
+            p->setOpacity(0.05);
+            p->drawRect(v.vector_origin_x - data->amplitude - wallSeparation,
+                        0,
+                        2 * (data->amplitude + wallSeparation),
+                        v.vector_origin_y - data->amplitude - wallSeparation - data->penWidth/2);
+
+            p->setOpacity(1);
+        }
     }
 }
 
