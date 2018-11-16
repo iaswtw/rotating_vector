@@ -301,9 +301,15 @@ void RenderWidget::drawRotatingVectorComponents(QPainter *p, VectorDrawingCoordi
         pen.setColor(sinColor);
         p->setPen(pen);
         p->setBrush(sinColor);
+        // Drop a line from vector tip perpendicular to X axis
         p->drawLine(v.vector_tip_x,
                     v.vector_tip_y,
                     v.vector_tip_x,
+                    v.vector_origin_y);
+        // Draw projection on Y Axis
+        p->drawLine(v.vector_origin_x,
+                    v.vector_tip_y,
+                    v.vector_origin_x,
                     v.vector_origin_y);
     }
 
@@ -312,9 +318,15 @@ void RenderWidget::drawRotatingVectorComponents(QPainter *p, VectorDrawingCoordi
         pen.setColor(cosColor);
         p->setPen(pen);
         p->setBrush(cosColor);
-        p->drawLine(v.vector_origin_x,
+        // Draw a line from vector tip perpendicular to Y axis
+        p->drawLine(v.vector_tip_x,
+                    v.vector_tip_y,
+                    v.vector_origin_x,
+                    v.vector_tip_y);
+        // Draw projection on X axis
+        p->drawLine(v.vector_tip_x,
                     v.vector_origin_y,
-                    v.vector_tip_x,
+                    v.vector_origin_x,
                     v.vector_origin_y);
     }
     p->setOpacity(1);

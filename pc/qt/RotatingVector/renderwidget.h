@@ -235,6 +235,7 @@ public:
         }
     }
     // Draw angle marks & angle value for ordinates on which they are set.
+    // Also draw a line showing +1 and -1 limits.
     void drawAngles(QPainter *p, AxisOrientation orientation, int xOffset, int yOffset, int abscissaScale, int amplitude)
     {
         //-----------------------------------------------------------------------
@@ -256,12 +257,14 @@ public:
             {
                 if (angles[i] != INT_MIN)
                 {
+                    //--------------------------------------------------
                     // draw small vertical line on X axis
                     p->drawLine(xOffset - i*abscissaScale,
                                 yOffset - 10,
                                 xOffset - i*abscissaScale,
                                 yOffset + 10);
-
+                    //--------------------------------------------------
+                    // Draw longer division at 0 / 360 degress
                     if ((angles[i] == 0) || (angles[i] == 360))
                     {
                         // draw a thin faint line from top to bottom
@@ -273,7 +276,8 @@ public:
                                     yOffset + amplitude + 10);
                         p->restore();
                     }
-
+                    //--------------------------------------------------
+                    // Draw angle number
                     QString str = QString::number(angles[i]);
                     int w = fm.width(str);
                     p->drawText(xOffset - i*abscissaScale - w/2,
@@ -285,12 +289,14 @@ public:
             {
                 if (angles[i] != INT_MIN)
                 {
+                    //--------------------------------------------------
                     // draw small horizontal line on Y axis
                     p->drawLine(xOffset - 10,
                                 yOffset - i*abscissaScale,
                                 xOffset + 10,
                                 yOffset - i*abscissaScale);
-
+                    //--------------------------------------------------
+                    // Draw longer division at 0 / 360 degress
                     if ((angles[i] == 0) || (angles[i] == 360))
                     {
                         // draw a thin faint line from left to right
@@ -302,7 +308,8 @@ public:
                                     yOffset - i*abscissaScale);
                         p->restore();
                     }
-
+                    //--------------------------------------------------
+                    // Draw angle number
                     QString str = QString::number(angles[i]);
                     int w = fm.width(str);
                     p->drawText(xOffset - 10 - w - 5,
@@ -315,6 +322,43 @@ public:
                 qFatal("Unknown axis orientation!");
             }
         }
+
+        //---------------------------------------------------------------------------------------
+        // Draw +1 and -1 limit line
+        //---------------------------------------------------------------------------------------
+        if (orientation == RIGHT_TO_LEFT)
+        {
+            p->save();
+            p->setOpacity(0.1);
+            p->drawLine(xOffset - 10,
+                        yOffset - amplitude,
+                        0,
+                        yOffset - amplitude);
+            p->drawLine(xOffset - 10,
+                        yOffset + amplitude,
+                        0,
+                        yOffset + amplitude);
+            p->restore();
+        }
+        else if (orientation == BOTTOM_TO_TOP)
+        {
+            p->save();
+            p->setOpacity(0.1);
+            p->drawLine(xOffset + amplitude,
+                        yOffset - 10,
+                        xOffset + amplitude,
+                        0);
+            p->drawLine(xOffset - amplitude,
+                        yOffset - 10,
+                        xOffset - amplitude,
+                        0);
+            p->restore();
+        }
+        else
+        {
+            qFatal("Unknown axis orientation!");
+        }
+
         p->restore();
     }
 };
@@ -384,7 +428,7 @@ private:
 //    const QColor cosColor = QColor(0, 0, 220);
 
     const QColor sinColor = QColor(120, 220, 120);
-    const QColor cosColor = QColor(150, 150, 250);
+    const QColor cosColor = QColor(140, 190, 255);
 
     const QColor vectorColor = QColor(0, 220, 220);
     const QColor vectorTipCircleColor = QColor(40, 40, 40);
