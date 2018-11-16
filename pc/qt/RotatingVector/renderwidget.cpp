@@ -14,7 +14,7 @@ RenderWidget::RenderWidget(QWidget *parent, MainWindow *data) :
     yAxisOrdinates(AxisOrdinates(NUM_ORDINATES)),
 
     vtScrollingBackground(NUM_BACKGROUND_TEXT_POINTS/2, NUM_TIME_TEXT_POINTS/2, NUM_ANGLE_TEXT_POINTS/2),
-    hzScrollingBackground(NUM_BACKGROUND_TEXT_POINTS, NUM_TIME_TEXT_POINTS, NUM_ANGLE_TEXT_POINTS)
+    hzScrollingBackground(NUM_BACKGROUND_TEXT_POINTS,   NUM_TIME_TEXT_POINTS,   NUM_ANGLE_TEXT_POINTS)
 {
     this->data = data;
 
@@ -33,43 +33,34 @@ RenderWidget::RenderWidget(QWidget *parent, MainWindow *data) :
     vtScrollingBackground.generateRandomTimePoints(       0, 500, 0, 800, randomGen);
 
     //----------------------------------------------------------------------------------
-    // Locate and open Alice and Bob stick figure png files.
+    // Locate and open Alice and Cat png files.
     //----------------------------------------------------------------------------------
+    aliceImage = locateAndInstantiateImage("alice.png");
+    catImage = locateAndInstantiateImage("cat.png");
+}
+
+/*
+ * Search the file in current directory and ..\RotatingVector directory.
+ */
+QImage* RenderWidget::locateAndInstantiateImage(QString filename)
+{
+    QImage *image = nullptr;
     QString curDir = QDir::currentPath();
-    QString alicePath;
-    QString bobPath;
-    QFile file;
+    QFile file(filename);
 
-    file.setFileName(curDir + "\\alice.png");
     if (file.exists())
     {
-        aliceImage = new QImage(file.fileName());
+        image = new QImage(file.fileName());
     }
     else
     {
-        file.setFileName(curDir + "\\..\\RotatingVector\\alice.png");
+        file.setFileName(curDir + "\\..\\RotatingVector\\" + filename);
         if (file.exists())
         {
-            aliceImage = new QImage(file.fileName());
+            image = new QImage(file.fileName());
         }
     }
-
-    file.setFileName(curDir + "\\bob.png");
-    if (file.exists())
-    {
-        bobImage = new QImage(file.fileName());
-    }
-    else
-    {
-        file.setFileName(curDir + "\\..\\RotatingVector\\bob.png");
-        if (file.exists())
-        {
-            bobImage = new QImage(file.fileName());
-        }
-    }
-    //----------------------------------------------------------------------------------
-
-
+    return image;
 }
 
 void RenderWidget::clearSinOrdinates()
@@ -127,7 +118,7 @@ void RenderWidget::draw(QPainter * p)
 
     drawRotatingVectorComponents(p, v);
     drawRotatingVector(p, v);
-    drawVectorShadow(p, v);
+    drawVectorProjection(p, v);
 
     // For the projection tip circle to show correctly, draw this after drawing sin & cos points and vector projection dotted line.
     drawTipCircles(p, v);
@@ -269,11 +260,8 @@ void RenderWidget::drawBackground(QPainter *p, VectorDrawingCoordinates v)
             //--------------------------------------------------------------------
             // Draw Vertical background
             //--------------------------------------------------------------------
-            font = QFont();
-            font.setPixelSize(30);
             pen = QPen(scrollingBackgroundColor);
             p->setPen(pen);
-            p->setFont(font);
             p->setOpacity(0.2);
 
             vtScrollingBackground.draw(*p,
@@ -296,7 +284,6 @@ void RenderWidget::drawBackground(QPainter *p, VectorDrawingCoordinates v)
                         0,
                         2 * (data->amplitude + wallSeparation),
                         v.vector_origin_y - data->amplitude - wallSeparation - data->penWidth/2);
-
             p->setOpacity(1);
         }
     }
@@ -304,35 +291,33 @@ void RenderWidget::drawBackground(QPainter *p, VectorDrawingCoordinates v)
 
 void RenderWidget::drawRotatingVectorComponents(QPainter *p, VectorDrawingCoordinates v)
 {
+    QPen pen = QPen();
+    pen.setWidth(data->penWidth);
+    pen.setCapStyle(Qt::RoundCap);
+    p->setOpacity(sinCosOpacity);
+
     if (data->drawSinComponent)
     {
-        QPen pen = QPen(sinColor);
-        pen.setWidth(data->penWidth);
-        pen.setCapStyle(Qt::RoundCap);
+        pen.setColor(sinColor);
         p->setPen(pen);
         p->setBrush(sinColor);
-        p->setOpacity(sinCosOpacity);
         p->drawLine(v.vector_tip_x,
                     v.vector_tip_y,
                     v.vector_tip_x,
                     v.vector_origin_y);
-        p->setOpacity(1);
     }
 
     if (data->drawCosComponent)
     {
-        QPen pen = QPen(cosColor);
-        pen.setWidth(data->penWidth);
-        pen.setCapStyle(Qt::RoundCap);
+        pen.setColor(cosColor);
         p->setPen(pen);
         p->setBrush(cosColor);
-        p->setOpacity(sinCosOpacity);
         p->drawLine(v.vector_origin_x,
                     v.vector_origin_y,
                     v.vector_tip_x,
                     v.vector_origin_y);
-        p->setOpacity(1);
     }
+    p->setOpacity(1);
 }
 
 
@@ -344,7 +329,7 @@ void RenderWidget::drawRotatingVector(QPainter *p, VectorDrawingCoordinates v)
     if (data->drawRotatingVector)
     {
         //----------------------------------------------------
-        // Draw vector axis and tracing circle
+        // Draw vector x & y axis and tracing circle
         QPen pen = QPen(QColor(120, 120, 120));
         pen.setWidth(2);
         pen.setCapStyle(Qt::RoundCap);
@@ -371,8 +356,6 @@ void RenderWidget::drawRotatingVector(QPainter *p, VectorDrawingCoordinates v)
                     v.vector_origin_y + data->amplitude + 10
         );
 
-        p->setOpacity(1);
-
         //----------------------------------------------------
         // Draw vector itself.
         pen = QPen(vectorColor);
@@ -386,7 +369,6 @@ void RenderWidget::drawRotatingVector(QPainter *p, VectorDrawingCoordinates v)
                     v.vector_tip_x,
                     v.vector_tip_y
         );
-        p->setOpacity(1);
 
         //----------------------------------------------------
         // Draw arc showing the region from 0 degrees that forms the current angle.
@@ -423,7 +405,7 @@ void RenderWidget::drawRotatingVector(QPainter *p, VectorDrawingCoordinates v)
 
 }
 
-void RenderWidget::drawVectorShadow(QPainter *p, VectorDrawingCoordinates v)
+void RenderWidget::drawVectorProjection(QPainter *p, VectorDrawingCoordinates v)
 {
     QPen pen = QPen();
     pen.setWidth(1);
@@ -431,28 +413,24 @@ void RenderWidget::drawVectorShadow(QPainter *p, VectorDrawingCoordinates v)
     p->setOpacity(0.7);
 
     //--------------------------------------------------------------------
-    // Draw vector shadow, if enabled
+    // VerticalpProjection
     //--------------------------------------------------------------------
     if (data->drawVerticalShadow)
     {
-        //--------------------------------------------------------------------
-        // Vertical shadow
-        //--------------------------------------------------------------------
         pen.setColor(sinColor);
         p->setPen(pen);
         p->setBrush(sinColor);
-        p->drawRect(width() - data->xAxisOffFromRight - data->penWidth/2,
-                    data->xAxisOffFromTop - data->curHeight,
+        p->drawRect(v.vector_origin_x - data->amplitude - wallSeparation - data->penWidth/2,
+                    v.vector_origin_y,
                     data->penWidth,
-                    data->curHeight);
-        p->setOpacity(1);
+                    -data->curHeight);
     }
 
+    //--------------------------------------------------------------------
+    // Horizontal projection
+    //--------------------------------------------------------------------
     if (data->drawHorizontalShadow)
     {
-        //--------------------------------------------------------------------
-        // Horizontal projection
-        //--------------------------------------------------------------------
         pen.setColor(cosColor);
         p->setPen(pen);
         p->setBrush(cosColor);
@@ -460,8 +438,8 @@ void RenderWidget::drawVectorShadow(QPainter *p, VectorDrawingCoordinates v)
                     v.vector_origin_y - data->amplitude - wallSeparation - data->penWidth/2,
                     data->curWidth,
                     data->penWidth);
-        p->setOpacity(1);
     }
+    p->setOpacity(1);
 
     //--------------------------------------------------------------------
     // Dotted line showing projection
@@ -474,22 +452,20 @@ void RenderWidget::drawVectorShadow(QPainter *p, VectorDrawingCoordinates v)
 
     if (data->drawVerticalProjectionDottedLine)
     {
-        // Draw vector tip vertical projection
-        p->drawLine(v.vector_tip_x,
+        // For vertical projection: from wall to vector tip.
+        p->drawLine(v.vector_origin_x - data->amplitude - wallSeparation,
                     v.vector_tip_y,
-                    width() - data->xAxisOffFromRight,
-                    data->xAxisOffFromTop - v.vector_height
-        );
+                    v.vector_tip_x,
+                    v.vector_tip_y);
     }
 
     if (data->drawHorizontalProjectionDottedLine)
     {
-        // Draw vector tip horizontal projection
+        // For horizontal projection: from ceiling to vector tip.
         p->drawLine(v.vector_tip_x,
-                    v.vector_tip_y,
+                    v.vector_origin_y - data->amplitude - wallSeparation,
                     v.vector_tip_x,
-                    v.vector_origin_y - data->amplitude - wallSeparation
-        );
+                    v.vector_tip_y);
     }
     p->setOpacity(1);
 }
@@ -515,7 +491,11 @@ void RenderWidget::drawSineAndCosinePoints(QPainter *p, VectorDrawingCoordinates
             if (!data->useArduino && data->arduinoSimulator->runMotor)
             {
                 currentAngle = int(round(data->curAngleInDegrees));
-                if ((currentAngle % 90) != 0)
+                if (!data->arduinoSimulator->isCounterClockwise)
+                {
+                    currentAngle = (currentAngle - 360) % 360;      // if clockwise rotation, show angles 0, -90, -180 & -270
+                }
+                if ((currentAngle % 90) != 0)                       // set angle values only if angle is a multiple of 90
                 {
                     currentAngle = INT_MIN;
                 }
@@ -552,7 +532,11 @@ void RenderWidget::drawSineAndCosinePoints(QPainter *p, VectorDrawingCoordinates
             if (!data->useArduino && data->arduinoSimulator->runMotor)
             {
                 currentAngle = int(round(data->curAngleInDegrees));
-                if ((currentAngle % 90) != 0)
+                if (!data->arduinoSimulator->isCounterClockwise)
+                {
+                    currentAngle = (currentAngle - 360) % 360;      // if clockwise rotation, show angles 0, -90, -180 & -270
+                }
+                if ((currentAngle % 90) != 0)                       // set angle values only if angle is a multiple of 90
                 {
                     currentAngle = INT_MIN;
                 }
@@ -632,7 +616,7 @@ void RenderWidget::drawTipCircles(QPainter *p, VectorDrawingCoordinates v)
     if (data->drawVerticalProjectionTipCircle)
     {
         // Draw a circle at the tip of the vector's vertical projection
-        p->drawEllipse(width() - data->xAxisOffFromRight - data->penWidth/2,
+        p->drawEllipse(v.vector_origin_x - data->amplitude - wallSeparation - data->penWidth/2,
                        v.vector_tip_y - data->penWidth/2,
                        data->penWidth,
                        data->penWidth
@@ -656,7 +640,6 @@ void RenderWidget::drawTipCircles(QPainter *p, VectorDrawingCoordinates v)
             );
         }
     }
-
     p->setOpacity(1);
 }
 
@@ -710,7 +693,7 @@ void RenderWidget::drawAliceAndBob(QPainter *p, VectorDrawingCoordinates v)
 
     //------------------------------------------------------------
     // Load and draw Bob
-    if (bobImage)
+    if (catImage)
     {
         target = QRect(v.vector_origin_x - 80,
                        v.vector_origin_y + data->amplitude + 2*wallSeparation,
@@ -720,7 +703,6 @@ void RenderWidget::drawAliceAndBob(QPainter *p, VectorDrawingCoordinates v)
                        0,
                        155,
                        61);
-        p->drawImage(target, *bobImage, source);
+        p->drawImage(target, *catImage, source);
     }
-
 }

@@ -15,11 +15,11 @@
 ArduinoSimulator::ArduinoSimulator(QObject *parent, MainWindow *mw_) :
     QObject(parent),
     runMotor(false),
+    isCounterClockwise(true),
     timer(new QTimer(this)),
     iterationInterval(30),
     halfSteps(0),
     targetHalfSteps(-1),
-    isCounterClockwise(true),
     doHalfStep(false),
     mw(mw_)
 {
@@ -161,7 +161,7 @@ void ArduinoSimulator::iterationTimerEvent()
         }
         else
         {
-            if (halfSteps <= 0)
+            if (halfSteps < 0)
                 halfSteps += HALF_STEPS_PER_REVOLUTION;
         }
 

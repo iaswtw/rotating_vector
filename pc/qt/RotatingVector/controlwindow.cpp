@@ -177,40 +177,31 @@ void ControlWindow::on_setPcCalOffFrom180ToMinus2p5_btn_clicked()   {    ui->cal
 void ControlWindow::on_setPcCalOffFrom180ToMinus3p0_btn_clicked()   {    ui->calAt180_sb->setValue(-3.0);   }
 void ControlWindow::on_setPcCalOffFrom180ToMinus3p5_btn_clicked()   {    ui->calAt180_sb->setValue(-3.5);   }
 
-void ControlWindow::on_sineAmplitude_sb_valueChanged(int /*arg1*/)
-{
-    mw->amplitude = ui->sineAmplitude_sb->value();
-}
-
-void ControlWindow::on_penWidth_sb_valueChanged(int /*arg1*/)
-{
-    mw->penWidth = ui->penWidth_sb->value();
-}
-
-void ControlWindow::on_xAxisOffFromTop_sb_valueChanged(int /*arg1*/)
-{
-    mw->xAxisOffFromTop = ui->xAxisOffFromTop_sb->value();
-}
-
-void ControlWindow::on_xAxisOffFromRight_sb_valueChanged(int /*arg1*/)
-{
-    mw->xAxisOffFromRight = ui->xAxisOffFromRight_sb->value();
-}
-
-void ControlWindow::on_sineAmplitude_sb_valueChanged(const QString &/*arg1*/)
-{
-    mw->amplitude = ui->sineAmplitude_sb->value();
-}
-
-void ControlWindow::on_drawVerticalShadow_cb_stateChanged(int /*arg1*/)
-{
-    mw->drawVerticalShadow = ui->drawVerticalShadow_cb->isChecked();
-}
-
-void ControlWindow::on_drawRotatingVector_cb_stateChanged(int /*arg1*/)
-{
-    mw->drawRotatingVector = ui->drawRotatingVector_cb->isChecked();
-}
+void ControlWindow::on_sineAmplitude_sb_valueChanged(int)               { mw->amplitude       = ui->sineAmplitude_sb->value();                                  }
+void ControlWindow::on_penWidth_sb_valueChanged(int)                    { mw->penWidth        = ui->penWidth_sb->value();                                       }
+void ControlWindow::on_xAxisOffFromTop_sb_valueChanged(int)             { mw->xAxisOffFromTop = ui->xAxisOffFromTop_sb->value();                                }
+void ControlWindow::on_xAxisOffFromRight_sb_valueChanged(int)           { mw->xAxisOffFromRight = ui->xAxisOffFromRight_sb->value();                            }
+void ControlWindow::on_sineAmplitude_sb_valueChanged(const QString &)   { mw->amplitude = ui->sineAmplitude_sb->value();                                        }
+void ControlWindow::on_drawVerticalShadow_cb_stateChanged(int)          { mw->drawVerticalShadow = ui->drawVerticalShadow_cb->isChecked();                      }
+void ControlWindow::on_drawRotatingVector_cb_stateChanged(int)          { mw->drawRotatingVector = ui->drawRotatingVector_cb->isChecked();                      }
+void ControlWindow::on_showCosOnXAxis_cb_stateChanged(int)              { mw->showCosOnXAxis = ui->showCosOnXAxis_cb->isChecked();                              }
+void ControlWindow::on_showCosOnYAxis_cb_stateChanged(int)              { mw->showCosOnYAxis = ui->showCosOnYAxis_cb->isChecked();                              }
+void ControlWindow::on_useArduino_cb_stateChanged(int)                  { mw->useArduino = ui->useArduino_cb->isChecked();                                      }
+void ControlWindow::on_showSinOnXAxis_cb_stateChanged(int)              { mw->showSinOnXAxis = ui->showSinOnXAxis_cb->isChecked();                              }
+void ControlWindow::on_showVerticalProjectionBox_cb_stateChanged(int)   { mw->showVerticalProjectionBox = ui->showVerticalProjectionBox_cb->isChecked();        }
+void ControlWindow::on_showHorizontalProjectionBox_cb_stateChanged(int) { mw->showHorizontalProjectionBox = ui->showHorizontalProjectionBox_cb->isChecked();    }
+void ControlWindow::on_drawHorizontalShadow_cb_stateChanged(int)        { mw->drawHorizontalShadow = ui->drawHorizontalShadow_cb->isChecked();                  }
+void ControlWindow::on_clearSinValues_btn_clicked()                     { mw->renderWidget->clearSinOrdinates();                                                }
+void ControlWindow::on_clearCosValues_btn_clicked()                     { mw->renderWidget->clearCosOrdinates();                                                }
+void ControlWindow::on_drawVerticalProjectionDottedLine_cb_stateChanged(int)   { mw->drawVerticalProjectionDottedLine = ui->drawVerticalProjectionDottedLine_cb->isChecked(); }
+void ControlWindow::on_drawHorizontalProjectionDottedLine_cb_stateChanged(int) { mw->drawHorizontalProjectionDottedLine = ui->drawHorizontalProjectionDottedLine_cb->isChecked(); }
+void ControlWindow::on_drawVerticalProjectionTipCircle_cb_stateChanged(int)    { mw->drawVerticalProjectionTipCircle = ui->drawVerticalProjectionTipCircle_cb->isChecked(); }
+void ControlWindow::on_drawHorizontalProjectionTipCircle_cb_stateChanged(int)  { mw->drawHorizontalProjectionTipCircle = ui->drawHorizontalProjectionTipCircle_cb->isChecked(); }
+void ControlWindow::on_drawAngleArc_cb_stateChanged(int)                { mw->drawAngleArc = ui->drawAngleArc_cb->isChecked();                                  }
+void ControlWindow::on_drawSinComponent_cb_stateChanged(int)            { mw->drawSinComponent = ui->drawSinComponent_cb->isChecked();                          }
+void ControlWindow::on_drawCosComponent_cb_stateChanged(int)            { mw->drawCosComponent = ui->drawCosComponent_cb->isChecked();                          }
+void ControlWindow::on_showAnglesOnXAndYAxis_cb_stateChanged(int)       { mw->showAnglesOnXAndYAxis = ui->showAnglesOnXAndYAxis_cb->isChecked();                }
+void ControlWindow::on_showScrollingBackgroundText_cb_stateChanged(int) { mw->showScrollingBackgroundText = ui->showScrollingBackgroundText_cb->isChecked();    }
 
 void ControlWindow::on_timeDelay_sb_valueChanged(int)
 {
@@ -218,97 +209,6 @@ void ControlWindow::on_timeDelay_sb_valueChanged(int)
     mw->renderWidget->updateTimerInterval();
 }
 
-void ControlWindow::on_showCosOnXAxis_cb_stateChanged(int /*arg1*/)
+void ControlWindow::on_angleAdvanceOffset_sb_valueChanged(const QString &)
 {
-    mw->showCosOnXAxis = ui->showCosOnXAxis_cb->isChecked();
-}
-
-void ControlWindow::on_showCosOnYAxis_cb_stateChanged(int /*arg1*/)
-{
-    mw->showCosOnYAxis = ui->showCosOnYAxis_cb->isChecked();
-}
-
-void ControlWindow::on_useArduino_cb_stateChanged(int /*arg1*/)
-{
-    mw->useArduino = ui->useArduino_cb->isChecked();
-}
-
-void ControlWindow::on_showSinOnXAxis_cb_stateChanged(int /*arg1*/)
-{
-    mw->showSinOnXAxis = ui->showSinOnXAxis_cb->isChecked();
-}
-
-void ControlWindow::on_angleAdvanceOffset_sb_valueChanged(const QString &/*arg1*/)
-{
-
-}
-
-void ControlWindow::on_showVerticalProjectionBox_cb_stateChanged(int /*arg1*/)
-{
-    mw->showVerticalProjectionBox = ui->showVerticalProjectionBox_cb->isChecked();
-}
-
-void ControlWindow::on_showHorizontalProjectionBox_cb_stateChanged(int /*arg1*/)
-{
-    mw->showHorizontalProjectionBox = ui->showHorizontalProjectionBox_cb->isChecked();
-}
-
-void ControlWindow::on_drawHorizontalShadow_cb_stateChanged(int /*arg1*/)
-{
-    mw->drawHorizontalShadow = ui->drawHorizontalShadow_cb->isChecked();
-}
-
-void ControlWindow::on_clearSinValues_btn_clicked()
-{
-    mw->renderWidget->clearSinOrdinates();
-}
-
-void ControlWindow::on_clearCosValues_btn_clicked()
-{
-    mw->renderWidget->clearCosOrdinates();
-}
-
-void ControlWindow::on_drawVerticalProjectionDottedLine_cb_stateChanged(int /*arg1*/)
-{
-    mw->drawVerticalProjectionDottedLine = ui->drawVerticalProjectionDottedLine_cb->isChecked();
-}
-
-void ControlWindow::on_drawHorizontalProjectionDottedLine_cb_stateChanged(int /*arg1*/)
-{
-    mw->drawHorizontalProjectionDottedLine = ui->drawHorizontalProjectionDottedLine_cb->isChecked();
-}
-
-void ControlWindow::on_drawVerticalProjectionTipCircle_cb_stateChanged(int /*arg1*/)
-{
-    mw->drawVerticalProjectionTipCircle = ui->drawVerticalProjectionTipCircle_cb->isChecked();
-}
-
-void ControlWindow::on_drawHorizontalProjectionTipCircle_cb_stateChanged(int /*arg1*/)
-{
-    mw->drawHorizontalProjectionTipCircle = ui->drawHorizontalProjectionTipCircle_cb->isChecked();
-}
-
-void ControlWindow::on_drawAngleArc_cb_stateChanged(int /*arg1*/)
-{
-    mw->drawAngleArc = ui->drawAngleArc_cb->isChecked();
-}
-
-void ControlWindow::on_drawSinComponent_cb_stateChanged(int /*arg1*/)
-{
-    mw->drawSinComponent = ui->drawSinComponent_cb->isChecked();
-}
-
-void ControlWindow::on_drawCosComponent_cb_stateChanged(int /*arg1*/)
-{
-    mw->drawCosComponent = ui->drawCosComponent_cb->isChecked();
-}
-
-void ControlWindow::on_showAnglesOnXAndYAxis_cb_stateChanged(int /*arg1*/)
-{
-    mw->showAnglesOnXAndYAxis = ui->showAnglesOnXAndYAxis_cb->isChecked();
-}
-
-void ControlWindow::on_showScrollingBackgroundText_cb_stateChanged(int /*arg1*/)
-{
-    mw->showScrollingBackgroundText = ui->showScrollingBackgroundText_cb->isChecked();
 }

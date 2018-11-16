@@ -234,7 +234,7 @@ public:
             }
         }
     }
-    // Draw angle marks & angle value for ordinates on which it is set.
+    // Draw angle marks & angle value for ordinates on which they are set.
     void drawAngles(QPainter *p, AxisOrientation orientation, int xOffset, int yOffset, int abscissaScale, int amplitude)
     {
         //-----------------------------------------------------------------------
@@ -262,7 +262,7 @@ public:
                                 xOffset - i*abscissaScale,
                                 yOffset + 10);
 
-                    if (angles[i] == 0)
+                    if ((angles[i] == 0) || (angles[i] == 360))
                     {
                         // draw a thin faint line from top to bottom
                         p->save();
@@ -291,7 +291,7 @@ public:
                                 xOffset + 10,
                                 yOffset - i*abscissaScale);
 
-                    if (angles[i] == 0)
+                    if ((angles[i] == 0) || (angles[i] == 360))
                     {
                         // draw a thin faint line from left to right
                         p->save();
@@ -342,17 +342,18 @@ protected:
 
 
 private:
-    void draw(QPainter *p);
-    void drawProjectionBoxes(QPainter *p, VectorDrawingCoordinates v);
-    void drawBackground(QPainter *p, VectorDrawingCoordinates v);
-    void drawRotatingVectorComponents(QPainter *p, VectorDrawingCoordinates v);
-    void drawRotatingVector(QPainter *p, VectorDrawingCoordinates v);
-    void drawVectorShadow(QPainter *p, VectorDrawingCoordinates v);
-    void drawAxis(QPainter *p, VectorDrawingCoordinates v);
-    void drawSineAndCosinePoints(QPainter *p, VectorDrawingCoordinates v);
-    void drawTipCircles(QPainter *p, VectorDrawingCoordinates v);
-    void drawAliceAndBob(QPainter *p, VectorDrawingCoordinates v);
+    void draw                           (QPainter *p);
+    void drawProjectionBoxes            (QPainter *p, VectorDrawingCoordinates v);
+    void drawBackground                 (QPainter *p, VectorDrawingCoordinates v);
+    void drawRotatingVectorComponents   (QPainter *p, VectorDrawingCoordinates v);
+    void drawRotatingVector             (QPainter *p, VectorDrawingCoordinates v);
+    void drawVectorProjection           (QPainter *p, VectorDrawingCoordinates v);
+    void drawAxis                       (QPainter *p, VectorDrawingCoordinates v);
+    void drawSineAndCosinePoints        (QPainter *p, VectorDrawingCoordinates v);
+    void drawTipCircles                 (QPainter *p, VectorDrawingCoordinates v);
+    void drawAliceAndBob                (QPainter *p, VectorDrawingCoordinates v);
 
+    QImage* locateAndInstantiateImage(QString filename);
 //    RotatingVectorData *data;
 
     QTimer *timer;
@@ -366,7 +367,7 @@ private:
     ScrollingBackground hzScrollingBackground;
 
     QImage *aliceImage = nullptr;
-    QImage *bobImage = nullptr;
+    QImage *catImage = nullptr;
 
     // Red and green
 //    QColor sinColor = QColor(220, 50, 0);

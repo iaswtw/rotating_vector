@@ -14,6 +14,7 @@ public:
     void postCmd(QString cmd);
 
     bool runMotor;
+    bool isCounterClockwise;
 
 
 signals:
@@ -26,7 +27,6 @@ private:
     int iterationInterval;
     int halfSteps;
     int targetHalfSteps;
-    bool isCounterClockwise;
     bool doHalfStep;
     QStringList cmdList;
     MainWindow *mw;

@@ -24,8 +24,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>671</width>
-     <height>571</height>
+     <width>635</width>
+     <height>582</height>
     </rect>
    </property>
    <layout class="QGridLayout" name="gridLayout">
@@ -699,7 +699,7 @@
        <item>
         <widget class="QCheckBox" name="drawRotatingVector_cb">
          <property name="text">
-          <string>Draw rotating vector and projection</string>
+          <string>Rotating Vector</string>
          </property>
          <property name="checked">
           <bool>true</bool>
@@ -709,21 +709,21 @@
        <item>
         <widget class="QCheckBox" name="drawAngleArc_cb">
          <property name="text">
-          <string>Draw Angle Arc</string>
+          <string>Angle Arc</string>
          </property>
         </widget>
        </item>
        <item>
         <widget class="QCheckBox" name="showAnglesOnXAndYAxis_cb">
          <property name="text">
-          <string>Show angles on X &amp;&amp; Y axis</string>
+          <string>Angles on X &amp;&amp; Y axis</string>
          </property>
         </widget>
        </item>
        <item>
         <widget class="QCheckBox" name="showScrollingBackgroundText_cb">
          <property name="text">
-          <string>Show Scrolling Background text</string>
+          <string>Scrolling Background text</string>
          </property>
         </widget>
        </item>
@@ -793,14 +793,14 @@
           <item>
            <widget class="QCheckBox" name="showVerticalProjectionBox_cb">
             <property name="text">
-             <string>Show Vertical Projection box</string>
+             <string>Vertical Projection box</string>
             </property>
            </widget>
           </item>
           <item>
            <widget class="QCheckBox" name="drawVerticalShadow_cb">
             <property name="text">
-             <string>Draw Vertical Projection</string>
+             <string>Vertical Projection</string>
             </property>
             <property name="checked">
              <bool>false</bool>
@@ -810,14 +810,14 @@
           <item>
            <widget class="QCheckBox" name="drawVerticalProjectionTipCircle_cb">
             <property name="text">
-             <string>Draw Vertical Projection Tip Circle</string>
+             <string>Vertical Projection Tip Circle</string>
             </property>
            </widget>
           </item>
           <item>
            <widget class="QCheckBox" name="drawVerticalProjectionDottedLine_cb">
             <property name="text">
-             <string>Draw Vertical Projection dotted line</string>
+             <string>Vertical Projection dotted line</string>
             </property>
            </widget>
           </item>
@@ -830,14 +830,14 @@
              </sizepolicy>
             </property>
             <property name="text">
-             <string>Show Sin on X Axis</string>
+             <string>Sin on X Axis</string>
             </property>
            </widget>
           </item>
           <item>
            <widget class="QCheckBox" name="drawSinComponent_cb">
             <property name="text">
-             <string>Draw Sin Component</string>
+             <string>Sin Component</string>
             </property>
            </widget>
           </item>
@@ -884,49 +884,49 @@
           <item>
            <widget class="QCheckBox" name="showHorizontalProjectionBox_cb">
             <property name="text">
-             <string>Show Horizontal Projection box</string>
+             <string>Horizontal Projection box</string>
             </property>
            </widget>
           </item>
           <item>
            <widget class="QCheckBox" name="drawHorizontalShadow_cb">
             <property name="text">
-             <string>Draw Horizontal Projection</string>
+             <string>Horizontal Projection</string>
             </property>
            </widget>
           </item>
           <item>
            <widget class="QCheckBox" name="drawHorizontalProjectionTipCircle_cb">
             <property name="text">
-             <string>Draw Horizontal Projection Tip Circle</string>
+             <string>Horizontal Projection Tip Circle</string>
             </property>
            </widget>
           </item>
           <item>
            <widget class="QCheckBox" name="drawHorizontalProjectionDottedLine_cb">
             <property name="text">
-             <string>Draw Horizontal Projection dotted line</string>
+             <string>Horizontal Projection dotted line</string>
             </property>
            </widget>
           </item>
           <item>
            <widget class="QCheckBox" name="showCosOnYAxis_cb">
             <property name="text">
-             <string>Show Cos on Y Axis</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QCheckBox" name="showCosOnXAxis_cb">
-            <property name="text">
-             <string>Show Cos on X Axis</string>
+             <string>Cos on Y Axis</string>
             </property>
            </widget>
           </item>
           <item>
            <widget class="QCheckBox" name="drawCosComponent_cb">
             <property name="text">
-             <string>Draw Cos Component</string>
+             <string>Cos Component</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="showCosOnXAxis_cb">
+            <property name="text">
+             <string>Cos on X Axis</string>
             </property>
            </widget>
           </item>
