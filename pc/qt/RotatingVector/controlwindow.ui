@@ -727,6 +727,13 @@
          </property>
         </widget>
        </item>
+       <item>
+        <widget class="QCheckBox" name="show30And60Angles_cb">
+         <property name="text">
+          <string>30 and 60 angles</string>
+         </property>
+        </widget>
+       </item>
       </layout>
      </widget>
     </item>

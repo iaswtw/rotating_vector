@@ -94,6 +94,7 @@ private slots:
     void on_goto330_btn_clicked();
     void on_showAnglesOnXAndYAxis_cb_stateChanged(int arg1);
     void on_showScrollingBackgroundText_cb_stateChanged(int arg1);
+    void on_show30And60Angles_cb_stateChanged(int arg1);
 };
 
 #endif // CONTROLWINDOW_H

@@ -41,6 +41,7 @@ ControlWindow::ControlWindow(QWidget *parent, MainWindow * mw) :
 
     ui->showAnglesOnXAndYAxis_cb->setChecked(mw->showAnglesOnXAndYAxis);
     ui->showScrollingBackgroundText_cb->setChecked(mw->showScrollingBackgroundText);
+    ui->show30And60Angles_cb->setChecked(mw->show30And60Angles);
 
     ui->useArduino_cb->setChecked(mw->useArduino);
 
@@ -202,6 +203,7 @@ void ControlWindow::on_drawSinComponent_cb_stateChanged(int)            { mw->dr
 void ControlWindow::on_drawCosComponent_cb_stateChanged(int)            { mw->drawCosComponent = ui->drawCosComponent_cb->isChecked();                          }
 void ControlWindow::on_showAnglesOnXAndYAxis_cb_stateChanged(int)       { mw->showAnglesOnXAndYAxis = ui->showAnglesOnXAndYAxis_cb->isChecked();                }
 void ControlWindow::on_showScrollingBackgroundText_cb_stateChanged(int) { mw->showScrollingBackgroundText = ui->showScrollingBackgroundText_cb->isChecked();    }
+void ControlWindow::on_show30And60Angles_cb_stateChanged(int)           { mw->show30And60Angles = ui->show30And60Angles_cb->isChecked();                        }
 
 void ControlWindow::on_timeDelay_sb_valueChanged(int)
 {
@@ -212,3 +214,4 @@ void ControlWindow::on_timeDelay_sb_valueChanged(int)
 void ControlWindow::on_angleAdvanceOffset_sb_valueChanged(const QString &)
 {
 }
+

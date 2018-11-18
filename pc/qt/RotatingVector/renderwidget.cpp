@@ -63,6 +63,28 @@ QImage* RenderWidget::locateAndInstantiateImage(QString filename)
     return image;
 }
 
+
+void RenderWidget::lowPassFilterAngleDifference(double newAngleInDegrees)
+{
+    double difference = fabs(newAngleInDegrees - previousAngleInDegrees);
+
+    // This method is called everytime GUI update is performed, which could be several times between
+    // consecutive angle updates. Hence alpha has to be small.
+    // E.g. if alpha = 0.5, smoothed angle could get close to 0 if vector speed is slow (vector updates come every 100s or ms),
+    //      and GUI update is fast (less delay between GUI timer firing... 10s of ms).
+    // This will cause angle to be not displayed at 0, 90, 180 & 270 due to low smoothed angle threshold.
+    double alpha = 0.1;
+    if (difference > 2)
+    {
+        // Ignore this difference. Must be due to 0 -> 360 rollover.
+    }
+    else
+    {
+        smoothedChangeInAngle = (smoothedChangeInAngle * (1-alpha)) + (difference * alpha);
+    }
+    //printf("Calculated smoothed angle diff.  difference = %lf\n", difference);
+}
+
 void RenderWidget::clearSinOrdinates()
 {
     xAxisOrdinates.clear();
@@ -97,6 +119,20 @@ void RenderWidget::paintEvent(QPaintEvent *pe)
 
 void RenderWidget::draw(QPainter * p)
 {
+    //----------------------------------------------------------------------------------------------------------
+    // Decide if vector (arduino or simulator) is rotating. Use low pass filter on angle difference.
+    // if it is rotating, and if current angle is 0, 90, 180 and 270, it will be applied on current ordinate.
+    //----------------------------------------------------------------------------------------------------------
+    // if time is not paused, we are feeding current angle to sine/cosine plot. LPF to get smoothed angle diff.
+    // if time paused, sine/cosine is frozen. smoothed angle diff can stay where it is.
+    if (!data->isTimePaused)
+    {
+        lowPassFilterAngleDifference(data->curAngleInDegrees);
+    }
+    previousAngleInDegrees = data->curAngleInDegrees;
+    isVectorOrArduinoRunning = smoothedChangeInAngle > 0.2;
+    //----------------------------------------------------------------------------------------------------------
+
     QFont font;
 
     VectorDrawingCoordinates v;
@@ -110,11 +146,18 @@ void RenderWidget::draw(QPainter * p)
     v.vector_tip_x = v.vector_origin_x + v.vector_width;
     v.vector_tip_y = v.vector_origin_y - v.vector_height;
 
+    v.xaxis_x = v.vector_origin_x - data->amplitude - wallSeparation - data->penWidth/2;
+    v.xaxis_y = v.vector_origin_y;
+
+    v.yaxis_x = v.vector_origin_x;
+    v.yaxis_y = v.vector_origin_y - data->amplitude - wallSeparation - data->penWidth/2;
+
     drawAxis(p, v);
     drawProjectionBoxes(p, v);
 
     drawBackground(p, v);
     drawSineAndCosinePoints(p, v);
+    drawLinesAtImportantOrdinateValues(p, v);
 
     drawRotatingVectorComponents(p, v);
     drawRotatingVector(p, v);
@@ -123,7 +166,7 @@ void RenderWidget::draw(QPainter * p)
     // For the projection tip circle to show correctly, draw this after drawing sin & cos points and vector projection dotted line.
     drawTipCircles(p, v);
 
-    drawAliceAndBob(p, v);
+    drawAliceAndCat(p, v);
 }
 
 
@@ -154,17 +197,6 @@ void RenderWidget::drawProjectionBoxes(QPainter *p, VectorDrawingCoordinates v)
         p->setOpacity(1);
 
         //---------------------------------------------------------
-//        int w;
-//        str = "V e r t i c a l   p r o j e c t i o n";
-//        w = fm.width(str);
-
-//        p->save();
-//        p->translate(v.vector_origin_x - data->amplitude - 4,
-//                     v.vector_origin_y + w / 2);
-//        p->rotate(-90);
-//        p->drawText(0, 0, str);
-//        p->restore();
-
         font.setPixelSize(20);
         p->setFont(font);
         p->drawText(v.vector_origin_x - data->amplitude - wallSeparation - data->penWidth - 25,
@@ -196,12 +228,7 @@ void RenderWidget::drawProjectionBoxes(QPainter *p, VectorDrawingCoordinates v)
 
         p->setOpacity(1);
 
-//        str = "H o r i z o n t a l   p r o j e c t i o n";
-//        w = fm.width(str);
-
-//        p->drawText(v.vector_origin_x - w / 2,
-//                    v.vector_origin_y - data->amplitude - 4,
-//                    str);
+        //---------------------------------------------------------
         p->drawText(v.vector_origin_x - data->amplitude - 23,
                     v.vector_origin_y - data->amplitude - wallSeparation - data->penWidth,
                     "-1");
@@ -484,6 +511,9 @@ void RenderWidget::drawVectorProjection(QPainter *p, VectorDrawingCoordinates v)
 
 void RenderWidget::drawSineAndCosinePoints(QPainter *p, VectorDrawingCoordinates v)
 {
+
+    //printf("smoothedChangeInAngle = %lf\n", smoothedChangeInAngle);
+
     //--------------------------------------------------------------------
     // Draw sine points
     //--------------------------------------------------------------------
@@ -500,16 +530,21 @@ void RenderWidget::drawSineAndCosinePoints(QPainter *p, VectorDrawingCoordinates
             // Setting angle would lead to too many same angles being set in a row if the vector
             // had stopped at 0, 90, 180 or 270.
             int currentAngle = INT_MIN;
-            if (!data->useArduino && data->arduinoSimulator->runMotor)
+            if (isVectorOrArduinoRunning)
             {
                 currentAngle = int(round(data->curAngleInDegrees));
                 if (!data->arduinoSimulator->isCounterClockwise)
                 {
                     currentAngle = (currentAngle - 360) % 360;      // if clockwise rotation, show angles 0, -90, -180 & -270
                 }
-                if ((currentAngle % 90) != 0)                       // set angle values only if angle is a multiple of 90
+                int modAngle = data->show30And60Angles ? 30 : 90;
+                if ((currentAngle % modAngle) != 0)                 // set angle values only if angle is a multiple of 90
                 {
                     currentAngle = INT_MIN;
+                }
+                if (currentAngle == 360)
+                {
+                    currentAngle = 0;
                 }
             }
             // Copy value of each point to the previous (older) point.
@@ -541,16 +576,21 @@ void RenderWidget::drawSineAndCosinePoints(QPainter *p, VectorDrawingCoordinates
             // Setting angle would lead to too many same angles being set in a row if the vector
             // had stopped at 0, 90, 180 or 270.
             int currentAngle = INT_MIN;
-            if (!data->useArduino && data->arduinoSimulator->runMotor)
+            if (isVectorOrArduinoRunning)
             {
                 currentAngle = int(round(data->curAngleInDegrees));
                 if (!data->arduinoSimulator->isCounterClockwise)
                 {
                     currentAngle = (currentAngle - 360) % 360;      // if clockwise rotation, show angles 0, -90, -180 & -270
                 }
-                if ((currentAngle % 90) != 0)                       // set angle values only if angle is a multiple of 90
+                int modAngle = data->show30And60Angles ? 30 : 90;
+                if ((currentAngle % modAngle) != 0)                 // set angle values only if angle is a multiple of 90
                 {
                     currentAngle = INT_MIN;
+                }
+                if (currentAngle == 360)
+                {
+                    currentAngle = 0;
                 }
             }
             // Copy height of each point to the point on its left (older point)
@@ -606,6 +646,126 @@ void RenderWidget::drawSineAndCosinePoints(QPainter *p, VectorDrawingCoordinates
     p->setOpacity(1);
 }
 
+
+void RenderWidget::drawLinesAtImportantOrdinateValues (QPainter *p, VectorDrawingCoordinates v)
+{
+    p->save();
+    QPen pen = QPen(QColor(50, 50, 50));
+    pen.setWidth(2);
+    p->setPen(pen);
+    if (data->showSinOnXAxis && data->showAnglesOnXAndYAxis)
+    {
+        //---------------------------------------------------------------------------------------
+        // Draw faint horizontal lines at +1, +0.866, +0.5, -0.5, -0.866 and -1.
+        //---------------------------------------------------------------------------------------
+        if (data->show30And60Angles)
+        {
+            QFont font;
+            font.setPixelSize(15);
+            p->setFont(font);
+
+            p->setOpacity(0.7);
+            p->drawText(v.xaxis_x - 50,
+                        v.xaxis_y - int(round(data->amplitude * 0.866)),
+                        "+0.866");
+            p->drawText(v.xaxis_x - 50,
+                        v.xaxis_y - int(round(data->amplitude * 0.707)),
+                        "+0.707");
+            p->drawText(v.xaxis_x - 50,
+                        v.xaxis_y - int(round(data->amplitude * 0.5)),
+                        "+0.5");
+            p->drawText(v.xaxis_x - 50,
+                        v.xaxis_y - int(round(data->amplitude * -0.5)),
+                        "-0.5");
+            p->drawText(v.xaxis_x - 50,
+                        v.xaxis_y - int(round(data->amplitude * -0.707)),
+                        "-0.707");
+            p->drawText(v.xaxis_x - 50,
+                        v.xaxis_y - int(round(data->amplitude * -0.866)),
+                        "-0.866");
+
+            p->setOpacity(0.1);
+            p->drawLine(v.xaxis_x - 10,
+                        v.xaxis_y - int(round(data->amplitude * 0.866)),
+                        0,
+                        v.xaxis_y - int(round(data->amplitude * 0.866)));
+            p->drawLine(v.xaxis_x - 10,
+                        v.xaxis_y - int(round(data->amplitude * 0.707)),
+                        0,
+                        v.xaxis_y - int(round(data->amplitude * 0.707)));
+            p->drawLine(v.xaxis_x - 10,
+                        v.xaxis_y - int(round(data->amplitude * 0.5)),
+                        0,
+                        v.xaxis_y - int(round(data->amplitude * 0.5)));
+            p->drawLine(v.xaxis_x - 10,
+                        v.xaxis_y - int(round(data->amplitude * -0.5)),
+                        0,
+                        v.xaxis_y - int(round(data->amplitude * -0.5)));
+            p->drawLine(v.xaxis_x - 10,
+                        v.xaxis_y - int(round(data->amplitude * -0.707)),
+                        0,
+                        v.xaxis_y - int(round(data->amplitude * -0.707)));
+            p->drawLine(v.xaxis_x - 10,
+                        v.xaxis_y - int(round(data->amplitude * -0.866)),
+                        0,
+                        v.xaxis_y - int(round(data->amplitude * -0.866)));
+
+        }
+        p->setOpacity(0.1);
+        p->drawLine(v.xaxis_x - 10,                                         // +1
+                    v.xaxis_y - data->amplitude,
+                    0,
+                    v.xaxis_y - data->amplitude);
+        p->drawLine(v.xaxis_x - 10,                                         // -1
+                    v.xaxis_y + data->amplitude,
+                    0,
+                    v.xaxis_y + data->amplitude);
+    }
+
+    if (data->showCosOnYAxis && data->showAnglesOnXAndYAxis)
+    {
+        //---------------------------------------------------------------------------------------
+        // Draw faint vertical lines at +1, +0.866, +0.5, -0.5, -0.866 and -1.
+        //---------------------------------------------------------------------------------------
+        p->drawLine(v.yaxis_x + data->amplitude,                            // +1
+                    v.yaxis_y - 10,
+                    v.yaxis_x + data->amplitude,
+                    0);
+
+        if (data->show30And60Angles)
+        {
+            p->drawLine(v.yaxis_x + int(round(data->amplitude * 0.866)),        // +0.866
+                        v.yaxis_y - 10,
+                        v.yaxis_x + int(round(data->amplitude * 0.866)),
+                        0);
+            p->drawLine(v.yaxis_x + int(round(data->amplitude * 0.707)),        // +0.707
+                        v.yaxis_y - 10,
+                        v.yaxis_x + int(round(data->amplitude * 0.707)),
+                        0);
+            p->drawLine(v.yaxis_x + int(round(data->amplitude * 0.5)),          // +0.5
+                        v.yaxis_y - 10,
+                        v.yaxis_x + int(round(data->amplitude * 0.5)),
+                        0);
+            p->drawLine(v.yaxis_x + int(round(data->amplitude * -0.5)),         // -0.5
+                        v.yaxis_y - 10,
+                        v.yaxis_x + int(round(data->amplitude * -0.5)),
+                        0);
+            p->drawLine(v.yaxis_x + int(round(data->amplitude * -0.707)),        // -0.707
+                        v.yaxis_y - 10,
+                        v.yaxis_x + int(round(data->amplitude * -0.707)),
+                        0);
+            p->drawLine(v.yaxis_x + int(round(data->amplitude * -0.866)),        // -0.866
+                        v.yaxis_y - 10,
+                        v.yaxis_x + int(round(data->amplitude * -0.866)),
+                        0);
+        }
+        p->drawLine(v.yaxis_x - data->amplitude,
+                    v.yaxis_y - 10,
+                    v.yaxis_x - data->amplitude,
+                    0);
+    }
+    p->restore();
+}
 
 void RenderWidget::drawTipCircles(QPainter *p, VectorDrawingCoordinates v)
 {
@@ -682,7 +842,7 @@ void RenderWidget::drawAxis(QPainter *p, VectorDrawingCoordinates v)
     }
 }
 
-void RenderWidget::drawAliceAndBob(QPainter *p, VectorDrawingCoordinates v)
+void RenderWidget::drawAliceAndCat(QPainter *p, VectorDrawingCoordinates v)
 {
     QRect target;
     QRect source;
@@ -704,7 +864,7 @@ void RenderWidget::drawAliceAndBob(QPainter *p, VectorDrawingCoordinates v)
     }
 
     //------------------------------------------------------------
-    // Load and draw Bob
+    // Load and draw Cat
     if (catImage)
     {
         target = QRect(v.vector_origin_x - 80,

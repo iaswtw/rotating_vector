@@ -76,6 +76,7 @@ public:
 
     bool showAnglesOnXAndYAxis;
     bool showScrollingBackgroundText;
+    bool show30And60Angles;
 
     int timerInterval;
     int halfSteps;

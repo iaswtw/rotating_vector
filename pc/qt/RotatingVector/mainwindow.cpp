@@ -49,11 +49,13 @@ MainWindow::MainWindow(QWidget *parent) :
     showCosOnXAxis(false),
 
     showAnglesOnXAndYAxis(false),
-    showScrollingBackgroundText(true),
+    showScrollingBackgroundText(false),
+    show30And60Angles(false),
 
     timerInterval(30),
     halfSteps(0),
     useArduino(false),
+
     serialData(new QByteArray())
 {
     //---------------------------------------------------------------------------------
@@ -74,6 +76,10 @@ MainWindow::MainWindow(QWidget *parent) :
     showSinOnXAxis = true;
     showCosOnYAxis = true;
     showCosOnXAxis = true;
+
+    drawAngleArc = true;
+    showAnglesOnXAndYAxis = true;
+    show30And60Angles = true;
     //---------------------------------------------------------------------------------
 
     setbuf(stdout, nullptr);
@@ -145,6 +151,7 @@ void MainWindow::readSerialData()
         int newlineIndex = serialData->indexOf('\n');
         QByteArray line = serialData->left(newlineIndex);
 
+        // we read the serial data unconditionally, but process it only if 'use arduino' is selected.
         if (useArduino)
         {
             processSerialLine(line);
@@ -172,8 +179,9 @@ void MainWindow::processSerialLine(QByteArray line)
         // Extract angle
         qstr = list.at(1);
         curAngleInDegrees = qstr.toDouble();
+
         //printf("Angle: %.2f\n", double(curAngleInDegrees));
-        cw->ui->curAngle_le->setText(qstr.toLocal8Bit().constData());
+        cw->ui->curAngle_le->setText(qstr.toLocal8Bit().constData());       // set current angle in GUI
 
         if (useArduino)
             curAngleInDegrees += cw->ui->angleAdvanceOffset_sb->value();

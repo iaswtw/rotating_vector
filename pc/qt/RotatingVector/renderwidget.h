@@ -152,6 +152,14 @@ struct VectorDrawingCoordinates
 
     int vector_tip_x;
     int vector_tip_y;
+
+    // coordinates of rightmost point of the X axis
+    int xaxis_x;
+    int xaxis_y;
+
+    // coordinates of the bottommost point of the Y axis
+    int yaxis_x;
+    int yaxis_y;
 };
 
 enum AxisOrientation
@@ -249,6 +257,7 @@ public:
         int fontPixelSize = 20;
         font.setPixelSize(fontPixelSize);
         p->setFont(font);
+        p->setOpacity(0.3);
 
         QFontMetrics fm(font);
         for (int i=0; i<maxOrdinates-1; i++)
@@ -258,18 +267,31 @@ public:
                 if (angles[i] != INT_MIN)
                 {
                     //--------------------------------------------------
-                    // draw small vertical line on X axis
+                    // draw tiny division on X axis
                     p->drawLine(xOffset - i*abscissaScale,
-                                yOffset - 10,
+                                yOffset - 1,
                                 xOffset - i*abscissaScale,
-                                yOffset + 10);
+                                yOffset + 1);
+
+                    // drop perpendicular from the ordinate value to x axis
+                    p->save();
+                    p->setOpacity(0.1);
+                    p->drawLine(xOffset - i*abscissaScale,
+                                yOffset,
+                                xOffset - i*abscissaScale,
+                                yOffset - ordinates[i]);
+                    p->restore();
+
                     //--------------------------------------------------
                     // Draw longer division at 0 / 360 degress
                     if ((angles[i] == 0) || (angles[i] == 360))
                     {
                         // draw a thin faint line from top to bottom
                         p->save();
-                        p->setOpacity(0.1);
+                        QPen pen = QPen(QColor(200, 50, 50));
+                        pen.setWidth(2);
+                        p->setPen(pen);
+//                        p->setOpacity(0.3);
                         p->drawLine(xOffset - i*abscissaScale,
                                     yOffset - amplitude - 10,
                                     xOffset - i*abscissaScale,
@@ -290,18 +312,31 @@ public:
                 if (angles[i] != INT_MIN)
                 {
                     //--------------------------------------------------
-                    // draw small horizontal line on Y axis
-                    p->drawLine(xOffset - 10,
+                    // draw tiny division on Y axis
+                    p->drawLine(xOffset - 1,
                                 yOffset - i*abscissaScale,
-                                xOffset + 10,
+                                xOffset + 1,
                                 yOffset - i*abscissaScale);
+
+                    // drop perpendicular from the ordinate value to y axis
+                    p->save();
+                    p->setOpacity(0.1);
+                    p->drawLine(xOffset,
+                                yOffset - i*abscissaScale,
+                                xOffset + ordinates[i],
+                                yOffset - i*abscissaScale);
+                    p->restore();
+
                     //--------------------------------------------------
                     // Draw longer division at 0 / 360 degress
                     if ((angles[i] == 0) || (angles[i] == 360))
                     {
                         // draw a thin faint line from left to right
                         p->save();
-                        p->setOpacity(0.1);
+                        QPen pen = QPen(QColor(200, 50, 50));
+                        pen.setWidth(2);
+                        p->setPen(pen);
+//                        p->setOpacity(0.3);
                         p->drawLine(xOffset - amplitude - 10,
                                     yOffset - i*abscissaScale,
                                     xOffset + amplitude + 10,
@@ -322,43 +357,6 @@ public:
                 qFatal("Unknown axis orientation!");
             }
         }
-
-        //---------------------------------------------------------------------------------------
-        // Draw +1 and -1 limit line
-        //---------------------------------------------------------------------------------------
-        if (orientation == RIGHT_TO_LEFT)
-        {
-            p->save();
-            p->setOpacity(0.1);
-            p->drawLine(xOffset - 10,
-                        yOffset - amplitude,
-                        0,
-                        yOffset - amplitude);
-            p->drawLine(xOffset - 10,
-                        yOffset + amplitude,
-                        0,
-                        yOffset + amplitude);
-            p->restore();
-        }
-        else if (orientation == BOTTOM_TO_TOP)
-        {
-            p->save();
-            p->setOpacity(0.1);
-            p->drawLine(xOffset + amplitude,
-                        yOffset - 10,
-                        xOffset + amplitude,
-                        0);
-            p->drawLine(xOffset - amplitude,
-                        yOffset - 10,
-                        xOffset - amplitude,
-                        0);
-            p->restore();
-        }
-        else
-        {
-            qFatal("Unknown axis orientation!");
-        }
-
         p->restore();
     }
 };
@@ -386,19 +384,20 @@ protected:
 
 
 private:
-    void draw                           (QPainter *p);
-    void drawProjectionBoxes            (QPainter *p, VectorDrawingCoordinates v);
-    void drawBackground                 (QPainter *p, VectorDrawingCoordinates v);
-    void drawRotatingVectorComponents   (QPainter *p, VectorDrawingCoordinates v);
-    void drawRotatingVector             (QPainter *p, VectorDrawingCoordinates v);
-    void drawVectorProjection           (QPainter *p, VectorDrawingCoordinates v);
-    void drawAxis                       (QPainter *p, VectorDrawingCoordinates v);
-    void drawSineAndCosinePoints        (QPainter *p, VectorDrawingCoordinates v);
-    void drawTipCircles                 (QPainter *p, VectorDrawingCoordinates v);
-    void drawAliceAndBob                (QPainter *p, VectorDrawingCoordinates v);
+    void draw                               (QPainter *p);
+    void drawProjectionBoxes                (QPainter *p, VectorDrawingCoordinates v);
+    void drawBackground                     (QPainter *p, VectorDrawingCoordinates v);
+    void drawRotatingVectorComponents       (QPainter *p, VectorDrawingCoordinates v);
+    void drawRotatingVector                 (QPainter *p, VectorDrawingCoordinates v);
+    void drawVectorProjection               (QPainter *p, VectorDrawingCoordinates v);
+    void drawAxis                           (QPainter *p, VectorDrawingCoordinates v);
+    void drawSineAndCosinePoints            (QPainter *p, VectorDrawingCoordinates v);
+    void drawLinesAtImportantOrdinateValues (QPainter *p, VectorDrawingCoordinates v);
+    void drawTipCircles                     (QPainter *p, VectorDrawingCoordinates v);
+    void drawAliceAndCat                    (QPainter *p, VectorDrawingCoordinates v);
 
     QImage* locateAndInstantiateImage(QString filename);
-//    RotatingVectorData *data;
+    void lowPassFilterAngleDifference(double difference);
 
     QTimer *timer;
 
@@ -437,6 +436,10 @@ private:
 
     const int wallSeparation = 30;
     const double sinCosOpacity = 0.7;
+
+    double previousAngleInDegrees = 0;
+    double smoothedChangeInAngle = 0;
+    bool isVectorOrArduinoRunning = false;      // decides whether angle (0, 90, 180, 270) is set on an ordinate.
 
 };
 
