@@ -27,7 +27,7 @@ MainWindow::MainWindow(QWidget *parent) :
     penWidth(12),
     timeXInc(1),
     drawRotatingVector(true),
-    drawAngleArc(false),
+    drawAngleArc(true),
 
     drawSinComponent(false),
     drawCosComponent(false),
@@ -61,25 +61,25 @@ MainWindow::MainWindow(QWidget *parent) :
     //---------------------------------------------------------------------------------
     // Following values are set to I don't have to click checkboxes everytime I start the app for testing.
     // Comment these values for actual demonstration.
-    showVerticalProjectionBox = true;
-    showHorizontalProjectionBox = true;
+//    showVerticalProjectionBox = true;
+//    showHorizontalProjectionBox = true;
 
-    drawVerticalShadow = true;
-    drawHorizontalShadow = true;
+//    drawVerticalShadow = true;
+//    drawHorizontalShadow = true;
 
-    drawVerticalProjectionTipCircle = true;
-    drawHorizontalProjectionTipCircle = true;
+//    drawVerticalProjectionTipCircle = true;
+//    drawHorizontalProjectionTipCircle = true;
 
-    drawVerticalProjectionDottedLine = true;
-    drawHorizontalProjectionDottedLine = true;
+//    drawVerticalProjectionDottedLine = true;
+//    drawHorizontalProjectionDottedLine = true;
 
-    showSinOnXAxis = true;
-    showCosOnYAxis = true;
-    showCosOnXAxis = true;
+//    showSinOnXAxis = true;
+//    showCosOnYAxis = true;
+//    showCosOnXAxis = true;
 
-    drawAngleArc = true;
-    showAnglesOnXAndYAxis = true;
-    show30And60Angles = true;
+//    drawAngleArc = true;
+//    showAnglesOnXAndYAxis = true;
+//    show30And60Angles = true;
     //---------------------------------------------------------------------------------
 
     setbuf(stdout, nullptr);

@@ -152,6 +152,13 @@ void RenderWidget::draw(QPainter * p)
     v.yaxis_x = v.vector_origin_x;
     v.yaxis_y = v.vector_origin_y - data->amplitude - wallSeparation - data->penWidth/2;
 
+    v.vproj_origin_x = v.vector_origin_x - data->amplitude - wallSeparation;
+    v.vproj_origin_y = v.vector_origin_y;
+
+    v.hproj_origin_x = v.vector_origin_x;
+    v.hproj_origin_y = v.vector_origin_y - data->amplitude - wallSeparation;
+
+
     drawAxis(p, v);
     drawProjectionBoxes(p, v);
 
@@ -459,8 +466,8 @@ void RenderWidget::drawVectorProjection(QPainter *p, VectorDrawingCoordinates v)
         pen.setColor(sinColor);
         p->setPen(pen);
         p->setBrush(sinColor);
-        p->drawRect(v.vector_origin_x - data->amplitude - wallSeparation - data->penWidth/2,
-                    v.vector_origin_y,
+        p->drawRect(v.vproj_origin_x - data->penWidth/2,
+                    v.vproj_origin_y,
                     data->penWidth,
                     -data->curHeight);
     }
@@ -473,8 +480,8 @@ void RenderWidget::drawVectorProjection(QPainter *p, VectorDrawingCoordinates v)
         pen.setColor(cosColor);
         p->setPen(pen);
         p->setBrush(cosColor);
-        p->drawRect(v.vector_origin_x,
-                    v.vector_origin_y - data->amplitude - wallSeparation - data->penWidth/2,
+        p->drawRect(v.hproj_origin_x,
+                    v.hproj_origin_y - data->penWidth/2,
                     data->curWidth,
                     data->penWidth);
     }
@@ -827,18 +834,11 @@ void RenderWidget::drawAxis(QPainter *p, VectorDrawingCoordinates v)
 
     if (data->showSinOnXAxis)
     {
-        p->drawLine(0,
-                    v.vector_origin_y,
-                    v.vector_origin_x - data->amplitude - wallSeparation - data->penWidth/2,
-                    v.vector_origin_y);
+        p->drawLine(v.xaxis_x, v.xaxis_y, 0, v.xaxis_y);
     }
-
     if (data->showCosOnYAxis)
     {
-        p->drawLine(v.vector_origin_x,
-                    0,
-                    v.vector_origin_x,
-                    v.vector_origin_y - data->amplitude - wallSeparation - data->penWidth/2);
+        p->drawLine(v.yaxis_x, v.yaxis_y, v.yaxis_x, 0);
     }
 }
 

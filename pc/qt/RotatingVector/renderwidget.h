@@ -160,6 +160,14 @@ struct VectorDrawingCoordinates
     // coordinates of the bottommost point of the Y axis
     int yaxis_x;
     int yaxis_y;
+
+    // coordinates of the vector origin's vertical projection
+    int vproj_origin_x;
+    int vproj_origin_y;
+
+    // coordinates of the vector origin's horizontal projection
+    int hproj_origin_x;
+    int hproj_origin_y;
 };
 
 enum AxisOrientation
