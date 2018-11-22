@@ -16,17 +16,12 @@ ArduinoSimulator::ArduinoSimulator(QObject *parent, MainWindow *mw_) :
     QObject(parent),
     runMotor(false),
     isCounterClockwise(true),
-    timer(new QTimer(this)),
-    iterationInterval(30),
+    angleIncrementInDegrees(0.1),
     halfSteps(0),
     targetHalfSteps(-1),
     doHalfStep(false),
     mw(mw_)
 {
-    connect(timer, SIGNAL(timeout()), this, SLOT(iterationTimerEvent()));
-
-    timer->start(iterationInterval);
-
 }
 
 void ArduinoSimulator::postCmd(QString cmd)
@@ -107,62 +102,69 @@ void ArduinoSimulator::readAndExecuteCommand()
             else if (cmd == "1")
             {
                 runMotor = true;
-                iterationInterval = 50;
+                angleIncrementInDegrees = SPEED_1_ANGLE_INCREMENT;
             }
             else if (cmd == "2")
             {
                 runMotor = true;
-                iterationInterval = 45;
+                angleIncrementInDegrees = SPEED_2_ANGLE_INCREMENT;
             }
             else if (cmd == "3")
             {
                 runMotor = true;
-                iterationInterval = 38;
+                angleIncrementInDegrees = SPEED_3_ANGLE_INCREMENT;
             }
             else if (cmd == "4")
             {
                 runMotor = true;
-                iterationInterval = 30;
+                angleIncrementInDegrees = SPEED_4_ANGLE_INCREMENT;
             }
             else if (cmd == "5")
             {
                 runMotor = true;
-                iterationInterval = 22;
+                angleIncrementInDegrees = SPEED_5_ANGLE_INCREMENT;
             }
             else if (cmd == "6")
             {
                 runMotor = true;
-                iterationInterval = 15;
+                angleIncrementInDegrees = SPEED_6_ANGLE_INCREMENT;
             }
-
-            // start the timer with potentially updated iteration interval
-            timer->start(iterationInterval);
         }
 
     }
 }
 
-void ArduinoSimulator::iterationTimerEvent()
+void ArduinoSimulator::tick()
 {
     if (runMotor)
     {
         if (isCounterClockwise)
-            halfSteps++;
+        {
+            if (doHalfStep)
+                currentAngleInDegrees += 0.9;
+            else
+                currentAngleInDegrees += angleIncrementInDegrees;
+        }
         else
-            halfSteps--;
+        {
+            if (doHalfStep)
+                currentAngleInDegrees -= 0.9;
+            else
+                currentAngleInDegrees -= angleIncrementInDegrees;
+        }
 
         //----------------------------------------------
         // rebase to 0 if gone over/under a full revolution.
         //----------------------------------------------
         if (isCounterClockwise)
         {
-            if (halfSteps >= HALF_STEPS_PER_REVOLUTION)
-                halfSteps -= HALF_STEPS_PER_REVOLUTION;
+            if (currentAngleInDegrees >= 360)
+                currentAngleInDegrees -= 360.0;
         }
         else
         {
-            if (halfSteps < 0)
-                halfSteps += HALF_STEPS_PER_REVOLUTION;
+            if (currentAngleInDegrees < 0)
+                currentAngleInDegrees += 360.0;
         }
 
         //------------------------------------------------------
@@ -174,6 +176,8 @@ void ArduinoSimulator::iterationTimerEvent()
             runMotor = false;
             mw->isTimePaused = true;
         }
+
+        halfSteps = int(round(currentAngleInDegrees * NUM_HALF_STEPS_PER_DEGREE));
 
         //----------------------------------------------
         // were we asked to go to a specific angle?  If yes, and if we reached that, stop.
@@ -187,7 +191,7 @@ void ArduinoSimulator::iterationTimerEvent()
 
 
         QString statusString;
-        statusString.sprintf("%.2f %d\n", halfSteps * NUM_DEGREES_PER_HALF_STEP, halfSteps);
+        statusString.sprintf("%.2f %d\n", currentAngleInDegrees, halfSteps);
 
         if (!mw->useArduino)
         {

@@ -52,7 +52,7 @@ MainWindow::MainWindow(QWidget *parent) :
     showScrollingBackgroundText(false),
     show30And60Angles(false),
 
-    timerInterval(30),
+    timerInterval(20),
     halfSteps(0),
     useArduino(false),
 
@@ -61,25 +61,25 @@ MainWindow::MainWindow(QWidget *parent) :
     //---------------------------------------------------------------------------------
     // Following values are set to I don't have to click checkboxes everytime I start the app for testing.
     // Comment these values for actual demonstration.
-//    showVerticalProjectionBox = true;
-//    showHorizontalProjectionBox = true;
+    showVerticalProjectionBox = true;
+    showHorizontalProjectionBox = true;
 
-//    drawVerticalShadow = true;
-//    drawHorizontalShadow = true;
+    drawVerticalShadow = true;
+    drawHorizontalShadow = true;
 
-//    drawVerticalProjectionTipCircle = true;
-//    drawHorizontalProjectionTipCircle = true;
+    drawVerticalProjectionTipCircle = true;
+    drawHorizontalProjectionTipCircle = true;
 
-//    drawVerticalProjectionDottedLine = true;
-//    drawHorizontalProjectionDottedLine = true;
+    drawVerticalProjectionDottedLine = true;
+    drawHorizontalProjectionDottedLine = true;
 
-//    showSinOnXAxis = true;
-//    showCosOnYAxis = true;
-//    showCosOnXAxis = true;
+    showSinOnXAxis = true;
+    showCosOnYAxis = true;
+    showCosOnXAxis = true;
 
-//    drawAngleArc = true;
-//    showAnglesOnXAndYAxis = true;
-//    show30And60Angles = true;
+    drawAngleArc = true;
+    showAnglesOnXAndYAxis = true;
+    show30And60Angles = true;
     //---------------------------------------------------------------------------------
 
     setbuf(stdout, nullptr);
@@ -115,9 +115,11 @@ MainWindow::MainWindow(QWidget *parent) :
     arduinoSimulator = new ArduinoSimulator(this, this);
 
     printf("Current Dir: %s\n", QDir::currentPath().toStdString().c_str());
-    //printf("Hello world\n");
     fflush(stdout);
-//    std::cout << "Hello world" << std::endl;
+
+    oneTimeTimer.setSingleShot(true);
+    connect(&oneTimeTimer, SIGNAL(timeout()), this, SLOT(oneTimeTimerHandler()));
+    oneTimeTimer.start(500);
 }
 
 
@@ -133,11 +135,24 @@ void MainWindow::update()
 
 }
 
+void MainWindow::oneTimeTimerHandler()
+{
+//    cw->setLowestSpeed();
+//    cw->continueVectorAndUnpauseTime();
+}
+
 void MainWindow::setControlWindow(ControlWindow *cw)
 {
     this->cw = cw;
 }
 
+void MainWindow::renderWidgetPaintEvent()
+{
+    if (!useArduino)
+    {
+        arduinoSimulator->tick();
+    }
+}
 
 void MainWindow::readSerialData()
 {

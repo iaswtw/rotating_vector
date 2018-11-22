@@ -22,9 +22,11 @@ public:
     ~MainWindow();
     void setControlWindow(ControlWindow *cw);
     void processSerialLine(QByteArray line);
+    void renderWidgetPaintEvent();
 
 public slots:
     void readSerialData();
+    void oneTimeTimerHandler();
 
 private slots:
 
@@ -83,6 +85,7 @@ public:
     bool useArduino;
 
     QByteArray *serialData;
+    QTimer oneTimeTimer;
 
 };
 

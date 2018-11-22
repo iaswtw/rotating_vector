@@ -219,7 +219,11 @@ public:
         // the previous two ordinates didn't have any angle set.
         if (currentAngle != INT_MIN)
         {
-            if ((angles[1] == INT_MIN) && (angles[2] == INT_MIN))
+            if ((angles[1] == INT_MIN) &&
+                (angles[2] == INT_MIN) &&
+                (angles[3] == INT_MIN) &&
+                (angles[4] == INT_MIN) &&
+                (angles[5] == INT_MIN))
             {
                 angles[0] = currentAngle;
             }

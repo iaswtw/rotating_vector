@@ -16,6 +16,8 @@ class ControlWindow : public QDialog
 public:
     explicit ControlWindow(QWidget *parent = nullptr, MainWindow * mw = nullptr);
     ~ControlWindow();
+    void continueVectorAndUnpauseTime();
+    void setLowestSpeed();
 
 private:
     MainWindow *mw;

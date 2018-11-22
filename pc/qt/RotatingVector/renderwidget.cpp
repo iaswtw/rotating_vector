@@ -110,6 +110,9 @@ void RenderWidget::renderTimerEvent()
 void RenderWidget::paintEvent(QPaintEvent *pe)
 {
     QWidget::paintEvent(pe);
+
+    data->renderWidgetPaintEvent();
+
     QPainter p(this);
 
     draw(&p);

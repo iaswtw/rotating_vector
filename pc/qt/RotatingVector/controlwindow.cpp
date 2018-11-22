@@ -52,6 +52,17 @@ ControlWindow::~ControlWindow()
     delete ui;
 }
 
+void ControlWindow::setLowestSpeed()
+{
+    sendCmd("1\n");
+}
+
+void ControlWindow::continueVectorAndUnpauseTime()
+{
+    sendCmd("c\n");
+    mw->isTimePaused = false;
+}
+
 void ControlWindow::sendCmd(const char * pCmd)
 {
     if (mw->useArduino)
@@ -66,8 +77,7 @@ void ControlWindow::sendCmd(const char * pCmd)
 
 void ControlWindow::on_continue_btn_clicked()
 {
-    sendCmd("c\n");
-    mw->isTimePaused = false;
+    continueVectorAndUnpauseTime();
 }
 
 void ControlWindow::on_unpauseVector_btn_clicked()
@@ -80,7 +90,7 @@ void ControlWindow::on_unpauseTime_btn_clicked()
     mw->isTimePaused = false;
 }
 
-void ControlWindow::on_speed1_btn_clicked()   {    sendCmd("1\n");   }
+void ControlWindow::on_speed1_btn_clicked()   {    setLowestSpeed(); }
 void ControlWindow::on_speed2_btn_clicked()   {    sendCmd("2\n");   }
 void ControlWindow::on_speed3_btn_clicked()   {    sendCmd("3\n");   }
 void ControlWindow::on_speed4_btn_clicked()   {    sendCmd("4\n");   }
