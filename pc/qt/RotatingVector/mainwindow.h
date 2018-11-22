@@ -34,57 +34,56 @@ protected:
 
 private:
     void sendCmd(const char * pCmd);
-    void update();
 
     ControlWindow *cw;
 
 public:
     Ui::MainWindow *ui;
-    QSerialPort *serial;
+    QSerialPort *serial = new QSerialPort(this);
     RenderWidget *renderWidget;
-    ArduinoSimulator *arduinoSimulator;
+    ArduinoSimulator *arduinoSimulator = nullptr;
 
-    double curAngleInRadians;
-    double curAngleInDegrees;
-    bool isTimePaused;
-    int xAxisOffFromTop;
-    int xAxisOffFromRight;
-    int amplitude;
-    int curHeight;
-    int curWidth;
-    int penWidth;
-    int timeXInc;
-    bool drawRotatingVector;
-    bool drawAngleArc;
+    double curAngleInRadians = 0.0;
+    double curAngleInDegrees = 0.0;
+    bool isTimePaused = false;
+    int xAxisOffFromTop = 663;
+    int xAxisOffFromRight = 661;
+    int amplitude = 220;
+    int curHeight = 0;
+    int curWidth = amplitude;
+    int penWidth = 12;
+    int timeXInc = 1;
+    bool drawRotatingVector = true;
+    bool drawAngleArc = true;
 
-    bool drawSinComponent;
-    bool drawCosComponent;
+    bool drawSinComponent = false;
+    bool drawCosComponent = false;
 
-    bool drawVerticalShadow;
-    bool drawHorizontalShadow;
+    bool drawVerticalShadow = false;
+    bool drawHorizontalShadow = false;
 
-    bool drawVerticalProjectionDottedLine;
-    bool drawHorizontalProjectionDottedLine;
+    bool drawVerticalProjectionDottedLine = false;
+    bool drawHorizontalProjectionDottedLine = false;
 
-    bool drawVerticalProjectionTipCircle;
-    bool drawHorizontalProjectionTipCircle;
+    bool drawVerticalProjectionTipCircle = false;
+    bool drawHorizontalProjectionTipCircle = false;
 
-    bool showVerticalProjectionBox;
-    bool showHorizontalProjectionBox;
+    bool showVerticalProjectionBox = false;
+    bool showHorizontalProjectionBox = false;
 
-    bool showSinOnXAxis;
-    bool showCosOnYAxis;
-    bool showCosOnXAxis;
+    bool showSinOnXAxis = false;
+    bool showCosOnYAxis = false;
+    bool showCosOnXAxis = false;
 
-    bool showAnglesOnXAndYAxis;
-    bool showScrollingBackgroundText;
-    bool show30And60Angles;
+    bool showAnglesOnXAndYAxis = false;
+    bool showScrollingBackgroundText = false;
+    bool show30And60Angles = false;
 
-    int timerInterval;
-    int halfSteps;
-    bool useArduino;
+    int timerInterval = 20;
+    int halfSteps = 0;
+    bool useArduino = false;
 
-    QByteArray *serialData;
+    QByteArray *serialData = new QByteArray();
     QTimer oneTimeTimer;
 
 };

@@ -14,12 +14,6 @@
 
 ArduinoSimulator::ArduinoSimulator(QObject *parent, MainWindow *mw_) :
     QObject(parent),
-    runMotor(false),
-    isCounterClockwise(true),
-    angleIncrementInDegrees(0.1),
-    halfSteps(0),
-    targetHalfSteps(-1),
-    doHalfStep(false),
     mw(mw_)
 {
 }

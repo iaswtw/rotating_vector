@@ -4,6 +4,9 @@
 #include <QWidget>
 #include <QRandomGenerator>
 #include <QPainter>
+#include <QTimer>
+
+using namespace std;
 
 #define NUM_ORDINATES                   1500
 #define NUM_BACKGROUND_TEXT_POINTS      15
@@ -410,33 +413,26 @@ private:
 
     QImage* locateAndInstantiateImage(QString filename);
     void lowPassFilterAngleDifference(double difference);
+    void drawOrdinateLinesAndText(QPainter *p, vector<pair<double, string>>& ordinates, int x, int y, AxisOrientation orientation);
+    void drawTipCircle(QPainter *p, int x, int y);
 
-    QTimer *timer;
+    QTimer *timer = new QTimer(this);
 
     MainWindow *data;
 
-    AxisOrdinates xAxisOrdinates;
-    AxisOrdinates yAxisOrdinates;
+    AxisOrdinates xAxisOrdinates = AxisOrdinates(NUM_ORDINATES);
+    AxisOrdinates yAxisOrdinates = AxisOrdinates(NUM_ORDINATES);
 
-    ScrollingBackground vtScrollingBackground;
-    ScrollingBackground hzScrollingBackground;
+    ScrollingBackground vtScrollingBackground = ScrollingBackground(NUM_BACKGROUND_TEXT_POINTS/2,
+                                                                    NUM_TIME_TEXT_POINTS/2,
+                                                                    NUM_ANGLE_TEXT_POINTS/2);
+
+    ScrollingBackground hzScrollingBackground = ScrollingBackground(NUM_BACKGROUND_TEXT_POINTS,
+                                                                    NUM_TIME_TEXT_POINTS,
+                                                                    NUM_ANGLE_TEXT_POINTS);
 
     QImage *aliceImage = nullptr;
     QImage *catImage = nullptr;
-
-    // Red and green
-//    QColor sinColor = QColor(220, 50, 0);
-//    QColor cosColor = QColor(50, 220, 0);
-//    QColor vectorColor = QColor(220, 220, 0);
-
-    // Red and blue
-//    QColor sinColor = QColor(220, 50, 0);
-//    QColor cosColor = QColor(50, 0, 220);
-//    QColor vectorColor = QColor(220, 0, 220);
-
-    // Green and Blue
-//    const QColor sinColor = QColor(0, 220, 0);
-//    const QColor cosColor = QColor(0, 0, 220);
 
     const QColor sinColor = QColor(120, 220, 120);
     const QColor cosColor = QColor(140, 190, 255);

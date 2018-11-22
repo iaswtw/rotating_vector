@@ -6,15 +6,10 @@
 #include <QDir>
 #include <QImage>
 
+using namespace std;
+
 RenderWidget::RenderWidget(QWidget *parent, MainWindow *data) :
-    QWidget(parent),
-    timer(new QTimer(this)),
-
-    xAxisOrdinates(AxisOrdinates(NUM_ORDINATES)),
-    yAxisOrdinates(AxisOrdinates(NUM_ORDINATES)),
-
-    vtScrollingBackground(NUM_BACKGROUND_TEXT_POINTS/2, NUM_TIME_TEXT_POINTS/2, NUM_ANGLE_TEXT_POINTS/2),
-    hzScrollingBackground(NUM_BACKGROUND_TEXT_POINTS,   NUM_TIME_TEXT_POINTS,   NUM_ANGLE_TEXT_POINTS)
+    QWidget(parent)
 {
     this->data = data;
 
@@ -657,79 +652,82 @@ void RenderWidget::drawSineAndCosinePoints(QPainter *p, VectorDrawingCoordinates
 }
 
 
+void RenderWidget::drawOrdinateLinesAndText(QPainter *p, vector<pair<double, string>>& ordinates, int x, int y, AxisOrientation orientation)
+{
+    QFont font;
+    font.setPixelSize(15);
+    p->setFont(font);
+
+    p->setOpacity(0.7);
+
+    for (pair<double, string> value : ordinates)
+    {
+        if (orientation == RIGHT_TO_LEFT)
+        {
+            p->drawText(x - 70,
+                        y - int(round(data->amplitude * value.first)),
+                        value.second.c_str());
+        }
+        else
+        {
+            // todo. Not drawing ordinate captions on Y axis for now.
+        }
+    }
+
+    p->setOpacity(0.1);
+
+    for (pair<double, string> value : ordinates)
+    {
+        if (orientation == RIGHT_TO_LEFT)
+        {
+            p->drawLine(x - 10,
+                        y - int(round(data->amplitude * value.first)),
+                        0,
+                        y - int(round(data->amplitude * value.first)));
+        }
+        else
+        {
+            p->drawLine(x + int(round(data->amplitude * value.first)),
+                        y - 10,
+                        x + int(round(data->amplitude * value.first)),
+                        0);
+        }
+    }
+}
+
+
 void RenderWidget::drawLinesAtImportantOrdinateValues (QPainter *p, VectorDrawingCoordinates v)
 {
     p->save();
     QPen pen = QPen(QColor(50, 50, 50));
     pen.setWidth(2);
     p->setPen(pen);
+
+    vector<pair<double, string>> ordinates_1_minus1 = {
+        make_pair(1.0,    "+1.0"),
+        make_pair(-1.0,   "-1.0"),
+    };
+
+    vector<pair<double, string>> ordinates = {
+        make_pair(0.866,  "+0.866"),
+        make_pair(0.707,  "+0.707"),
+        make_pair(0.5,    "+0.5"),
+        make_pair(-0.5,   "-0.5"),
+        make_pair(-0.707, "-0.707"),
+        make_pair(-0.866, "-0.866")
+    };
+
+
     if (data->showSinOnXAxis && data->showAnglesOnXAndYAxis)
     {
         //---------------------------------------------------------------------------------------
         // Draw faint horizontal lines at +1, +0.866, +0.5, -0.5, -0.866 and -1.
         //---------------------------------------------------------------------------------------
+        drawOrdinateLinesAndText(p, ordinates_1_minus1, v.xaxis_x, v.xaxis_y, RIGHT_TO_LEFT);
         if (data->show30And60Angles)
         {
-            QFont font;
-            font.setPixelSize(15);
-            p->setFont(font);
-
-            p->setOpacity(0.7);
-            p->drawText(v.xaxis_x - 50,
-                        v.xaxis_y - int(round(data->amplitude * 0.866)),
-                        "+0.866");
-            p->drawText(v.xaxis_x - 50,
-                        v.xaxis_y - int(round(data->amplitude * 0.707)),
-                        "+0.707");
-            p->drawText(v.xaxis_x - 50,
-                        v.xaxis_y - int(round(data->amplitude * 0.5)),
-                        "+0.5");
-            p->drawText(v.xaxis_x - 50,
-                        v.xaxis_y - int(round(data->amplitude * -0.5)),
-                        "-0.5");
-            p->drawText(v.xaxis_x - 50,
-                        v.xaxis_y - int(round(data->amplitude * -0.707)),
-                        "-0.707");
-            p->drawText(v.xaxis_x - 50,
-                        v.xaxis_y - int(round(data->amplitude * -0.866)),
-                        "-0.866");
-
-            p->setOpacity(0.1);
-            p->drawLine(v.xaxis_x - 10,
-                        v.xaxis_y - int(round(data->amplitude * 0.866)),
-                        0,
-                        v.xaxis_y - int(round(data->amplitude * 0.866)));
-            p->drawLine(v.xaxis_x - 10,
-                        v.xaxis_y - int(round(data->amplitude * 0.707)),
-                        0,
-                        v.xaxis_y - int(round(data->amplitude * 0.707)));
-            p->drawLine(v.xaxis_x - 10,
-                        v.xaxis_y - int(round(data->amplitude * 0.5)),
-                        0,
-                        v.xaxis_y - int(round(data->amplitude * 0.5)));
-            p->drawLine(v.xaxis_x - 10,
-                        v.xaxis_y - int(round(data->amplitude * -0.5)),
-                        0,
-                        v.xaxis_y - int(round(data->amplitude * -0.5)));
-            p->drawLine(v.xaxis_x - 10,
-                        v.xaxis_y - int(round(data->amplitude * -0.707)),
-                        0,
-                        v.xaxis_y - int(round(data->amplitude * -0.707)));
-            p->drawLine(v.xaxis_x - 10,
-                        v.xaxis_y - int(round(data->amplitude * -0.866)),
-                        0,
-                        v.xaxis_y - int(round(data->amplitude * -0.866)));
-
+            drawOrdinateLinesAndText(p, ordinates, v.xaxis_x, v.xaxis_y, RIGHT_TO_LEFT);
         }
-        p->setOpacity(0.1);
-        p->drawLine(v.xaxis_x - 10,                                         // +1
-                    v.xaxis_y - data->amplitude,
-                    0,
-                    v.xaxis_y - data->amplitude);
-        p->drawLine(v.xaxis_x - 10,                                         // -1
-                    v.xaxis_y + data->amplitude,
-                    0,
-                    v.xaxis_y + data->amplitude);
     }
 
     if (data->showCosOnYAxis && data->showAnglesOnXAndYAxis)
@@ -737,44 +735,22 @@ void RenderWidget::drawLinesAtImportantOrdinateValues (QPainter *p, VectorDrawin
         //---------------------------------------------------------------------------------------
         // Draw faint vertical lines at +1, +0.866, +0.5, -0.5, -0.866 and -1.
         //---------------------------------------------------------------------------------------
-        p->drawLine(v.yaxis_x + data->amplitude,                            // +1
-                    v.yaxis_y - 10,
-                    v.yaxis_x + data->amplitude,
-                    0);
-
+        drawOrdinateLinesAndText(p, ordinates_1_minus1, v.yaxis_x, v.yaxis_y, BOTTOM_TO_TOP);
         if (data->show30And60Angles)
         {
-            p->drawLine(v.yaxis_x + int(round(data->amplitude * 0.866)),        // +0.866
-                        v.yaxis_y - 10,
-                        v.yaxis_x + int(round(data->amplitude * 0.866)),
-                        0);
-            p->drawLine(v.yaxis_x + int(round(data->amplitude * 0.707)),        // +0.707
-                        v.yaxis_y - 10,
-                        v.yaxis_x + int(round(data->amplitude * 0.707)),
-                        0);
-            p->drawLine(v.yaxis_x + int(round(data->amplitude * 0.5)),          // +0.5
-                        v.yaxis_y - 10,
-                        v.yaxis_x + int(round(data->amplitude * 0.5)),
-                        0);
-            p->drawLine(v.yaxis_x + int(round(data->amplitude * -0.5)),         // -0.5
-                        v.yaxis_y - 10,
-                        v.yaxis_x + int(round(data->amplitude * -0.5)),
-                        0);
-            p->drawLine(v.yaxis_x + int(round(data->amplitude * -0.707)),        // -0.707
-                        v.yaxis_y - 10,
-                        v.yaxis_x + int(round(data->amplitude * -0.707)),
-                        0);
-            p->drawLine(v.yaxis_x + int(round(data->amplitude * -0.866)),        // -0.866
-                        v.yaxis_y - 10,
-                        v.yaxis_x + int(round(data->amplitude * -0.866)),
-                        0);
+            drawOrdinateLinesAndText(p, ordinates, v.yaxis_x, v.yaxis_y, BOTTOM_TO_TOP);
         }
-        p->drawLine(v.yaxis_x - data->amplitude,
-                    v.yaxis_y - 10,
-                    v.yaxis_x - data->amplitude,
-                    0);
     }
     p->restore();
+}
+
+
+void RenderWidget::drawTipCircle(QPainter *p, int x, int y)
+{
+    p->drawEllipse(x - data->penWidth / 2,
+                   y - data->penWidth / 2,
+                   data->penWidth,
+                   data->penWidth);
 }
 
 void RenderWidget::drawTipCircles(QPainter *p, VectorDrawingCoordinates v)
@@ -789,37 +765,23 @@ void RenderWidget::drawTipCircles(QPainter *p, VectorDrawingCoordinates v)
     if (data->drawRotatingVector)
     {
         // Draw a circle at the tip of the vector
-        p->drawEllipse(v.vector_tip_x - data->penWidth / 2,
-                       v.vector_tip_y - data->penWidth / 2,
-                       data->penWidth,
-                       data->penWidth
-        );
+        drawTipCircle(p, v.vector_tip_x, v.vector_tip_y);
     }
     if (data->drawVerticalProjectionTipCircle)
     {
         // Draw a circle at the tip of the vector's vertical projection
-        p->drawEllipse(v.vector_origin_x - data->amplitude - wallSeparation - data->penWidth/2,
-                       v.vector_tip_y - data->penWidth/2,
-                       data->penWidth,
-                       data->penWidth
-        );
+        drawTipCircle(p, v.vproj_origin_x, v.vector_tip_y);
     }
     if (data->drawHorizontalProjectionTipCircle)
     {
-        // Draw a circle at the tip of the vector's vertical projection
-        p->drawEllipse(v.vector_tip_x - data->penWidth/2,
-                       v.vector_origin_y - data->amplitude - wallSeparation - data->penWidth/2,
-                       data->penWidth,
-                       data->penWidth
-        );
+        // Draw a circle at the tip of the vector's horizontal projection
+        drawTipCircle(p, v.vector_tip_x, v.hproj_origin_y);
 
         if (data->showCosOnXAxis)
         {
-            p->drawEllipse(v.vector_origin_x - data->amplitude - wallSeparation - data->penWidth/2,
-                           v.vector_origin_y - (v.vector_tip_x - v.vector_origin_x) - data->penWidth/2,
-                           data->penWidth,
-                           data->penWidth
-            );
+            drawTipCircle(p,
+                          v.vproj_origin_x,
+                          v.vector_origin_y - (v.vector_tip_x - v.vector_origin_x));
         }
     }
     p->setOpacity(1);

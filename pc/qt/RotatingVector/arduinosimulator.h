@@ -21,8 +21,8 @@ public:
     explicit ArduinoSimulator(QObject *parent = nullptr, MainWindow *mw_ = nullptr);
     void postCmd(QString cmd);
 
-    bool runMotor;
-    bool isCounterClockwise;
+    bool runMotor = false;
+    bool isCounterClockwise = true;
 
 signals:
 
@@ -32,9 +32,10 @@ public slots:
 private:
     double angleIncrementInDegrees = SPEED_3_ANGLE_INCREMENT;
     double currentAngleInDegrees = 0.0;
-    int halfSteps;
-    int targetHalfSteps;
-    bool doHalfStep;
+    int halfSteps = 0;
+    int targetHalfSteps = -1;
+    bool doHalfStep = false;
+
     QStringList cmdList;
     MainWindow *mw;
 

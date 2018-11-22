@@ -12,51 +12,7 @@
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::MainWindow),
-    serial(new QSerialPort(this)),
-    arduinoSimulator(nullptr),
-
-    curAngleInRadians(0.0),
-    curAngleInDegrees(0.0),
-    isTimePaused(false),
-    xAxisOffFromTop(663),
-    xAxisOffFromRight(661),
-    amplitude(220),
-    curHeight(0),
-    curWidth(amplitude),
-    penWidth(12),
-    timeXInc(1),
-    drawRotatingVector(true),
-    drawAngleArc(true),
-
-    drawSinComponent(false),
-    drawCosComponent(false),
-
-    drawVerticalShadow(false),
-    drawHorizontalShadow(false),
-
-    drawVerticalProjectionDottedLine(false),
-    drawHorizontalProjectionDottedLine(false),
-
-    drawVerticalProjectionTipCircle(false),
-    drawHorizontalProjectionTipCircle(false),
-
-    showVerticalProjectionBox(false),
-    showHorizontalProjectionBox(false),
-
-    showSinOnXAxis(false),
-    showCosOnYAxis(false),
-    showCosOnXAxis(false),
-
-    showAnglesOnXAndYAxis(false),
-    showScrollingBackgroundText(false),
-    show30And60Angles(false),
-
-    timerInterval(20),
-    halfSteps(0),
-    useArduino(false),
-
-    serialData(new QByteArray())
+    ui(new Ui::MainWindow)
 {
     //---------------------------------------------------------------------------------
     // Following values are set to I don't have to click checkboxes everytime I start the app for testing.
@@ -127,12 +83,6 @@ MainWindow::MainWindow(QWidget *parent) :
 MainWindow::~MainWindow()
 {
     delete ui;
-}
-
-
-void MainWindow::update()
-{
-
 }
 
 void MainWindow::oneTimeTimerHandler()
