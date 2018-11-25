@@ -24,6 +24,8 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 CONFIG += c++11
 
+RC_ICONS = rotating_vector.ico
+
 SOURCES += \
         main.cpp \
         mainwindow.cpp \
