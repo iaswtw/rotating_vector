@@ -23,12 +23,17 @@ public:
     void setControlWindow(ControlWindow *cw);
     void processSerialLine(QByteArray line);
     void renderWidgetPaintEvent();
+    void showControlWindowCentered();
 
 public slots:
     void readSerialData();
     void oneTimeTimerHandler();
 
 private slots:
+
+    void on_actionControl_Panel_triggered();
+
+    void on_actionAbout_triggered();
 
 protected:
 
@@ -46,8 +51,6 @@ public:
     double curAngleInRadians = 0.0;
     double curAngleInDegrees = 0.0;
     bool isTimePaused = false;
-    int xAxisOffFromTop = 663;
-    int xAxisOffFromRight = 661;
     int amplitude = 220;
     int curHeight = 0;
     int curWidth = amplitude;
@@ -78,6 +81,9 @@ public:
     bool showAnglesOnXAndYAxis = false;
     bool showScrollingBackgroundText = false;
     bool show30And60Angles = false;
+
+    int extraVectorOffsetFromRight = 0;
+    int extraVectorOffsetFromBottom = 0;
 
     int timerInterval = 20;
     int halfSteps = 0;

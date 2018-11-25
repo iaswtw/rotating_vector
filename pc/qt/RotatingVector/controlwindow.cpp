@@ -16,8 +16,8 @@ ControlWindow::ControlWindow(QWidget *parent, MainWindow * mw) :
     ui->drawHorizontalShadow_cb->setChecked(mw->drawHorizontalShadow);
 
     ui->drawRotatingVector_cb->setChecked(mw->drawRotatingVector);
-    ui->xAxisOffFromRight_sb->setValue(mw->xAxisOffFromRight);
-    ui->xAxisOffFromTop_sb->setValue(mw->xAxisOffFromTop);
+    ui->extraVectorOffsetFromRight_sb->setValue(mw->extraVectorOffsetFromRight);
+    ui->extraVectorOffsetFromBottom_sb->setValue(mw->extraVectorOffsetFromBottom);
     ui->sineAmplitude_sb->setValue(mw->amplitude);
     ui->timeDelay_sb->setValue(mw->timerInterval);
 
@@ -44,6 +44,8 @@ ControlWindow::ControlWindow(QWidget *parent, MainWindow * mw) :
     ui->show30And60Angles_cb->setChecked(mw->show30And60Angles);
 
     ui->useArduino_cb->setChecked(mw->useArduino);
+
+
 
 }
 
@@ -188,11 +190,9 @@ void ControlWindow::on_setPcCalOffFrom180ToMinus2p5_btn_clicked()   {    ui->cal
 void ControlWindow::on_setPcCalOffFrom180ToMinus3p0_btn_clicked()   {    ui->calAt180_sb->setValue(-3.0);   }
 void ControlWindow::on_setPcCalOffFrom180ToMinus3p5_btn_clicked()   {    ui->calAt180_sb->setValue(-3.5);   }
 
-void ControlWindow::on_sineAmplitude_sb_valueChanged(int)               { mw->amplitude       = ui->sineAmplitude_sb->value();                                  }
 void ControlWindow::on_penWidth_sb_valueChanged(int)                    { mw->penWidth        = ui->penWidth_sb->value();                                       }
-void ControlWindow::on_xAxisOffFromTop_sb_valueChanged(int)             { mw->xAxisOffFromTop = ui->xAxisOffFromTop_sb->value();                                }
-void ControlWindow::on_xAxisOffFromRight_sb_valueChanged(int)           { mw->xAxisOffFromRight = ui->xAxisOffFromRight_sb->value();                            }
-void ControlWindow::on_sineAmplitude_sb_valueChanged(const QString &)   { mw->amplitude = ui->sineAmplitude_sb->value();                                        }
+void ControlWindow::on_extraVectorOffsetFromBottom_sb_valueChanged(int) { mw->extraVectorOffsetFromBottom = ui->extraVectorOffsetFromBottom_sb->value();                                }
+void ControlWindow::on_extraVectorOffsetFromRight_sb_valueChanged(int)  { mw->extraVectorOffsetFromRight = ui->extraVectorOffsetFromRight_sb->value();                            }
 void ControlWindow::on_drawVerticalShadow_cb_stateChanged(int)          { mw->drawVerticalShadow = ui->drawVerticalShadow_cb->isChecked();                      }
 void ControlWindow::on_drawRotatingVector_cb_stateChanged(int)          { mw->drawRotatingVector = ui->drawRotatingVector_cb->isChecked();                      }
 void ControlWindow::on_showCosOnXAxis_cb_stateChanged(int)              { mw->showCosOnXAxis = ui->showCosOnXAxis_cb->isChecked();                              }
@@ -215,6 +215,13 @@ void ControlWindow::on_showAnglesOnXAndYAxis_cb_stateChanged(int)       { mw->sh
 void ControlWindow::on_showScrollingBackgroundText_cb_stateChanged(int) { mw->showScrollingBackgroundText = ui->showScrollingBackgroundText_cb->isChecked();    }
 void ControlWindow::on_show30And60Angles_cb_stateChanged(int)           { mw->show30And60Angles = ui->show30And60Angles_cb->isChecked();                        }
 
+void ControlWindow::on_sineAmplitude_sb_valueChanged(int)
+{
+    mw->amplitude = ui->sineAmplitude_sb->value();
+    mw->renderWidget->recalculateVectorOrigin();
+}
+
+
 void ControlWindow::on_timeDelay_sb_valueChanged(int)
 {
     mw->timerInterval = ui->timeDelay_sb->value();
@@ -224,4 +231,3 @@ void ControlWindow::on_timeDelay_sb_valueChanged(int)
 void ControlWindow::on_angleAdvanceOffset_sb_valueChanged(const QString &)
 {
 }
-

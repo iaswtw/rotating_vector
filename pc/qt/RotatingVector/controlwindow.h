@@ -58,9 +58,8 @@ private slots:
     void on_timeDelay_sb_valueChanged(int arg1);
     void on_sineAmplitude_sb_valueChanged(int arg1);
     void on_penWidth_sb_valueChanged(int arg1);
-    void on_xAxisOffFromTop_sb_valueChanged(int arg1);
-    void on_xAxisOffFromRight_sb_valueChanged(int arg1);
-    void on_sineAmplitude_sb_valueChanged(const QString &arg1);
+    void on_extraVectorOffsetFromBottom_sb_valueChanged(int arg1);
+    void on_extraVectorOffsetFromRight_sb_valueChanged(int arg1);
     void on_drawVerticalShadow_cb_stateChanged(int arg1);
     void on_drawRotatingVector_cb_stateChanged(int arg1);
     void on_showCosOnXAxis_cb_stateChanged(int arg1);

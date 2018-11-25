@@ -9,6 +9,7 @@
 #include <QPainter>
 #include <math.h>
 #include <QDir>
+#include <QDesktopWidget>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -40,6 +41,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     setbuf(stdout, nullptr);
     ui->setupUi(this);
+    QMainWindow::showMaximized();
 
 
     renderWidget = new RenderWidget(ui->topWidget, this);
@@ -76,6 +78,7 @@ MainWindow::MainWindow(QWidget *parent) :
     oneTimeTimer.setSingleShot(true);
     connect(&oneTimeTimer, SIGNAL(timeout()), this, SLOT(oneTimeTimerHandler()));
     oneTimeTimer.start(500);
+
 }
 
 
@@ -94,6 +97,7 @@ void MainWindow::oneTimeTimerHandler()
 void MainWindow::setControlWindow(ControlWindow *cw)
 {
     this->cw = cw;
+    showControlWindowCentered();
 }
 
 void MainWindow::renderWidgetPaintEvent()
@@ -162,4 +166,22 @@ void MainWindow::processSerialLine(QByteArray line)
         cw->ui->curHalfSteps_le->setText(qstr.toLocal8Bit().constData());
     }
     //printf("\n");
+}
+
+void MainWindow::showControlWindowCentered()
+{
+    cw->show();
+    cw->move(200, 50);
+}
+
+void MainWindow::on_actionControl_Panel_triggered()
+{
+    showControlWindowCentered();
+}
+
+void MainWindow::on_actionAbout_triggered()
+{
+    QDialog * aboutDialog = new QDialog(this);
+    aboutDialog->setModal(true);
+    aboutDialog->show();
 }

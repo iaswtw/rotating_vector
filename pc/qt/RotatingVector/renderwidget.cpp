@@ -34,6 +34,20 @@ RenderWidget::RenderWidget(QWidget *parent, MainWindow *data) :
     catImage = locateAndInstantiateImage("cat.png");
 }
 
+void RenderWidget::resizeEvent(QResizeEvent* event)
+{
+    QWidget::resizeEvent(event);
+
+    recalculateVectorOrigin();
+}
+
+void RenderWidget::recalculateVectorOrigin()
+{
+    vectorOrigin.setX(width() - data->amplitude - 130);
+    vectorOrigin.setY(height() - data->amplitude - 130);
+}
+
+
 /*
  * Search the file in current directory and ..\RotatingVector directory.
  */
@@ -135,8 +149,9 @@ void RenderWidget::draw(QPainter * p)
 
     VectorDrawingCoordinates v;
 
-    v.vector_origin_x = width() - data->xAxisOffFromRight + wallSeparation + data->amplitude;
-    v.vector_origin_y = data->xAxisOffFromTop;
+    // Automatically set vector origin coords baseds on window width and height.  Then add offsets to it.
+    v.vector_origin_x = vectorOrigin.x() - data->extraVectorOffsetFromRight;
+    v.vector_origin_y = vectorOrigin.y() - data->extraVectorOffsetFromBottom;
 
     v.vector_width  = int(data->amplitude * cos(data->curAngleInRadians));
     v.vector_height = int(data->amplitude * sin(data->curAngleInRadians));

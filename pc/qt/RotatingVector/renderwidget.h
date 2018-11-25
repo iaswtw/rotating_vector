@@ -8,7 +8,7 @@
 
 using namespace std;
 
-#define NUM_ORDINATES                   1500
+#define NUM_ORDINATES                   2300
 #define NUM_BACKGROUND_TEXT_POINTS      15
 #define NUM_TIME_TEXT_POINTS            8
 #define NUM_ANGLE_TEXT_POINTS           8
@@ -387,6 +387,11 @@ public:
     void updateTimerInterval();
     void clearSinOrdinates();
     void clearCosOrdinates();
+    void recalculateVectorOrigin();
+
+protected:
+    void resizeEvent(QResizeEvent* event);
+
 
 public slots:
     void renderTimerEvent();
@@ -448,6 +453,8 @@ private:
     double previousAngleInDegrees = 0;
     double smoothedChangeInAngle = 0;
     bool isVectorOrArduinoRunning = false;      // decides whether angle (0, 90, 180, 270) is set on an ordinate.
+
+    QPoint vectorOrigin = QPoint(0, 0);
 
 };
 
