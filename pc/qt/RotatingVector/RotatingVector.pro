@@ -29,17 +29,20 @@ SOURCES += \
         mainwindow.cpp \
     renderwidget.cpp \
     controlwindow.cpp \
-    arduinosimulator.cpp
+    arduinosimulator.cpp \
+    aboutdialog.cpp
 
 HEADERS += \
         mainwindow.h \
     renderwidget.h \
     controlwindow.h \
-    arduinosimulator.h
+    arduinosimulator.h \
+    aboutdialog.h
 
 FORMS += \
         mainwindow.ui \
-    controlwindow.ui
+    controlwindow.ui \
+    aboutdialog.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

@@ -3,13 +3,14 @@
 #include "controlwindow.h"
 #include "ui_mainwindow.h"
 #include "ui_controlwindow.h"
+#include "aboutdialog.h"
 #include <stdio.h>
 #include <iostream>
 #include <QPen>
 #include <QPainter>
 #include <math.h>
 #include <QDir>
-#include <QDesktopWidget>
+#include <QMessageBox>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -42,7 +43,7 @@ MainWindow::MainWindow(QWidget *parent) :
     setbuf(stdout, nullptr);
     ui->setupUi(this);
     QMainWindow::showMaximized();
-
+    setWindowTitle("Rotating Vector");
 
     renderWidget = new RenderWidget(ui->topWidget, this);
     renderWidget->setObjectName(QStringLiteral("renderWidget"));
@@ -181,7 +182,10 @@ void MainWindow::on_actionControl_Panel_triggered()
 
 void MainWindow::on_actionAbout_triggered()
 {
-    QDialog * aboutDialog = new QDialog(this);
-    aboutDialog->setModal(true);
-    aboutDialog->show();
+    AboutDialog aboutDialog;
+    aboutDialog.setModal(true);
+    aboutDialog.exec();
+
+//    QMessageBox messageBox;
+//    messageBox.about(this, "About Rotating Vector", "Version 0.1.1\nAuthor: Abhir Joshi");
 }
