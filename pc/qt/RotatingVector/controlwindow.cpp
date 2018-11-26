@@ -43,6 +43,8 @@ ControlWindow::ControlWindow(QWidget *parent, MainWindow * mw) :
     ui->showScrollingBackgroundText_cb->setChecked(mw->showScrollingBackgroundText);
     ui->show30And60Angles_cb->setChecked(mw->show30And60Angles);
 
+    ui->phaseShiftFromSine_sb->setValue(mw->phaseShiftFromSine);
+
     ui->useArduino_cb->setChecked(mw->useArduino);
 
 
@@ -190,9 +192,7 @@ void ControlWindow::on_setPcCalOffFrom180ToMinus2p5_btn_clicked()   {    ui->cal
 void ControlWindow::on_setPcCalOffFrom180ToMinus3p0_btn_clicked()   {    ui->calAt180_sb->setValue(-3.0);   }
 void ControlWindow::on_setPcCalOffFrom180ToMinus3p5_btn_clicked()   {    ui->calAt180_sb->setValue(-3.5);   }
 
-void ControlWindow::on_penWidth_sb_valueChanged(int)                    { mw->penWidth        = ui->penWidth_sb->value();                                       }
-void ControlWindow::on_extraVectorOffsetFromBottom_sb_valueChanged(int) { mw->extraVectorOffsetFromBottom = ui->extraVectorOffsetFromBottom_sb->value();                                }
-void ControlWindow::on_extraVectorOffsetFromRight_sb_valueChanged(int)  { mw->extraVectorOffsetFromRight = ui->extraVectorOffsetFromRight_sb->value();                            }
+void ControlWindow::on_penWidth_sb_valueChanged(int)                    { mw->penWidth = ui->penWidth_sb->value();                                              }
 void ControlWindow::on_drawVerticalShadow_cb_stateChanged(int)          { mw->drawVerticalShadow = ui->drawVerticalShadow_cb->isChecked();                      }
 void ControlWindow::on_drawRotatingVector_cb_stateChanged(int)          { mw->drawRotatingVector = ui->drawRotatingVector_cb->isChecked();                      }
 void ControlWindow::on_showCosOnXAxis_cb_stateChanged(int)              { mw->showCosOnXAxis = ui->showCosOnXAxis_cb->isChecked();                              }
@@ -215,6 +215,18 @@ void ControlWindow::on_showAnglesOnXAndYAxis_cb_stateChanged(int)       { mw->sh
 void ControlWindow::on_showScrollingBackgroundText_cb_stateChanged(int) { mw->showScrollingBackgroundText = ui->showScrollingBackgroundText_cb->isChecked();    }
 void ControlWindow::on_show30And60Angles_cb_stateChanged(int)           { mw->show30And60Angles = ui->show30And60Angles_cb->isChecked();                        }
 
+void ControlWindow::on_extraVectorOffsetFromBottom_sb_valueChanged(int)
+{
+    mw->extraVectorOffsetFromBottom = ui->extraVectorOffsetFromBottom_sb->value();
+    mw->renderWidget->recalculateVectorOrigin();
+}
+
+void ControlWindow::on_extraVectorOffsetFromRight_sb_valueChanged(int)
+{
+    mw->extraVectorOffsetFromRight = ui->extraVectorOffsetFromRight_sb->value();
+    mw->renderWidget->recalculateVectorOrigin();
+}
+
 void ControlWindow::on_sineAmplitude_sb_valueChanged(int)
 {
     mw->amplitude = ui->sineAmplitude_sb->value();
@@ -230,4 +242,10 @@ void ControlWindow::on_timeDelay_sb_valueChanged(int)
 
 void ControlWindow::on_angleAdvanceOffset_sb_valueChanged(const QString &)
 {
+}
+
+void ControlWindow::on_phaseShiftFromSine_sb_valueChanged(int)
+{
+    mw->phaseShiftFromSine = ui->phaseShiftFromSine_sb->value();
+    mw->renderWidget->updatePhaseShiftFromSine();
 }

@@ -89,6 +89,8 @@ public:
     int halfSteps = 0;
     bool useArduino = false;
 
+    int phaseShiftFromSine = 90;
+
     QByteArray *serialData = new QByteArray();
     QTimer oneTimeTimer;
 
