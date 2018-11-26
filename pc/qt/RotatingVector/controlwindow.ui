@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1076</width>
-    <height>430</height>
+    <width>1005</width>
+    <height>389</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -19,7 +19,7 @@
   <property name="maximumSize">
    <size>
     <width>1076</width>
-    <height>430</height>
+    <height>389</height>
    </size>
   </property>
   <property name="windowTitle">
@@ -43,6 +43,11 @@
    </property>
    <item row="0" column="1">
     <spacer name="horizontalSpacer">
+     <property name="font">
+      <font>
+       <pointsize>8</pointsize>
+      </font>
+     </property>
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
@@ -64,7 +69,7 @@
      </property>
      <property name="font">
       <font>
-       <pointsize>9</pointsize>
+       <pointsize>8</pointsize>
       </font>
      </property>
      <layout class="QGridLayout" name="gridLayout">
@@ -80,142 +85,12 @@
       <property name="bottomMargin">
        <number>5</number>
       </property>
-      <property name="spacing">
+      <property name="horizontalSpacing">
        <number>10</number>
       </property>
-      <item row="2" column="0" colspan="3" alignment="Qt::AlignTop">
-       <widget class="QGroupBox" name="monitor_groupBox">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="font">
-         <font>
-          <pointsize>9</pointsize>
-         </font>
-        </property>
-        <property name="title">
-         <string>Monitor</string>
-        </property>
-        <layout class="QHBoxLayout" name="horizontalLayout_9">
-         <property name="spacing">
-          <number>0</number>
-         </property>
-         <property name="leftMargin">
-          <number>0</number>
-         </property>
-         <property name="topMargin">
-          <number>0</number>
-         </property>
-         <property name="rightMargin">
-          <number>0</number>
-         </property>
-         <property name="bottomMargin">
-          <number>0</number>
-         </property>
-         <item>
-          <widget class="QWidget" name="widget_12" native="true">
-           <property name="font">
-            <font>
-             <pointsize>9</pointsize>
-            </font>
-           </property>
-           <layout class="QHBoxLayout" name="horizontalLayout_10">
-            <property name="spacing">
-             <number>3</number>
-            </property>
-            <property name="leftMargin">
-             <number>0</number>
-            </property>
-            <property name="topMargin">
-             <number>0</number>
-            </property>
-            <property name="rightMargin">
-             <number>0</number>
-            </property>
-            <property name="bottomMargin">
-             <number>0</number>
-            </property>
-            <item>
-             <widget class="QLabel" name="label_11">
-              <property name="font">
-               <font>
-                <pointsize>9</pointsize>
-               </font>
-              </property>
-              <property name="text">
-               <string>Angle:</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLineEdit" name="curAngle_le">
-              <property name="maximumSize">
-               <size>
-                <width>40</width>
-                <height>16777215</height>
-               </size>
-              </property>
-              <property name="font">
-               <font>
-                <pointsize>9</pointsize>
-               </font>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLabel" name="label_12">
-              <property name="font">
-               <font>
-                <pointsize>9</pointsize>
-               </font>
-              </property>
-              <property name="text">
-               <string>Half steps:</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLineEdit" name="curHalfSteps_le">
-              <property name="maximumSize">
-               <size>
-                <width>40</width>
-                <height>16777215</height>
-               </size>
-              </property>
-              <property name="font">
-               <font>
-                <pointsize>9</pointsize>
-               </font>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <spacer name="horizontalSpacer_2">
-              <property name="font">
-               <font>
-                <pointsize>9</pointsize>
-               </font>
-              </property>
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>40</width>
-                <height>20</height>
-               </size>
-              </property>
-             </spacer>
-            </item>
-           </layout>
-          </widget>
-         </item>
-        </layout>
-       </widget>
-      </item>
+      <property name="verticalSpacing">
+       <number>6</number>
+      </property>
       <item row="1" column="1" colspan="2">
        <widget class="QFrame" name="sineCosineFrame">
         <property name="sizePolicy">
@@ -226,7 +101,7 @@
         </property>
         <property name="font">
          <font>
-          <pointsize>9</pointsize>
+          <pointsize>8</pointsize>
          </font>
         </property>
         <property name="frameShape">
@@ -258,7 +133,7 @@
            </property>
            <property name="font">
             <font>
-             <pointsize>9</pointsize>
+             <pointsize>8</pointsize>
             </font>
            </property>
            <property name="title">
@@ -287,7 +162,7 @@
              <widget class="QCheckBox" name="showVerticalProjectionBox_cb">
               <property name="font">
                <font>
-                <pointsize>9</pointsize>
+                <pointsize>8</pointsize>
                </font>
               </property>
               <property name="text">
@@ -299,7 +174,7 @@
              <widget class="QCheckBox" name="drawVerticalShadow_cb">
               <property name="font">
                <font>
-                <pointsize>9</pointsize>
+                <pointsize>8</pointsize>
                </font>
               </property>
               <property name="text">
@@ -314,7 +189,7 @@
              <widget class="QCheckBox" name="drawVerticalProjectionTipCircle_cb">
               <property name="font">
                <font>
-                <pointsize>9</pointsize>
+                <pointsize>8</pointsize>
                </font>
               </property>
               <property name="text">
@@ -326,7 +201,7 @@
              <widget class="QCheckBox" name="drawVerticalProjectionDottedLine_cb">
               <property name="font">
                <font>
-                <pointsize>9</pointsize>
+                <pointsize>8</pointsize>
                </font>
               </property>
               <property name="text">
@@ -344,7 +219,7 @@
               </property>
               <property name="font">
                <font>
-                <pointsize>9</pointsize>
+                <pointsize>8</pointsize>
                </font>
               </property>
               <property name="text">
@@ -356,7 +231,7 @@
              <widget class="QCheckBox" name="drawSinComponent_cb">
               <property name="font">
                <font>
-                <pointsize>9</pointsize>
+                <pointsize>8</pointsize>
                </font>
               </property>
               <property name="text">
@@ -377,7 +252,7 @@
            </property>
            <property name="font">
             <font>
-             <pointsize>9</pointsize>
+             <pointsize>8</pointsize>
             </font>
            </property>
            <property name="title">
@@ -406,7 +281,7 @@
              <widget class="QCheckBox" name="showHorizontalProjectionBox_cb">
               <property name="font">
                <font>
-                <pointsize>9</pointsize>
+                <pointsize>8</pointsize>
                </font>
               </property>
               <property name="text">
@@ -418,7 +293,7 @@
              <widget class="QCheckBox" name="drawHorizontalShadow_cb">
               <property name="font">
                <font>
-                <pointsize>9</pointsize>
+                <pointsize>8</pointsize>
                </font>
               </property>
               <property name="text">
@@ -430,7 +305,7 @@
              <widget class="QCheckBox" name="drawHorizontalProjectionTipCircle_cb">
               <property name="font">
                <font>
-                <pointsize>9</pointsize>
+                <pointsize>8</pointsize>
                </font>
               </property>
               <property name="text">
@@ -442,7 +317,7 @@
              <widget class="QCheckBox" name="drawHorizontalProjectionDottedLine_cb">
               <property name="font">
                <font>
-                <pointsize>9</pointsize>
+                <pointsize>8</pointsize>
                </font>
               </property>
               <property name="text">
@@ -454,7 +329,7 @@
              <widget class="QCheckBox" name="showCosOnYAxis_cb">
               <property name="font">
                <font>
-                <pointsize>9</pointsize>
+                <pointsize>8</pointsize>
                </font>
               </property>
               <property name="text">
@@ -466,7 +341,7 @@
              <widget class="QCheckBox" name="drawCosComponent_cb">
               <property name="font">
                <font>
-                <pointsize>9</pointsize>
+                <pointsize>8</pointsize>
                </font>
               </property>
               <property name="text">
@@ -478,7 +353,7 @@
              <widget class="QCheckBox" name="showCosOnXAxis_cb">
               <property name="font">
                <font>
-                <pointsize>9</pointsize>
+                <pointsize>8</pointsize>
                </font>
               </property>
               <property name="text">
@@ -488,6 +363,11 @@
             </item>
             <item>
              <widget class="QWidget" name="phaseShiftContainer_widget" native="true">
+              <property name="font">
+               <font>
+                <pointsize>8</pointsize>
+               </font>
+              </property>
               <layout class="QHBoxLayout" name="horizontalLayout">
                <property name="spacing">
                 <number>1</number>
@@ -506,6 +386,11 @@
                </property>
                <item>
                 <widget class="QLabel" name="label_8">
+                 <property name="font">
+                  <font>
+                   <pointsize>8</pointsize>
+                  </font>
+                 </property>
                  <property name="text">
                   <string>Phase shift from Sin:</string>
                  </property>
@@ -518,6 +403,11 @@
                    <width>50</width>
                    <height>16777215</height>
                   </size>
+                 </property>
+                 <property name="font">
+                  <font>
+                   <pointsize>8</pointsize>
+                  </font>
                  </property>
                  <property name="maximum">
                   <number>360</number>
@@ -534,7 +424,7 @@
           <widget class="QPushButton" name="clearSinValues_btn">
            <property name="font">
             <font>
-             <pointsize>9</pointsize>
+             <pointsize>8</pointsize>
             </font>
            </property>
            <property name="text">
@@ -546,7 +436,7 @@
           <widget class="QPushButton" name="clearCosValues_btn">
            <property name="font">
             <font>
-             <pointsize>9</pointsize>
+             <pointsize>8</pointsize>
             </font>
            </property>
            <property name="text">
@@ -573,7 +463,7 @@
         </property>
         <property name="font">
          <font>
-          <pointsize>9</pointsize>
+          <pointsize>8</pointsize>
          </font>
         </property>
         <property name="title">
@@ -599,7 +489,7 @@
           <widget class="QPushButton" name="speed1_btn">
            <property name="font">
             <font>
-             <pointsize>9</pointsize>
+             <pointsize>8</pointsize>
             </font>
            </property>
            <property name="toolTip">
@@ -614,7 +504,7 @@
           <widget class="QPushButton" name="speed2_btn">
            <property name="font">
             <font>
-             <pointsize>9</pointsize>
+             <pointsize>8</pointsize>
             </font>
            </property>
            <property name="text">
@@ -626,7 +516,7 @@
           <widget class="QPushButton" name="speed3_btn">
            <property name="font">
             <font>
-             <pointsize>9</pointsize>
+             <pointsize>8</pointsize>
             </font>
            </property>
            <property name="text">
@@ -638,7 +528,7 @@
           <widget class="QPushButton" name="speed4_btn">
            <property name="font">
             <font>
-             <pointsize>9</pointsize>
+             <pointsize>8</pointsize>
             </font>
            </property>
            <property name="text">
@@ -650,7 +540,7 @@
           <widget class="QPushButton" name="speed5_btn">
            <property name="font">
             <font>
-             <pointsize>9</pointsize>
+             <pointsize>8</pointsize>
             </font>
            </property>
            <property name="text">
@@ -662,7 +552,7 @@
           <widget class="QPushButton" name="speed6_btn">
            <property name="font">
             <font>
-             <pointsize>9</pointsize>
+             <pointsize>8</pointsize>
             </font>
            </property>
            <property name="toolTip">
@@ -680,7 +570,7 @@
        <widget class="QGroupBox" name="guiAdjustments_groupBox">
         <property name="font">
          <font>
-          <pointsize>9</pointsize>
+          <pointsize>8</pointsize>
          </font>
         </property>
         <property name="title">
@@ -709,7 +599,7 @@
           <widget class="QLabel" name="label_7">
            <property name="font">
             <font>
-             <pointsize>9</pointsize>
+             <pointsize>8</pointsize>
             </font>
            </property>
            <property name="text">
@@ -724,7 +614,7 @@
            </property>
            <property name="font">
             <font>
-             <pointsize>9</pointsize>
+             <pointsize>8</pointsize>
             </font>
            </property>
            <property name="text">
@@ -736,7 +626,7 @@
           <widget class="QLabel" name="label_6">
            <property name="font">
             <font>
-             <pointsize>9</pointsize>
+             <pointsize>8</pointsize>
             </font>
            </property>
            <property name="text">
@@ -760,7 +650,7 @@
            </property>
            <property name="font">
             <font>
-             <pointsize>9</pointsize>
+             <pointsize>8</pointsize>
             </font>
            </property>
            <property name="minimum">
@@ -778,7 +668,7 @@
           <widget class="QLabel" name="label_5">
            <property name="font">
             <font>
-             <pointsize>9</pointsize>
+             <pointsize>8</pointsize>
             </font>
            </property>
            <property name="text">
@@ -790,7 +680,7 @@
           <widget class="QLabel" name="label_9">
            <property name="font">
             <font>
-             <pointsize>9</pointsize>
+             <pointsize>8</pointsize>
             </font>
            </property>
            <property name="text">
@@ -802,7 +692,7 @@
           <widget class="QSpinBox" name="penWidth_sb">
            <property name="font">
             <font>
-             <pointsize>9</pointsize>
+             <pointsize>8</pointsize>
             </font>
            </property>
            <property name="minimum">
@@ -817,7 +707,7 @@
           <widget class="QSpinBox" name="sineAmplitude_sb">
            <property name="font">
             <font>
-             <pointsize>9</pointsize>
+             <pointsize>8</pointsize>
             </font>
            </property>
            <property name="minimum">
@@ -835,7 +725,7 @@
            </property>
            <property name="font">
             <font>
-             <pointsize>9</pointsize>
+             <pointsize>8</pointsize>
             </font>
            </property>
            <property name="maximum">
@@ -847,7 +737,7 @@
           <widget class="QSpinBox" name="extraVectorOffsetFromRight_sb">
            <property name="font">
             <font>
-             <pointsize>9</pointsize>
+             <pointsize>8</pointsize>
             </font>
            </property>
            <property name="maximum">
@@ -868,7 +758,7 @@
         </property>
         <property name="font">
          <font>
-          <pointsize>9</pointsize>
+          <pointsize>8</pointsize>
          </font>
         </property>
         <property name="title">
@@ -894,7 +784,7 @@
           <widget class="QCheckBox" name="drawRotatingVector_cb">
            <property name="font">
             <font>
-             <pointsize>9</pointsize>
+             <pointsize>8</pointsize>
             </font>
            </property>
            <property name="text">
@@ -909,7 +799,7 @@
           <widget class="QCheckBox" name="drawAngleArc_cb">
            <property name="font">
             <font>
-             <pointsize>9</pointsize>
+             <pointsize>8</pointsize>
             </font>
            </property>
            <property name="text">
@@ -921,7 +811,7 @@
           <widget class="QCheckBox" name="showAnglesOnXAndYAxis_cb">
            <property name="font">
             <font>
-             <pointsize>9</pointsize>
+             <pointsize>8</pointsize>
             </font>
            </property>
            <property name="text">
@@ -933,7 +823,7 @@
           <widget class="QCheckBox" name="showScrollingBackgroundText_cb">
            <property name="font">
             <font>
-             <pointsize>9</pointsize>
+             <pointsize>8</pointsize>
             </font>
            </property>
            <property name="text">
@@ -945,7 +835,7 @@
           <widget class="QCheckBox" name="show30And60Angles_cb">
            <property name="font">
             <font>
-             <pointsize>9</pointsize>
+             <pointsize>8</pointsize>
             </font>
            </property>
            <property name="text">
@@ -966,7 +856,7 @@
         </property>
         <property name="font">
          <font>
-          <pointsize>9</pointsize>
+          <pointsize>8</pointsize>
          </font>
         </property>
         <property name="title">
@@ -998,7 +888,7 @@
           <widget class="QGroupBox" name="arduinoCalibration_groupBox">
            <property name="font">
             <font>
-             <pointsize>9</pointsize>
+             <pointsize>8</pointsize>
             </font>
            </property>
            <property name="title">
@@ -1024,7 +914,7 @@
              <widget class="QWidget" name="widget_4" native="true">
               <property name="font">
                <font>
-                <pointsize>9</pointsize>
+                <pointsize>8</pointsize>
                </font>
               </property>
               <layout class="QHBoxLayout" name="horizontalLayout_3">
@@ -1053,7 +943,7 @@
                  </property>
                  <property name="font">
                   <font>
-                   <pointsize>9</pointsize>
+                   <pointsize>8</pointsize>
                   </font>
                  </property>
                  <property name="text">
@@ -1071,7 +961,7 @@
                  </property>
                  <property name="font">
                   <font>
-                   <pointsize>9</pointsize>
+                   <pointsize>8</pointsize>
                   </font>
                  </property>
                 </widget>
@@ -1086,7 +976,7 @@
                  </property>
                  <property name="font">
                   <font>
-                   <pointsize>9</pointsize>
+                   <pointsize>8</pointsize>
                   </font>
                  </property>
                  <property name="text">
@@ -1104,7 +994,7 @@
                  </property>
                  <property name="font">
                   <font>
-                   <pointsize>9</pointsize>
+                   <pointsize>8</pointsize>
                   </font>
                  </property>
                  <property name="text">
@@ -1119,7 +1009,7 @@
              <widget class="QWidget" name="widget_5" native="true">
               <property name="font">
                <font>
-                <pointsize>9</pointsize>
+                <pointsize>8</pointsize>
                </font>
               </property>
               <layout class="QHBoxLayout" name="horizontalLayout_2">
@@ -1142,7 +1032,7 @@
                 <widget class="QPushButton" name="setAs0_btn">
                  <property name="font">
                   <font>
-                   <pointsize>9</pointsize>
+                   <pointsize>8</pointsize>
                   </font>
                  </property>
                  <property name="text">
@@ -1154,7 +1044,7 @@
                 <widget class="QPushButton" name="setAs180_btn">
                  <property name="font">
                   <font>
-                   <pointsize>9</pointsize>
+                   <pointsize>8</pointsize>
                   </font>
                  </property>
                  <property name="text">
@@ -1168,26 +1058,11 @@
            </layout>
           </widget>
          </item>
-         <item row="0" column="0" colspan="2">
-          <widget class="QCheckBox" name="useArduino_cb">
-           <property name="font">
-            <font>
-             <pointsize>9</pointsize>
-            </font>
-           </property>
-           <property name="text">
-            <string>Use Arduino (to read current angle)</string>
-           </property>
-           <property name="checked">
-            <bool>false</bool>
-           </property>
-          </widget>
-         </item>
          <item row="2" column="0" alignment="Qt::AlignTop">
           <widget class="QGroupBox" name="pcCalibration_groupBox">
            <property name="font">
             <font>
-             <pointsize>9</pointsize>
+             <pointsize>8</pointsize>
             </font>
            </property>
            <property name="autoFillBackground">
@@ -1222,7 +1097,7 @@
              <widget class="QWidget" name="widget_6" native="true">
               <property name="font">
                <font>
-                <pointsize>9</pointsize>
+                <pointsize>8</pointsize>
                </font>
               </property>
               <layout class="QHBoxLayout" name="horizontalLayout_4">
@@ -1245,7 +1120,7 @@
                 <widget class="QLabel" name="label_3">
                  <property name="font">
                   <font>
-                   <pointsize>9</pointsize>
+                   <pointsize>8</pointsize>
                   </font>
                  </property>
                  <property name="text">
@@ -1263,7 +1138,7 @@
                  </property>
                  <property name="font">
                   <font>
-                   <pointsize>9</pointsize>
+                   <pointsize>8</pointsize>
                   </font>
                  </property>
                  <property name="decimals">
@@ -1296,7 +1171,7 @@
               </property>
               <property name="font">
                <font>
-                <pointsize>9</pointsize>
+                <pointsize>8</pointsize>
                </font>
               </property>
               <layout class="QHBoxLayout" name="horizontalLayout_5">
@@ -1325,7 +1200,7 @@
                  </property>
                  <property name="font">
                   <font>
-                   <pointsize>9</pointsize>
+                   <pointsize>8</pointsize>
                   </font>
                  </property>
                  <property name="text">
@@ -1343,7 +1218,7 @@
                  </property>
                  <property name="font">
                   <font>
-                   <pointsize>9</pointsize>
+                   <pointsize>8</pointsize>
                   </font>
                  </property>
                  <property name="text">
@@ -1361,7 +1236,7 @@
                  </property>
                  <property name="font">
                   <font>
-                   <pointsize>9</pointsize>
+                   <pointsize>8</pointsize>
                   </font>
                  </property>
                  <property name="text">
@@ -1376,7 +1251,7 @@
              <widget class="QWidget" name="widget_8" native="true">
               <property name="font">
                <font>
-                <pointsize>9</pointsize>
+                <pointsize>8</pointsize>
                </font>
               </property>
               <layout class="QHBoxLayout" name="horizontalLayout_6">
@@ -1399,7 +1274,7 @@
                 <widget class="QLabel" name="label_4">
                  <property name="font">
                   <font>
-                   <pointsize>9</pointsize>
+                   <pointsize>8</pointsize>
                   </font>
                  </property>
                  <property name="text">
@@ -1417,7 +1292,7 @@
                  </property>
                  <property name="font">
                   <font>
-                   <pointsize>9</pointsize>
+                   <pointsize>8</pointsize>
                   </font>
                  </property>
                  <property name="maximum">
@@ -1434,10 +1309,25 @@
            </layout>
           </widget>
          </item>
+         <item row="0" column="0" colspan="2">
+          <widget class="QCheckBox" name="useArduino_cb">
+           <property name="font">
+            <font>
+             <pointsize>8</pointsize>
+            </font>
+           </property>
+           <property name="text">
+            <string>Use Arduino (to read current angle)</string>
+           </property>
+           <property name="checked">
+            <bool>false</bool>
+           </property>
+          </widget>
+         </item>
         </layout>
        </widget>
       </item>
-      <item row="0" column="3" rowspan="5" alignment="Qt::AlignTop">
+      <item row="0" column="3" rowspan="6" alignment="Qt::AlignTop">
        <widget class="QGroupBox" name="motionControls_groupBox">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -1447,7 +1337,7 @@
         </property>
         <property name="font">
          <font>
-          <pointsize>9</pointsize>
+          <pointsize>8</pointsize>
          </font>
         </property>
         <property name="title">
@@ -1479,7 +1369,7 @@
            </property>
            <property name="font">
             <font>
-             <pointsize>9</pointsize>
+             <pointsize>8</pointsize>
             </font>
            </property>
            <layout class="QGridLayout" name="gridLayout_5">
@@ -1502,7 +1392,7 @@
              <widget class="QPushButton" name="ccwDirection_btn">
               <property name="font">
                <font>
-                <pointsize>9</pointsize>
+                <pointsize>8</pointsize>
                </font>
               </property>
               <property name="toolTip">
@@ -1523,7 +1413,7 @@
               </property>
               <property name="font">
                <font>
-                <pointsize>9</pointsize>
+                <pointsize>8</pointsize>
                </font>
               </property>
               <property name="autoFillBackground">
@@ -1541,7 +1431,7 @@
              <widget class="QPushButton" name="cwHalfStep_btn">
               <property name="font">
                <font>
-                <pointsize>9</pointsize>
+                <pointsize>8</pointsize>
                </font>
               </property>
               <property name="text">
@@ -1556,7 +1446,7 @@
              <widget class="QPushButton" name="ccwHalfStep_btn">
               <property name="font">
                <font>
-                <pointsize>9</pointsize>
+                <pointsize>8</pointsize>
                </font>
               </property>
               <property name="text">
@@ -1589,7 +1479,7 @@
               </property>
               <property name="font">
                <font>
-                <pointsize>9</pointsize>
+                <pointsize>8</pointsize>
                </font>
               </property>
               <property name="styleSheet">
@@ -1604,7 +1494,7 @@
              <widget class="QPushButton" name="cwDirection_btn">
               <property name="font">
                <font>
-                <pointsize>9</pointsize>
+                <pointsize>8</pointsize>
                </font>
               </property>
               <property name="toolTip">
@@ -1619,7 +1509,7 @@
              <widget class="QPushButton" name="pauseTime_btn">
               <property name="font">
                <font>
-                <pointsize>9</pointsize>
+                <pointsize>8</pointsize>
                </font>
               </property>
               <property name="text">
@@ -1631,7 +1521,7 @@
              <widget class="QPushButton" name="pauseVector_btn">
               <property name="font">
                <font>
-                <pointsize>9</pointsize>
+                <pointsize>8</pointsize>
                </font>
               </property>
               <property name="text">
@@ -1643,7 +1533,7 @@
              <widget class="QPushButton" name="unpauseVector_btn">
               <property name="font">
                <font>
-                <pointsize>9</pointsize>
+                <pointsize>8</pointsize>
                </font>
               </property>
               <property name="text">
@@ -1655,7 +1545,7 @@
              <widget class="QPushButton" name="unpauseTime_btn">
               <property name="font">
                <font>
-                <pointsize>9</pointsize>
+                <pointsize>8</pointsize>
                </font>
               </property>
               <property name="text">
@@ -1679,7 +1569,7 @@
               </property>
               <property name="font">
                <font>
-                <pointsize>9</pointsize>
+                <pointsize>8</pointsize>
                 <weight>50</weight>
                 <bold>false</bold>
                </font>
@@ -1702,7 +1592,7 @@
               </property>
               <property name="font">
                <font>
-                <pointsize>9</pointsize>
+                <pointsize>8</pointsize>
                </font>
               </property>
              </widget>
@@ -1717,7 +1607,7 @@
               </property>
               <property name="font">
                <font>
-                <pointsize>9</pointsize>
+                <pointsize>8</pointsize>
                </font>
               </property>
              </widget>
@@ -1729,7 +1619,7 @@
           <widget class="QGroupBox" name="gotoControls_groupBox">
            <property name="font">
             <font>
-             <pointsize>9</pointsize>
+             <pointsize>8</pointsize>
             </font>
            </property>
            <property name="title">
@@ -1755,7 +1645,7 @@
              <widget class="QWidget" name="widget_10" native="true">
               <property name="font">
                <font>
-                <pointsize>9</pointsize>
+                <pointsize>8</pointsize>
                </font>
               </property>
               <layout class="QHBoxLayout" name="horizontalLayout_7">
@@ -1778,7 +1668,7 @@
                 <widget class="QLabel" name="label_10">
                  <property name="font">
                   <font>
-                   <pointsize>9</pointsize>
+                   <pointsize>8</pointsize>
                   </font>
                  </property>
                  <property name="text">
@@ -1796,7 +1686,7 @@
                  </property>
                  <property name="font">
                   <font>
-                   <pointsize>9</pointsize>
+                   <pointsize>8</pointsize>
                   </font>
                  </property>
                 </widget>
@@ -1811,7 +1701,7 @@
                  </property>
                  <property name="font">
                   <font>
-                   <pointsize>9</pointsize>
+                   <pointsize>8</pointsize>
                   </font>
                  </property>
                  <property name="text">
@@ -1826,7 +1716,7 @@
              <widget class="QWidget" name="widget_11" native="true">
               <property name="font">
                <font>
-                <pointsize>9</pointsize>
+                <pointsize>8</pointsize>
                </font>
               </property>
               <layout class="QGridLayout" name="gridLayout_4">
@@ -1852,7 +1742,7 @@
                  </property>
                  <property name="font">
                   <font>
-                   <pointsize>9</pointsize>
+                   <pointsize>8</pointsize>
                   </font>
                  </property>
                  <property name="text">
@@ -1870,7 +1760,7 @@
                  </property>
                  <property name="font">
                   <font>
-                   <pointsize>9</pointsize>
+                   <pointsize>8</pointsize>
                   </font>
                  </property>
                  <property name="text">
@@ -1888,7 +1778,7 @@
                  </property>
                  <property name="font">
                   <font>
-                   <pointsize>9</pointsize>
+                   <pointsize>8</pointsize>
                   </font>
                  </property>
                  <property name="text">
@@ -1906,7 +1796,7 @@
                  </property>
                  <property name="font">
                   <font>
-                   <pointsize>9</pointsize>
+                   <pointsize>8</pointsize>
                   </font>
                  </property>
                  <property name="text">
@@ -1924,7 +1814,7 @@
                  </property>
                  <property name="font">
                   <font>
-                   <pointsize>9</pointsize>
+                   <pointsize>8</pointsize>
                   </font>
                  </property>
                  <property name="text">
@@ -1942,7 +1832,7 @@
                  </property>
                  <property name="font">
                   <font>
-                   <pointsize>9</pointsize>
+                   <pointsize>8</pointsize>
                   </font>
                  </property>
                  <property name="text">
@@ -1960,7 +1850,7 @@
                  </property>
                  <property name="font">
                   <font>
-                   <pointsize>9</pointsize>
+                   <pointsize>8</pointsize>
                   </font>
                  </property>
                  <property name="text">
@@ -1978,7 +1868,7 @@
                  </property>
                  <property name="font">
                   <font>
-                   <pointsize>9</pointsize>
+                   <pointsize>8</pointsize>
                   </font>
                  </property>
                  <property name="text">
@@ -1996,7 +1886,7 @@
                  </property>
                  <property name="font">
                   <font>
-                   <pointsize>9</pointsize>
+                   <pointsize>8</pointsize>
                   </font>
                  </property>
                  <property name="text">
@@ -2014,7 +1904,7 @@
                  </property>
                  <property name="font">
                   <font>
-                   <pointsize>9</pointsize>
+                   <pointsize>8</pointsize>
                   </font>
                  </property>
                  <property name="text">
@@ -2032,7 +1922,7 @@
                  </property>
                  <property name="font">
                   <font>
-                   <pointsize>9</pointsize>
+                   <pointsize>8</pointsize>
                   </font>
                  </property>
                  <property name="text">
@@ -2050,7 +1940,7 @@
                  </property>
                  <property name="font">
                   <font>
-                   <pointsize>9</pointsize>
+                   <pointsize>8</pointsize>
                   </font>
                  </property>
                  <property name="text">
@@ -2068,7 +1958,7 @@
                  </property>
                  <property name="font">
                   <font>
-                   <pointsize>9</pointsize>
+                   <pointsize>8</pointsize>
                   </font>
                  </property>
                  <property name="text">
@@ -2086,7 +1976,7 @@
                  </property>
                  <property name="font">
                   <font>
-                   <pointsize>9</pointsize>
+                   <pointsize>8</pointsize>
                   </font>
                  </property>
                  <property name="text">
@@ -2104,7 +1994,7 @@
                  </property>
                  <property name="font">
                   <font>
-                   <pointsize>9</pointsize>
+                   <pointsize>8</pointsize>
                   </font>
                  </property>
                  <property name="text">
@@ -2122,7 +2012,7 @@
                  </property>
                  <property name="font">
                   <font>
-                   <pointsize>9</pointsize>
+                   <pointsize>8</pointsize>
                   </font>
                  </property>
                  <property name="text">
@@ -2139,21 +2029,147 @@
         </layout>
        </widget>
       </item>
+      <item row="2" column="0" colspan="3">
+       <widget class="QGroupBox" name="monitor_groupBox">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>8</pointsize>
+         </font>
+        </property>
+        <property name="title">
+         <string>Monitor</string>
+        </property>
+        <layout class="QHBoxLayout" name="horizontalLayout_9">
+         <property name="spacing">
+          <number>0</number>
+         </property>
+         <property name="leftMargin">
+          <number>0</number>
+         </property>
+         <property name="topMargin">
+          <number>0</number>
+         </property>
+         <property name="rightMargin">
+          <number>0</number>
+         </property>
+         <property name="bottomMargin">
+          <number>0</number>
+         </property>
+         <item>
+          <widget class="QWidget" name="widget_12" native="true">
+           <property name="font">
+            <font>
+             <pointsize>8</pointsize>
+            </font>
+           </property>
+           <layout class="QHBoxLayout" name="horizontalLayout_10">
+            <property name="spacing">
+             <number>3</number>
+            </property>
+            <property name="leftMargin">
+             <number>0</number>
+            </property>
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
+             <number>0</number>
+            </property>
+            <item>
+             <widget class="QLabel" name="label_11">
+              <property name="font">
+               <font>
+                <pointsize>8</pointsize>
+               </font>
+              </property>
+              <property name="text">
+               <string>Angle:</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLineEdit" name="curAngle_le">
+              <property name="maximumSize">
+               <size>
+                <width>40</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="font">
+               <font>
+                <pointsize>8</pointsize>
+               </font>
+              </property>
+              <property name="readOnly">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="label_12">
+              <property name="font">
+               <font>
+                <pointsize>8</pointsize>
+               </font>
+              </property>
+              <property name="text">
+               <string>Half steps:</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLineEdit" name="curHalfSteps_le">
+              <property name="maximumSize">
+               <size>
+                <width>40</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="font">
+               <font>
+                <pointsize>8</pointsize>
+               </font>
+              </property>
+              <property name="readOnly">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer name="horizontalSpacer_2">
+              <property name="font">
+               <font>
+                <pointsize>8</pointsize>
+               </font>
+              </property>
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
      </layout>
     </widget>
-   </item>
-   <item row="1" column="0">
-    <spacer name="verticalSpacer">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>40</height>
-      </size>
-     </property>
-    </spacer>
    </item>
   </layout>
  </widget>
