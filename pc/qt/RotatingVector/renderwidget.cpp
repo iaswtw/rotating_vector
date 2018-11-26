@@ -497,8 +497,20 @@ void RenderWidget::drawVectorProjection(QPainter *p, VectorDrawingCoordinates v)
 
 void RenderWidget::drawSineAndCosinePoints(QPainter *p)
 {
-
 //    printf("smoothedChangeInAngle = %lf\n", smoothedChangeInAngle);
+    if (!data->isTimePaused)
+    {
+        // Feed all projection axis
+        xProjection.shift(data->amplitude,
+                          data->curAngleInDegrees,
+                          isVectorOrArduinoRunning,
+                          !data->arduinoSimulator->isCounterClockwise);
+
+        yProjection.shift(data->amplitude,
+                          data->curAngleInDegrees,
+                          isVectorOrArduinoRunning,
+                          !data->arduinoSimulator->isCounterClockwise);
+    }
 
     //--------------------------------------------------------------------
     // Draw sine points
@@ -510,17 +522,6 @@ void RenderWidget::drawSineAndCosinePoints(QPainter *p)
     p->setOpacity(sinCosOpacity);
     if (data->showSinOnXAxis)
     {
-        if (!data->isTimePaused)
-        {
-            // If using arduino, don't set angles.... don't know if arduino is running or paused.
-            // Setting angle would lead to too many same angles being set in a row if the vector
-            // had stopped at 0, 90, 180 or 270.
-            // Copy value of each point to the previous (older) point.
-            xProjection.shift(data->amplitude,
-                              data->curAngleInDegrees,
-                              isVectorOrArduinoRunning,
-                              !data->arduinoSimulator->isCounterClockwise);
-        }
         xProjection.drawWave(p, data->timeXInc);
     }
 
@@ -534,85 +535,10 @@ void RenderWidget::drawSineAndCosinePoints(QPainter *p)
     p->setOpacity(sinCosOpacity);
     if (data->showCosOnYAxis)
     {
-        if (!data->isTimePaused)
-        {
-            // If using arduino, don't set angles.... don't know if arduino is running or paused.
-            // Setting angle would lead to too many same angles being set in a row if the vector
-            // had stopped at 0, 90, 180 or 270.
-            // Copy value of each point to the previous (older) point.
-            yProjection.shift(data->amplitude,
-                              data->curAngleInDegrees,
-                              isVectorOrArduinoRunning,
-                              !data->arduinoSimulator->isCounterClockwise);
-        }
         yProjection.drawWave(p, data->timeXInc);
-
         if (data->showAnglesOnXAndYAxis)
-        {
             yProjection.drawAngles(p, data->timeXInc, data->show30And60Angles);
-        }
     }
-
-
-
-
-
-
-
-//    //--------------------------------------------------------------------
-//    // Draw cosine points
-//    //--------------------------------------------------------------------
-//    pen = QPen(cosColor);
-//    pen.setWidth(data->penWidth);
-//    pen.setCapStyle(Qt::RoundCap);
-//    p->setPen(pen);
-//    p->setOpacity(sinCosOpacity);
-//    if (data->showCosOnYAxis)
-//    {
-//        if (!data->isTimePaused)
-//        {
-//            // If using arduino, don't set angles.... don't know if arduino is running or paused.
-//            // Setting angle would lead to too many same angles being set in a row if the vector
-//            // had stopped at 0, 90, 180 or 270.
-//            int currentAngle = INT_MIN;
-//            if (isVectorOrArduinoRunning)
-//            {
-//                currentAngle = int(round(data->curAngleInDegrees));
-//                if (!data->arduinoSimulator->isCounterClockwise)
-//                {
-//                    currentAngle = (currentAngle - 360) % 360;      // if clockwise rotation, show angles 0, -90, -180 & -270
-//                }
-//                int modAngle = data->show30And60Angles ? 30 : 90;
-//                if ((currentAngle % modAngle) != 0)                 // set angle values only if angle is a multiple of 90
-//                {
-//                    currentAngle = INT_MIN;
-//                }
-//                if (currentAngle == 360)
-//                {
-//                    currentAngle = 0;
-//                }
-//            }
-//            // Copy height of each point to the point on its left (older point)
-//            yAxisOrdinates.shift(data->curWidth, currentAngle);
-//        }
-
-//        //print("Using current height of " + str(self.current_height))
-//        yAxisOrdinates.drawLines(p,
-//                                 BOTTOM_TO_TOP,
-//                                 v.vector_origin_x,
-//                                 v.vector_origin_y - data->amplitude - wallSeparation,
-//                                 data->timeXInc);
-
-//        if (data->showAnglesOnXAndYAxis)
-//        {
-//            yAxisOrdinates.drawAngles(p,
-//                                      BOTTOM_TO_TOP,
-//                                      v.vector_origin_x,
-//                                      v.vector_origin_y - data->amplitude - wallSeparation,
-//                                      data->timeXInc,
-//                                      data->amplitude);
-//        }
-//    }
 
     //--------------------------------------------------------------------
     // Draw cosine on X axis along with sine so as to compare the 90 degree phase shift.
@@ -624,17 +550,15 @@ void RenderWidget::drawSineAndCosinePoints(QPainter *p)
         yProjection.drawWaveWithoutRotation(p, data->timeXInc);
     }
 
-
     // Draw angles after potentially drawing Cosine on X axis. This will ensure the marks and angles are on top of sine & cosine lines.
     if (data->showSinOnXAxis)
     {
         if (data->showAnglesOnXAndYAxis)
-        {
             xProjection.drawAngles(p, data->timeXInc, data->show30And60Angles);
-        }
     }
     p->setOpacity(1);
 }
+
 
 void RenderWidget::drawLinesAtImportantOrdinateValues (QPainter *p)
 {
@@ -672,20 +596,14 @@ void RenderWidget::drawTipCircles(QPainter *p, VectorDrawingCoordinates v)
                        data->penWidth);
     }
     if (data->drawVerticalProjectionTipCircle)
-    {
-        // Draw a circle at the tip of the vector's vertical projection
-        xProjection.drawTipCircle(p, data->curAngleInDegrees, data->penWidth);
-    }
-    if (data->drawHorizontalProjectionTipCircle)
-    {
-        // Draw a circle at the tip of the vector's horizontal projection
-        yProjection.drawTipCircle(p, data->curAngleInDegrees, data->penWidth);
+        xProjection.drawTipCircle(p, data->curAngleInDegrees, data->penWidth);      // Draw a circle at the tip of the vector's vertical projection
 
-        if (data->showCosOnXAxis)
-        {
-            yProjection.drawTipCircleWithoutRotation(p, data->curAngleInDegrees, data->penWidth);
-        }
-    }
+    if (data->drawHorizontalProjectionTipCircle && data->drawHorizontalShadow)
+        yProjection.drawTipCircle(p, data->curAngleInDegrees, data->penWidth);      // Draw a circle at the tip of the vector's horizontal projection
+
+    if (data->showCosOnXAxis && data->drawHorizontalProjectionTipCircle)
+        yProjection.drawTipCircleWithoutRotation(p, data->curAngleInDegrees, data->penWidth);
+
     p->setOpacity(1);
 }
 
