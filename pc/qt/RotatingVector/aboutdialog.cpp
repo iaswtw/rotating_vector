@@ -4,7 +4,7 @@
 #include <QPainter>
 
 static int MAJOR = 0;
-static int MINOR = 5;
+static int MINOR = 6;
 static int REVISION = 0;
 //static int BUILD = 0;
 
