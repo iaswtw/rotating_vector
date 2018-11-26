@@ -6,8 +6,6 @@
 #include <QDir>
 #include <QImage>
 
-using namespace std;
-
 RenderWidget::RenderWidget(QWidget *parent, MainWindow *data) :
     QWidget(parent)
 {
@@ -37,6 +35,9 @@ void RenderWidget::resizeEvent(QResizeEvent* event)
     recalculateVectorOrigin();
 }
 
+/*
+ * E.g. of when recalculation of vector position is required: when its offset from the bottom or right changes, or its amplitude changes.
+ */
 void RenderWidget::recalculateVectorOrigin()
 {
     vectorOrigin.setX(width() - data->amplitude - 130 - data->extraVectorOffsetFromRight);
@@ -259,15 +260,13 @@ void RenderWidget::drawBackground(QPainter *p, VectorDrawingCoordinates v)
 
             hzScrollingBackground.draw(*p,
                                        0,                                               // x offset
-                                       v.vector_origin_y - data->amplitude,               // y offset
-                                       v.vector_origin_x - data->amplitude,               // width of rectangle to draw in
+                                       v.vector_origin_y - data->amplitude,             // y offset
+                                       v.vector_origin_x - data->amplitude,             // width of rectangle to draw in
                                        data->amplitude * 2                              // height of rectangle to draw in
             );
 
             if (!data->isTimePaused)
-            {
                 hzScrollingBackground.shiftLeft(data->timeXInc);
-            }
 
             pen = QPen(cosColor);
             p->setPen(pen);
@@ -277,7 +276,6 @@ void RenderWidget::drawBackground(QPainter *p, VectorDrawingCoordinates v)
                         v.vector_origin_y - data->amplitude - wallSeparation,
                         v.vector_origin_x - data->amplitude - wallSeparation - data->penWidth/2,
                         2 * (data->amplitude + wallSeparation));
-
 
             p->setOpacity(1);
         }
@@ -293,15 +291,13 @@ void RenderWidget::drawBackground(QPainter *p, VectorDrawingCoordinates v)
 
             vtScrollingBackground.draw(*p,
                                        v.vector_origin_x - data->amplitude,               // x offset
-                                       0,                                               // y offset
-                                       data->amplitude * 2,                             // width of rectangle to draw in
+                                       0,                                                 // y offset
+                                       data->amplitude * 2,                               // width of rectangle to draw in
                                        v.vector_origin_y - data->amplitude                // height of rectangle to draw in
             );
 
             if (!data->isTimePaused)
-            {
                 vtScrollingBackground.shiftUp(data->timeXInc);
-            }
 
             pen = QPen(cosColor);
             p->setPen(pen);
@@ -419,10 +415,12 @@ void RenderWidget::drawRotatingVector(QPainter *p, VectorDrawingCoordinates v)
             p->setPen(pen);
             p->setBrush(vectorColor);
             p->setOpacity(0.3);
-            p->drawArc(v.vector_origin_x - 30,
-                       v.vector_origin_y - 30,
-                       60,
-                       60,
+
+            int arcRadius = data->amplitude / 10;
+            p->drawArc(v.vector_origin_x - arcRadius,
+                       v.vector_origin_y - arcRadius,
+                       2 * arcRadius,
+                       2 * arcRadius,
                        0 * 16,
                        int(data->curAngleInDegrees * 16)
             );
@@ -459,11 +457,6 @@ void RenderWidget::drawVectorProjection(QPainter *p, VectorDrawingCoordinates v)
         pen.setColor(sinColor);
         p->setPen(pen);
         p->setBrush(sinColor);
-//        p->drawRect(v.vproj_origin_x - data->penWidth/2,
-//                    v.vproj_origin_y,
-//                    data->penWidth,
-//                    -data->curHeight);
-
         xProjection.drawVectorProjection(p, data->curAngleInDegrees, data->penWidth);
     }
 
@@ -475,12 +468,7 @@ void RenderWidget::drawVectorProjection(QPainter *p, VectorDrawingCoordinates v)
         pen.setColor(cosColor);
         p->setPen(pen);
         p->setBrush(cosColor);
-//        p->drawRect(v.hproj_origin_x,
-//                    v.hproj_origin_y - data->penWidth/2,
-//                    data->curWidth,
-//                    data->penWidth);
         yProjection.drawVectorProjection(p, data->curAngleInDegrees, data->penWidth);
-
     }
     p->setOpacity(1);
 
@@ -496,20 +484,12 @@ void RenderWidget::drawVectorProjection(QPainter *p, VectorDrawingCoordinates v)
     if (data->drawVerticalProjectionDottedLine)
     {
         // For vertical projection: from wall to vector tip.
-//        p->drawLine(v.vector_origin_x - data->amplitude - wallSeparation,
-//                    v.vector_tip_y,
-//                    v.vector_tip_x,
-//                    v.vector_tip_y);
         xProjection.drawDottedLineFromVectorTip(p, data->curAngleInDegrees, v.vector_tip_x, v.vector_tip_y);
     }
 
     if (data->drawHorizontalProjectionDottedLine)
     {
         // For horizontal projection: from ceiling to vector tip.
-//        p->drawLine(v.vector_tip_x,
-//                    v.vector_origin_y - data->amplitude - wallSeparation,
-//                    v.vector_tip_x,
-//                    v.vector_tip_y);
         yProjection.drawDottedLineFromVectorTip(p, data->curAngleInDegrees, v.vector_tip_x, v.vector_tip_y);
     }
     p->setOpacity(1);
@@ -655,51 +635,6 @@ void RenderWidget::drawSineAndCosinePoints(QPainter *p)
     }
     p->setOpacity(1);
 }
-
-
-void RenderWidget::drawOrdinateLinesAndText(QPainter *p, vector<pair<double, string>>& ordinates, int x, int y, AxisOrientation orientation)
-{
-    QFont font;
-    font.setPixelSize(15);
-    p->setFont(font);
-
-    p->setOpacity(0.7);
-
-    for (pair<double, string> value : ordinates)
-    {
-        if (orientation == RIGHT_TO_LEFT)
-        {
-            p->drawText(x - 70,
-                        y - int(round(data->amplitude * value.first)),
-                        value.second.c_str());
-        }
-        else
-        {
-            // todo. Not drawing ordinate captions on Y axis for now.
-        }
-    }
-
-    p->setOpacity(0.1);
-
-    for (pair<double, string> value : ordinates)
-    {
-        if (orientation == RIGHT_TO_LEFT)
-        {
-            p->drawLine(x - 10,
-                        y - int(round(data->amplitude * value.first)),
-                        0,
-                        y - int(round(data->amplitude * value.first)));
-        }
-        else
-        {
-            p->drawLine(x + int(round(data->amplitude * value.first)),
-                        y - 10,
-                        x + int(round(data->amplitude * value.first)),
-                        0);
-        }
-    }
-}
-
 
 void RenderWidget::drawLinesAtImportantOrdinateValues (QPainter *p)
 {

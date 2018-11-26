@@ -176,16 +176,11 @@ struct VectorDrawingCoordinates
     int hproj_origin_y;
 };
 
-enum AxisOrientation
-{
-    RIGHT_TO_LEFT,
-    BOTTOM_TO_TOP
-};
-
-
 
 /*************************************************************************************************
-
+ This class manages projection at a given angle. It knows how to draw various parts of a projection
+ such as: projection boxes, projection itself, axis, various important ordinate lines, angle values,
+ observer, etc.  The functions that do the drawing should be called from the render widget.
  *************************************************************************************************/
 struct Projection
 {
@@ -238,8 +233,6 @@ public:
 
     void recalculatePosition()
     {
-        printf("Recalculating position. new vector origin x=%d, y=%d\n", vector_origin_x, vector_origin_y);
-
         axis_x = vector_origin_x - int((amplitude + wallSeparation) * cos(phase * M_PI / 180.0));
         axis_y = vector_origin_y - int((amplitude + wallSeparation) * sin(phase * M_PI / 180.0));
 
@@ -303,7 +296,6 @@ public:
                (angles[4] == INT_MIN) &&
                (angles[5] == INT_MIN))
            {
-               printf("Setting angle to %d\n", intAngle);
                angles[0] = intAngle;
            }
        }
@@ -636,7 +628,6 @@ private:
     void drawObservers                      (QPainter *p);
 
     void lowPassFilterAngleDifference(double difference);
-    void drawOrdinateLinesAndText(QPainter *p, vector<pair<double, string>>& ordinates, int x, int y, AxisOrientation orientation);
 
     QTimer *timer = new QTimer(this);
 
