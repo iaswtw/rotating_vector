@@ -40,8 +40,8 @@ void RenderWidget::resizeEvent(QResizeEvent* event)
  */
 void RenderWidget::recalculateVectorOrigin()
 {
-    vectorOrigin.setX(width() - data->amplitude - 130 - data->extraVectorOffsetFromRight);
-    vectorOrigin.setY(height() - data->amplitude - 130 - data->extraVectorOffsetFromBottom);
+    vectorOrigin.setX(width() - data->amplitude - 135 - data->extraVectorOffsetFromRight);
+    vectorOrigin.setY(height() - data->amplitude - 135 - data->extraVectorOffsetFromBottom);
 
     notifyPositionChange();
 }
@@ -314,43 +314,16 @@ void RenderWidget::drawBackground(QPainter *p, VectorDrawingCoordinates v)
 
 void RenderWidget::drawRotatingVectorComponents(QPainter *p, VectorDrawingCoordinates v)
 {
-    QPen pen = QPen();
-    pen.setWidth(data->penWidth);
-    pen.setCapStyle(Qt::RoundCap);
-    p->setOpacity(sinCosOpacity);
-
     if (data->drawSinComponent)
     {
-        pen.setColor(sinColor);
-        p->setPen(pen);
-        p->setBrush(sinColor);
         // Drop a line from vector tip perpendicular to X axis
-        p->drawLine(v.vector_tip_x,
-                    v.vector_tip_y,
-                    v.vector_tip_x,
-                    v.vector_origin_y);
-        // Draw projection on Y Axis
-        p->drawLine(v.vector_origin_x,
-                    v.vector_tip_y,
-                    v.vector_origin_x,
-                    v.vector_origin_y);
+        xProjection.drawVectorComponentInVectorSweepCircle(p, data->curAngleInDegrees, data->penWidth);
     }
 
     if (data->drawCosComponent)
     {
-        pen.setColor(cosColor);
-        p->setPen(pen);
-        p->setBrush(cosColor);
-        // Draw a line from vector tip perpendicular to Y axis
-        p->drawLine(v.vector_tip_x,
-                    v.vector_tip_y,
-                    v.vector_origin_x,
-                    v.vector_tip_y);
-        // Draw projection on X axis
-        p->drawLine(v.vector_tip_x,
-                    v.vector_origin_y,
-                    v.vector_origin_x,
-                    v.vector_origin_y);
+        // Draw a line from vector tip perpendicular to the axis of current phase
+        yProjection.drawVectorComponentInVectorSweepCircle(p, data->curAngleInDegrees, data->penWidth);
     }
     p->setOpacity(1);
 }
@@ -378,18 +351,11 @@ void RenderWidget::drawRotatingVector(QPainter *p, VectorDrawingCoordinates v)
         );
 
         p->setOpacity(0.3);
-        // vector's x axis
-        p->drawLine(v.vector_origin_x - data->amplitude - 10,
-                    v.vector_origin_y,
-                    v.vector_origin_x + data->amplitude + 10,
-                    v.vector_origin_y
-        );
-        // vector's y axis
-        p->drawLine(v.vector_origin_x,
-                    v.vector_origin_y - data->amplitude - 10,
-                    v.vector_origin_x,
-                    v.vector_origin_y + data->amplitude + 10
-        );
+        xProjection.drawLineThroughVectorSweepCircle(p);
+        yProjection.drawLineThroughVectorSweepCircle(p);
+
+        if (data->phaseShiftArcAndCaption)
+            yProjection.drawPhaseArcFromGivenPhase(p, xProjection.phase, data->penWidth);
 
         //----------------------------------------------------
         // Draw vector itself.
@@ -431,11 +397,11 @@ void RenderWidget::drawRotatingVector(QPainter *p, VectorDrawingCoordinates v)
             p->setOpacity(0.7);
 
             QFontMetrics fm(font);
-            QString angleString = QString::number(int(round(data->curAngleInDegrees)));
+            QString angleString = QString::number(int(round(data->curAngleInDegrees))) + "°";
             int w = fm.width(angleString);
 
             p->drawText(v.vector_origin_x - w/2,
-                        v.vector_origin_y + data->amplitude + 50,
+                        v.vector_origin_y + data->amplitude + 60,
                         angleString);
         }
     }
@@ -501,41 +467,31 @@ void RenderWidget::drawSineAndCosinePoints(QPainter *p)
     if (!data->isTimePaused)
     {
         // Feed all projection axis
-        xProjection.shift(data->amplitude,
-                          data->curAngleInDegrees,
-                          isVectorOrArduinoRunning,
-                          !data->arduinoSimulator->isCounterClockwise);
+        xProjection.shiftAndSet(data->amplitude,
+                                data->curAngleInDegrees,
+                                isVectorOrArduinoRunning,
+                                !data->arduinoSimulator->isCounterClockwise);
 
-        yProjection.shift(data->amplitude,
-                          data->curAngleInDegrees,
-                          isVectorOrArduinoRunning,
-                          !data->arduinoSimulator->isCounterClockwise);
+        yProjection.shiftAndSet(data->amplitude,
+                                data->curAngleInDegrees,
+                                isVectorOrArduinoRunning,
+                                !data->arduinoSimulator->isCounterClockwise);
     }
 
     //--------------------------------------------------------------------
     // Draw sine points
     //--------------------------------------------------------------------
-    QPen pen = QPen(sinColor);
-    pen.setWidth(data->penWidth);
-    pen.setCapStyle(Qt::RoundCap);
-    p->setPen(pen);
-    p->setOpacity(sinCosOpacity);
     if (data->showSinOnXAxis)
     {
-        xProjection.drawWave(p, data->timeXInc);
+        xProjection.drawWave(p, data->timeXInc, data->penWidth);
     }
 
     //--------------------------------------------------------------------
     // Draw cosine points
     //--------------------------------------------------------------------
-    pen = QPen(cosColor);
-    pen.setWidth(data->penWidth);
-    pen.setCapStyle(Qt::RoundCap);
-    p->setPen(pen);
-    p->setOpacity(sinCosOpacity);
     if (data->showCosOnYAxis)
     {
-        yProjection.drawWave(p, data->timeXInc);
+        yProjection.drawWave(p, data->timeXInc, data->penWidth);
         if (data->showAnglesOnXAndYAxis)
             yProjection.drawAngles(p, data->timeXInc, data->show30And60Angles);
     }
@@ -544,10 +500,7 @@ void RenderWidget::drawSineAndCosinePoints(QPainter *p)
     // Draw cosine on X axis along with sine so as to compare the 90 degree phase shift.
     if (data->showCosOnXAxis)
     {
-        pen.setColor(cosColor);
-        p->setPen(pen);
-        p->setOpacity(sinCosOpacity);
-        yProjection.drawWaveWithoutRotation(p, data->timeXInc);
+        yProjection.drawWave(p, data->timeXInc, data->penWidth, 0);
     }
 
     // Draw angles after potentially drawing Cosine on X axis. This will ensure the marks and angles are on top of sine & cosine lines.
@@ -570,11 +523,44 @@ void RenderWidget::drawLinesAtImportantOrdinateValues (QPainter *p)
     font.setPixelSize(15);
     p->setFont(font);
 
-    if (data->showSinOnXAxis && data->showAnglesOnXAndYAxis)
-        xProjection.drawLinesAtImportantCoordinates(p, true, true, true, true);
 
-    if (data->showCosOnYAxis && data->showAnglesOnXAndYAxis)
-        yProjection.drawLinesAtImportantCoordinates(p, true, true, true, true);
+    if (data->showSinOnXAxis)
+    {
+        if (data->showAllOrdinates)
+            xProjection.drawLinesAtImportantCoordinates(p, true, true, true, true,
+                                                        data->showOrdinateCaptions,
+                                                        data->showOrdinateCaptions,
+                                                        data->showOrdinateCaptions,
+                                                        data->showOrdinateCaptions);
+        else
+        {
+            if (data->show1AndMinus1Ordinates)
+                xProjection.drawLinesAtImportantCoordinates(p, true, false, false, false,
+                                                            data->showOrdinateCaptions,
+                                                            data->showOrdinateCaptions,
+                                                            data->showOrdinateCaptions,
+                                                            data->showOrdinateCaptions);
+        }
+    }
+
+    if (data->showCosOnYAxis)
+    {
+        if (data->showAllOrdinates)
+            yProjection.drawLinesAtImportantCoordinates(p, true, true, true, true,
+                                                        data->showOrdinateCaptions,
+                                                        data->showOrdinateCaptions,
+                                                        data->showOrdinateCaptions,
+                                                        data->showOrdinateCaptions);
+        else
+        {
+            if (data->show1AndMinus1Ordinates)
+                yProjection.drawLinesAtImportantCoordinates(p, true, false, false, false,
+                                                            data->showOrdinateCaptions,
+                                                            data->showOrdinateCaptions,
+                                                            data->showOrdinateCaptions,
+                                                            data->showOrdinateCaptions);
+        }
+    }
 }
 
 

@@ -81,6 +81,9 @@ public:
     bool showAnglesOnXAndYAxis = false;
     bool showScrollingBackgroundText = false;
     bool show30And60Angles = false;
+    bool showAllOrdinates = false;
+    bool show1AndMinus1Ordinates = true;
+    bool showOrdinateCaptions = true;
 
     int extraVectorOffsetFromRight = 0;
     int extraVectorOffsetFromBottom = 0;
@@ -90,6 +93,7 @@ public:
     bool useArduino = false;
 
     int phaseShiftFromSine = 90;
+    bool phaseShiftArcAndCaption = false;
 
     QByteArray *serialData = new QByteArray();
     QTimer oneTimeTimer;

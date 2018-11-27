@@ -93,10 +93,14 @@ private slots:
     void on_goto300_btn_clicked();
     void on_goto315_btn_clicked();
     void on_goto330_btn_clicked();
-    void on_showAnglesOnXAndYAxis_cb_stateChanged(int arg1);
+    void on_showAnglesOnAxis_cb_stateChanged(int arg1);
     void on_showScrollingBackgroundText_cb_stateChanged(int arg1);
     void on_show30And60Angles_cb_stateChanged(int arg1);
     void on_phaseShiftFromSine_sb_valueChanged(int arg1);
+    void on_phaseShiftArcAndCaption_cb_stateChanged(int arg1);
+    void on_show1AndMinus1Ordinate_cb_stateChanged(int arg1);
+    void on_showAllOrdinates_cb_stateChanged(int arg1);
+    void on_showOrdinateCaptions_cb_stateChanged(int arg1);
 };
 
 #endif // CONTROLWINDOW_H

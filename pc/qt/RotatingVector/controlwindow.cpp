@@ -11,44 +11,53 @@ ControlWindow::ControlWindow(QWidget *parent, MainWindow * mw) :
 
     //----------------------------------------------------------------------------
     // Set initial values in GUI widgets
-    ui->penWidth_sb->setValue(mw->penWidth);
-    ui->drawVerticalShadow_cb->setChecked(mw->drawVerticalShadow);
-    ui->drawHorizontalShadow_cb->setChecked(mw->drawHorizontalShadow);
+    //----------------------------------------------------------------------------
 
-    ui->drawRotatingVector_cb->setChecked(mw->drawRotatingVector);
-    ui->extraVectorOffsetFromRight_sb->setValue(mw->extraVectorOffsetFromRight);
-    ui->extraVectorOffsetFromBottom_sb->setValue(mw->extraVectorOffsetFromBottom);
-    ui->sineAmplitude_sb->setValue(mw->amplitude);
-    ui->timeDelay_sb->setValue(mw->timerInterval);
+    vector<pair<bool, QCheckBox*>> v_checkBox = {
+        make_pair(mw->drawVerticalShadow,                   ui->drawVerticalShadow_cb),
+        make_pair(mw->drawHorizontalShadow,                 ui->drawHorizontalShadow_cb),
+        make_pair(mw->drawRotatingVector,                   ui->drawRotatingVector_cb),
+        make_pair(mw->drawAngleArc,                         ui->drawAngleArc_cb),
+        make_pair(mw->drawSinComponent,                     ui->drawSinComponent_cb),
+        make_pair(mw->drawCosComponent,                     ui->drawCosComponent_cb),
+        make_pair(mw->showVerticalProjectionBox,            ui->showVerticalProjectionBox_cb),
+        make_pair(mw->showHorizontalProjectionBox,          ui->showHorizontalProjectionBox_cb),
+        make_pair(mw->drawVerticalProjectionDottedLine,     ui->drawVerticalProjectionDottedLine_cb),
+        make_pair(mw->drawHorizontalProjectionDottedLine,   ui->drawHorizontalProjectionDottedLine_cb),
+        make_pair(mw->drawVerticalProjectionTipCircle,      ui->drawVerticalProjectionTipCircle_cb),
+        make_pair(mw->drawHorizontalProjectionTipCircle,    ui->drawHorizontalProjectionTipCircle_cb),
+        make_pair(mw->showSinOnXAxis,                       ui->showSinOnXAxis_cb),
+        make_pair(mw->showCosOnXAxis,                       ui->showCosOnXAxis_cb),
+        make_pair(mw->showCosOnYAxis,                       ui->showCosOnYAxis_cb),
+        make_pair(mw->showAnglesOnXAndYAxis,                ui->showAnglesOnAxis_cb),
+        make_pair(mw->showScrollingBackgroundText,          ui->showScrollingBackgroundText_cb),
+        make_pair(mw->show30And60Angles,                    ui->show30And60Angles_cb),
+        make_pair(mw->phaseShiftArcAndCaption,              ui->phaseShiftArcAndCaption_cb),
+        make_pair(mw->showAllOrdinates,                     ui->showAllOrdinates_cb),
+        make_pair(mw->show1AndMinus1Ordinates,              ui->show1AndMinus1Ordinate_cb),
+        make_pair(mw->showOrdinateCaptions,                 ui->showOrdinateCaptions_cb),
+        make_pair(mw->useArduino,                           ui->useArduino_cb),
+    };
 
-    ui->drawAngleArc_cb->setChecked(mw->drawAngleArc);
-
-    ui->drawSinComponent_cb->setChecked(mw->drawSinComponent);
-    ui->drawCosComponent_cb->setChecked(mw->drawCosComponent);
-
-    ui->showVerticalProjectionBox_cb->setChecked(mw->showVerticalProjectionBox);
-    ui->showHorizontalProjectionBox_cb->setChecked(mw->showHorizontalProjectionBox);
-
-    ui->drawVerticalProjectionDottedLine_cb->setChecked(mw->drawVerticalProjectionDottedLine);
-    ui->drawHorizontalProjectionDottedLine_cb->setChecked(mw->drawHorizontalProjectionDottedLine);
-
-    ui->drawVerticalProjectionTipCircle_cb->setChecked(mw->drawVerticalProjectionTipCircle);
-    ui->drawHorizontalProjectionTipCircle_cb->setChecked(mw->drawHorizontalProjectionTipCircle);
-
-    ui->showSinOnXAxis_cb->setChecked(mw->showSinOnXAxis);
-    ui->showCosOnXAxis_cb->setChecked(mw->showCosOnXAxis);
-    ui->showCosOnYAxis_cb->setChecked(mw->showCosOnYAxis);
-
-    ui->showAnglesOnXAndYAxis_cb->setChecked(mw->showAnglesOnXAndYAxis);
-    ui->showScrollingBackgroundText_cb->setChecked(mw->showScrollingBackgroundText);
-    ui->show30And60Angles_cb->setChecked(mw->show30And60Angles);
-
-    ui->phaseShiftFromSine_sb->setValue(mw->phaseShiftFromSine);
-
-    ui->useArduino_cb->setChecked(mw->useArduino);
+    for (pair<bool, QCheckBox*> p : v_checkBox)
+    {
+        p.second->setChecked(p.first);
+    }
 
 
+    vector<pair<int, QSpinBox*>> v_spinBox = {
+        make_pair(mw->penWidth,                             ui->penWidth_sb),
+        make_pair(mw->extraVectorOffsetFromRight,           ui->extraVectorOffsetFromRight_sb),
+        make_pair(mw->extraVectorOffsetFromBottom,          ui->extraVectorOffsetFromBottom_sb),
+        make_pair(mw->amplitude,                            ui->sineAmplitude_sb),
+        make_pair(mw->timerInterval,                        ui->timeDelay_sb),
+        make_pair(mw->phaseShiftFromSine,                   ui->phaseShiftFromSine_sb),
+    };
 
+    for (pair<int, QSpinBox*> p : v_spinBox)
+    {
+        p.second->setValue(p.first);
+    }
 }
 
 ControlWindow::~ControlWindow()
@@ -211,9 +220,13 @@ void ControlWindow::on_drawHorizontalProjectionTipCircle_cb_stateChanged(int)  {
 void ControlWindow::on_drawAngleArc_cb_stateChanged(int)                { mw->drawAngleArc = ui->drawAngleArc_cb->isChecked();                                  }
 void ControlWindow::on_drawSinComponent_cb_stateChanged(int)            { mw->drawSinComponent = ui->drawSinComponent_cb->isChecked();                          }
 void ControlWindow::on_drawCosComponent_cb_stateChanged(int)            { mw->drawCosComponent = ui->drawCosComponent_cb->isChecked();                          }
-void ControlWindow::on_showAnglesOnXAndYAxis_cb_stateChanged(int)       { mw->showAnglesOnXAndYAxis = ui->showAnglesOnXAndYAxis_cb->isChecked();                }
+void ControlWindow::on_showAnglesOnAxis_cb_stateChanged(int)            { mw->showAnglesOnXAndYAxis = ui->showAnglesOnAxis_cb->isChecked();                     }
 void ControlWindow::on_showScrollingBackgroundText_cb_stateChanged(int) { mw->showScrollingBackgroundText = ui->showScrollingBackgroundText_cb->isChecked();    }
 void ControlWindow::on_show30And60Angles_cb_stateChanged(int)           { mw->show30And60Angles = ui->show30And60Angles_cb->isChecked();                        }
+void ControlWindow::on_phaseShiftArcAndCaption_cb_stateChanged(int)     { mw->phaseShiftArcAndCaption = ui->phaseShiftArcAndCaption_cb->isChecked();            }
+void ControlWindow::on_show1AndMinus1Ordinate_cb_stateChanged(int)      { mw->show1AndMinus1Ordinates = ui->show1AndMinus1Ordinate_cb->isChecked();             }
+void ControlWindow::on_showAllOrdinates_cb_stateChanged(int)            { mw->showAllOrdinates = ui->showAllOrdinates_cb->isChecked();                          }
+void ControlWindow::on_showOrdinateCaptions_cb_stateChanged(int)        { mw->showOrdinateCaptions = ui->showOrdinateCaptions_cb->isChecked();                  }
 
 void ControlWindow::on_extraVectorOffsetFromBottom_sb_valueChanged(int)
 {
@@ -249,3 +262,4 @@ void ControlWindow::on_phaseShiftFromSine_sb_valueChanged(int)
     mw->phaseShiftFromSine = ui->phaseShiftFromSine_sb->value();
     mw->renderWidget->updatePhaseShiftFromSine();
 }
+

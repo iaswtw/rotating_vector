@@ -37,7 +37,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     drawAngleArc = true;
     showAnglesOnXAndYAxis = true;
-    show30And60Angles = true;
+//    show30And60Angles = true;
     //---------------------------------------------------------------------------------
 
     setbuf(stdout, nullptr);

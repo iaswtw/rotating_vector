@@ -19,7 +19,7 @@
   <property name="maximumSize">
    <size>
     <width>1076</width>
-    <height>389</height>
+    <height>453</height>
    </size>
   </property>
   <property name="windowTitle">
@@ -409,12 +409,22 @@
                    <pointsize>8</pointsize>
                   </font>
                  </property>
+                 <property name="minimum">
+                  <number>0</number>
+                 </property>
                  <property name="maximum">
                   <number>360</number>
                  </property>
                 </widget>
                </item>
               </layout>
+             </widget>
+            </item>
+            <item>
+             <widget class="QCheckBox" name="phaseShiftArcAndCaption_cb">
+              <property name="text">
+               <string>Phase Shift arc and caption</string>
+              </property>
              </widget>
             </item>
            </layout>
@@ -808,14 +818,35 @@
           </widget>
          </item>
          <item>
-          <widget class="QCheckBox" name="showAnglesOnXAndYAxis_cb">
+          <widget class="QCheckBox" name="showAnglesOnAxis_cb">
            <property name="font">
             <font>
              <pointsize>8</pointsize>
             </font>
            </property>
            <property name="text">
-            <string>Angles on X &amp;&amp; Y axis</string>
+            <string>Angles on axis</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QCheckBox" name="show1AndMinus1Ordinate_cb">
+           <property name="text">
+            <string>1 and -1 ordinate</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QCheckBox" name="showAllOrdinates_cb">
+           <property name="text">
+            <string>All ordinates</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QCheckBox" name="showOrdinateCaptions_cb">
+           <property name="text">
+            <string>Ordinate captions</string>
            </property>
           </widget>
          </item>

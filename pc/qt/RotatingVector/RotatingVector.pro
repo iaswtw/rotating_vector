@@ -32,14 +32,16 @@ SOURCES += \
     renderwidget.cpp \
     controlwindow.cpp \
     arduinosimulator.cpp \
-    aboutdialog.cpp
+    aboutdialog.cpp \
+    projection.cpp
 
 HEADERS += \
         mainwindow.h \
     renderwidget.h \
     controlwindow.h \
     arduinosimulator.h \
-    aboutdialog.h
+    aboutdialog.h \
+    projection.h
 
 FORMS += \
         mainwindow.ui \
