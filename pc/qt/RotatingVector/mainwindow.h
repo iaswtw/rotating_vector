@@ -36,6 +36,7 @@ private slots:
     void on_actionAbout_triggered();
 
 protected:
+    void keyPressEvent(QKeyEvent *event);
 
 private:
     void sendCmd(const char * pCmd);
@@ -81,6 +82,7 @@ public:
     bool showAnglesOnXAndYAxis = false;
     bool showScrollingBackgroundText = false;
     bool show30And60Angles = false;
+    bool showAngleInRadians = false;
     bool showAllOrdinates = false;
     bool show1AndMinus1Ordinates = true;
     bool showOrdinateCaptions = true;

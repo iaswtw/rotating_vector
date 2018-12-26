@@ -1,7 +1,6 @@
 #include "renderwidget.h"
 
 
-
 Projection::Projection(double phase_, int maxOrdinates_, QString observerFilename, QColor color_)
 {
     phase = phase_;
@@ -77,8 +76,9 @@ int Projection::getCurrentDepth(int amplitude, double currentAngleInDegrees)
 }
 
 /*
- * Shift ordinate & angle values up by 1 index.  The last value in the array will fall off.
- * Set the given current value as the value for ordinate & angle at index 0.
+ * Shift ordinate & angle values up by 1 index.  The last value (oldest) in the array will fall off.
+ * Set the given 'amplitude' and 'currentAngleInDegrees' as the current (newest) value,
+ * i.e. the value for ordinate & angle at index 0.
  */
 void Projection::shiftAndSet(int amplitude, double currentAngleInDegrees, bool isVectorRunning, bool isClockwise)
 {
@@ -99,7 +99,8 @@ void Projection::shiftAndSet(int amplitude, double currentAngleInDegrees, bool i
        if (isClockwise)
            intAngle = (intAngle - 360) % 360;
 
-       if ((intAngle % 30) != 0)
+       // don't set angle is not a multiple of 30 or 45.
+       if (((intAngle % 30) != 0) && ((intAngle % 45) != 0))
            intAngle = INT_MIN;
 
        if (intAngle == 360)
@@ -152,78 +153,225 @@ void Projection::drawWave(QPainter *p, int abscissaScale, int penWidth, double p
 
 // Draw angle marks & angle value for ordinates on which they are set.
 // Also draw a line showing +1 and -1 limits.
-void Projection::drawAngles(QPainter *p, int abscissaScale, bool showMultiplesOf30)
+void Projection::drawAngles(QPainter *p, int abscissaScale, bool showMultiplesOf30, bool showInRadians)
 {
-   //-----------------------------------------------------------------------
-   // Draw angles if set
-   QPen pen = QPen(QColor(50, 50, 50));
-   pen.setWidth(2);
-   p->setPen(pen);
+    // Draw angles if set
+    QPen pen = QPen(QColor(50, 50, 50));
+    pen.setWidth(2);
+    p->setPen(pen);
 
-   QFont font;
-   int fontPixelSize = 20;
-   font.setPixelSize(fontPixelSize);
-   p->setFont(font);
-   p->setOpacity(0.3);
+    QFont font;
+    int fontPixelSize = 20;
+    font.setPixelSize(fontPixelSize);
+    p->setFont(font);
+    p->setOpacity(0.3);
 
-   QFontMetrics fm(font);
-   for (int i=0; i<maxOrdinates-1; i++)
-   {
-       if (angles[i] != INT_MIN)
-       {
-           if (!showMultiplesOf30 && ((angles[i] % 90) != 0))
-               continue;
+    QFontMetrics fm(font);
+    for (int i=0; i<maxOrdinates-1; i++)
+    {
+        if (angles[i] != INT_MIN)        // if a valid angle is set on this ordinate...
+        {
+            if (!showMultiplesOf30 && ((angles[i] % 90) != 0))
+                continue;
 
-           p->save();
-           p->translate(axis_x, axis_y);
-           p->rotate(phase);
-           //--------------------------------------------------
-           // draw tiny division on X axis
-           p->setOpacity(0.3);
-           p->drawLine(- i*abscissaScale,
-                       - 1,
-                       - i*abscissaScale,
-                       + 1);
+            p->save();
+            p->translate(axis_x, axis_y);
+            p->rotate(phase);
+            //--------------------------------------------------
+            // draw tiny division on X axis
+            p->setOpacity(0.3);
+            p->drawLine(- i*abscissaScale,
+                        - 1,
+                        - i*abscissaScale,
+                        + 1);
 
-           // drop perpendicular from the ordinate value to x axis
-           p->setOpacity(0.1);
-           p->drawLine(- i*abscissaScale,
-                       0,
-                       - i*abscissaScale,
-                       - ordinates[i]);
-           //--------------------------------------------------
-           // Draw longer division at 0 / 360 degress
-           if ((angles[i] == 0) || (angles[i] == 360))
-           {
-               // draw a thin faint line from top to bottom
-               QPen pen = QPen(QColor(200, 50, 50));
-               pen.setWidth(2);
-               p->setPen(pen);
-               p->setOpacity(0.3);
-               p->drawLine(- i*abscissaScale,
-                           - amplitude - 10,
-                           - i*abscissaScale,
-                           + amplitude + 10);
-           }
-           p->restore();
+            // drop perpendicular from the ordinate value to x axis
+            p->setOpacity(0.1);
+            p->drawLine(- i*abscissaScale,
+                        0,
+                        - i*abscissaScale,
+                        - ordinates[i]);
+            //--------------------------------------------------
+            // Draw longer division at 0 / 360 degress
+            if ((angles[i] == 0) || (angles[i] == 360))
+            {
+                // draw a thin faint line from top to bottom
+                QPen pen = QPen(QColor(200, 50, 50));
+                pen.setWidth(2);
+                p->setPen(pen);
+                p->setOpacity(0.3);
+                p->drawLine(- i*abscissaScale,
+                            - amplitude - 10,
+                            - i*abscissaScale,
+                            + amplitude + 10);
+            }
+            p->restore();
 
-           //--------------------------------------------------
-           // Draw angle number. This does not use translated coordinate system.
-           QString str = QString::number(angles[i]);
-           int w = fm.width(str);
+            //--------------------------------------------------
+            // Draw angle number. This does not use translated coordinate system.
+            QString str;
+            int w, h;       // width and height of the rendered angle. fractional angles in radians will cause increased height.
+            int w1 = 0;
 
-           int angle_str_x = axis_x - int((i*abscissaScale) * cos(phase * M_PI / 180.0));
-           int angle_str_y = axis_y - int((i*abscissaScale) * sin(phase * M_PI / 180.0));
+            if (showInRadians)
+            {
+                w1 = fm.width("O");     // get width of 1 dummy character
+                std::tuple<int, int> wh = _getRadianAngleDisplayWidthAndHeight(angles[i], w1, fontPixelSize);
+                w = std::get<0>(wh);
+                h = std::get<1>(wh);
+            }
+            else
+            {
+                str = QString::number(angles[i]);
+                w = fm.width(str);
+                h = fontPixelSize;
+            }
 
-           int angle_str_x_correction = w/2 + int((w/2 + 10) * sin(phase * M_PI / 180.0));
-           int angle_str_y_correction = 10 + int((fontPixelSize) * cos(phase * M_PI / 180.0));
 
-           p->drawText(angle_str_x - angle_str_x_correction,
-                       angle_str_y + angle_str_y_correction,
-                       str);
-       }
-   }
+            int angle_str_x = axis_x - int((i*abscissaScale) * cos(phase * M_PI / 180.0));
+            int angle_str_y = axis_y - int((i*abscissaScale) * sin(phase * M_PI / 180.0));
+
+            int angle_str_x_correction = w/2 + int((w/2 + 10) * sin(phase * M_PI / 180.0));
+
+            // Note - this correction factor doesn't vertically center the caption on Y axis.
+            int angle_str_y_correction = int(20 * cos(phase * M_PI / 180.0))  -
+                                         int(((fontPixelSize/2) * sin(phase * M_PI / 180.0)));
+
+            if (showInRadians)
+            {
+                _drawRadianAngle(p,
+                                 angle_str_x - angle_str_x_correction,
+                                 angle_str_y + angle_str_y_correction,
+                                 angles[i],
+                                 w1);
+            }
+            else
+            {
+                p->drawText(angle_str_x - angle_str_x_correction,
+                            angle_str_y + angle_str_y_correction,
+                            str);
+            }
+        }
+    }
 }
+
+
+std::tuple<int, int> Projection::_getRadianAngleDisplayWidthAndHeight(int angleInDegree, int w1, int h1)
+{
+    // w1 = single character width in current font
+    // h1 = single character height in current font
+
+    switch (angleInDegree)
+    {
+    case 0: return std::make_tuple(w1, h1);              // 0
+
+    case 30: return std::make_tuple(w1, 2 * h1);             // 𝛑/6
+    case 45: return std::make_tuple(w1, 2 * h1);             // 𝛑/4
+    case 60: return std::make_tuple(2 * w1, 2 * h1);             // 2𝛑/6
+
+    case 90: return std::make_tuple(w1, 2 * h1);             // 𝛑/2
+
+    case 120: return std::make_tuple(2 * w1, 2 * h1);        // 4𝛑/6
+    case 135: return std::make_tuple(2 * w1, 2 * h1);        // 3𝛑/4
+    case 150: return std::make_tuple(2 * w1, 2 * h1);        // 5𝛑/6
+
+    case 180: return std::make_tuple(w1, h1);            // 𝛑
+
+    case 210: return std::make_tuple(2 * w1, 2 * h1);        // 7𝛑/6
+    case 225: return std::make_tuple(2 * w1, 2 * h1);        // 5𝛑/4
+    case 240: return std::make_tuple(2 * w1, 2 * h1);        // 8𝛑/6
+
+    case 270: return std::make_tuple(2 * w1, 2 * h1);        // 3𝛑/4
+
+    case 300: return std::make_tuple(3 * w1, 2 * h1);        // 10𝛑/6
+    case 315: return std::make_tuple(2 * w1, 2 * h1);        // 7𝛑/4
+    case 330: return std::make_tuple(3 * w1, 2 * h1);        // 11𝛑/6
+
+
+    case 360: return std::make_tuple(w1, h1);            // 0
+    }
+
+    return std::make_tuple(0, 0);
+}
+
+int Projection::_getRadianAngleDisplayWidth(int angleInDegree, int w1, int h1)
+{
+    return std::get<0>(_getRadianAngleDisplayWidthAndHeight(angleInDegree, w1, h1));
+}
+
+int Projection::_getRadianAngleDisplayHeight(int angleInDegree, int w1, int h1)
+{
+    return std::get<1>(_getRadianAngleDisplayWidthAndHeight(angleInDegree, w1, h1));
+}
+
+// w1 = single character width
+void Projection::_drawRadianAngle(QPainter *p, int x, int y, int angleInDegree, int w1)
+{
+    int denominator = 1;
+    int multiplier = 1;
+    int h1 = p->font().pixelSize();
+    int w = _getRadianAngleDisplayWidth(angleInDegree, w1, h1);;      // width of the angle display in radians
+
+    switch (angleInDegree)
+    {
+        case 0:     multiplier = 1;     denominator = 1;    break;
+
+        case 30:    multiplier = 1;     denominator = 6;    break;
+        case 45:    multiplier = 1;     denominator = 4;    break;
+        case 60:    multiplier = 2;     denominator = 6;    break;
+        case 90:    multiplier = 1;     denominator = 2;    break;
+
+        case 120:   multiplier = 4;     denominator = 6;    break;
+        case 135:   multiplier = 3;     denominator = 4;    break;
+        case 150:   multiplier = 5;     denominator = 6;    break;
+        case 180:   multiplier = 1;     denominator = 1;    break;
+
+        case 210:   multiplier = 7;     denominator = 6;    break;
+        case 225:   multiplier = 5;     denominator = 4;    break;
+        case 240:   multiplier = 8;     denominator = 6;    break;
+        case 270:   multiplier = 3;     denominator = 2;    break;
+
+        case 300:   multiplier = 10;    denominator = 6;    break;
+        case 315:   multiplier = 7;     denominator = 4;    break;
+        case 330:   multiplier = 11;    denominator = 6;    break;
+        case 360:   multiplier = 1;     denominator = 1;    break;
+    }
+
+    switch (angleInDegree)
+    {
+        case 0:     p->drawText(x, y, "0");     break;
+        case 180:   p->drawText(x, y, "𝛑");     break;
+        default:
+            if (multiplier != 1)
+            {
+                int ym = y;                 // y value of multipler is different if denominator is not 1.
+                if (denominator != 1)
+                    ym += h1 / 2 + 2;
+
+                QString str = QString::number(multiplier);
+                p->drawText(x, ym, str);
+
+                QFontMetrics fm(p->font());
+                x += fm.width(str) + 2;
+            }
+
+            p->drawText(x-1, y, "𝛑");
+
+            if (denominator != 1)
+            {
+                p->drawLine(x - 2,
+                            y + 3,
+                            x + 12,
+                            y + 3);
+                y += h1 + 1;
+                p->drawText(x, y, QString::number(denominator));
+            }
+            break;
+    }
+}
+
+
+
 
 void Projection::drawVectorProjection(QPainter *p, double currentAngleInDegrees, int penWidth)
 {

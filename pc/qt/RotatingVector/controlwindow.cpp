@@ -32,6 +32,7 @@ ControlWindow::ControlWindow(QWidget *parent, MainWindow * mw) :
         make_pair(mw->showAnglesOnXAndYAxis,                ui->showAnglesOnAxis_cb),
         make_pair(mw->showScrollingBackgroundText,          ui->showScrollingBackgroundText_cb),
         make_pair(mw->show30And60Angles,                    ui->show30And60Angles_cb),
+        make_pair(mw->showAngleInRadians,                   ui->angleInRadians_cb),
         make_pair(mw->phaseShiftArcAndCaption,              ui->phaseShiftArcAndCaption_cb),
         make_pair(mw->showAllOrdinates,                     ui->showAllOrdinates_cb),
         make_pair(mw->show1AndMinus1Ordinates,              ui->show1AndMinus1Ordinate_cb),
@@ -74,6 +75,12 @@ void ControlWindow::continueVectorAndUnpauseTime()
 {
     sendCmd("c\n");
     mw->isTimePaused = false;
+}
+
+void ControlWindow::pauseVectorAndTime()
+{
+    mw->isTimePaused = true;
+    sendCmd("p\n");
 }
 
 void ControlWindow::sendCmd(const char * pCmd)
@@ -136,8 +143,7 @@ void ControlWindow::on_pauseTime_btn_clicked()
 
 void ControlWindow::on_pauseVectorAndTime_btn_clicked()
 {
-    mw->isTimePaused = true;
-    sendCmd("p\n");
+    pauseVectorAndTime();
 }
 
 void ControlWindow::gotoAngle(double angle)
@@ -227,6 +233,7 @@ void ControlWindow::on_phaseShiftArcAndCaption_cb_stateChanged(int)     { mw->ph
 void ControlWindow::on_show1AndMinus1Ordinate_cb_stateChanged(int)      { mw->show1AndMinus1Ordinates = ui->show1AndMinus1Ordinate_cb->isChecked();             }
 void ControlWindow::on_showAllOrdinates_cb_stateChanged(int)            { mw->showAllOrdinates = ui->showAllOrdinates_cb->isChecked();                          }
 void ControlWindow::on_showOrdinateCaptions_cb_stateChanged(int)        { mw->showOrdinateCaptions = ui->showOrdinateCaptions_cb->isChecked();                  }
+void ControlWindow::on_angleInRadians_cb_stateChanged(int arg1)         { mw->showAngleInRadians = ui->angleInRadians_cb->isChecked();                          }
 
 void ControlWindow::on_extraVectorOffsetFromBottom_sb_valueChanged(int)
 {
@@ -262,4 +269,5 @@ void ControlWindow::on_phaseShiftFromSine_sb_valueChanged(int)
     mw->phaseShiftFromSine = ui->phaseShiftFromSine_sb->value();
     mw->renderWidget->updatePhaseShiftFromSine();
 }
+
 

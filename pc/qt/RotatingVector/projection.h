@@ -49,7 +49,7 @@ public:
     void shiftAndSet(int amplitude, double currentAngleInDegrees, bool isVectorRunning, bool isClockwise);
      void drawWave(QPainter *p, int abscissaScale, int penWidth);
     void drawWave(QPainter *p, int abscissaScale, int penWidth, double phaseRotation);
-    void drawAngles(QPainter *p, int abscissaScale, bool showMultiplesOf30);
+    void drawAngles(QPainter *p, int abscissaScale, bool showMultiplesOf30, bool showInRadians);
     void drawVectorProjection(QPainter *p, double currentAngleInDegrees, int penWidth);
     void drawVectorComponentInVectorSweepCircle(QPainter *p, double currentAngleInDegrees, int penWidth);
     void drawVectorProjectionBoxes(QPainter *p, int penWidth);
@@ -65,6 +65,13 @@ public:
 
     void drawObserver(QPainter *p);
     QImage* locateAndInstantiateImage(QString filename);
+
+private:
+    void _drawRadianAngle(QPainter *p, int x, int y, int angleInRadian, int w1);
+    std::tuple<int, int> _getRadianAngleDisplayWidthAndHeight(int angleInDegree, int w1, int h1);
+    int _getRadianAngleDisplayWidth(int angleInDegree, int w1, int h1);
+    int _getRadianAngleDisplayHeight(int angleInDegree, int w1, int h1);
+
 };
 
 

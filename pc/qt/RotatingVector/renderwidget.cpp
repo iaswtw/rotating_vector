@@ -493,7 +493,7 @@ void RenderWidget::drawSineAndCosinePoints(QPainter *p)
     {
         yProjection.drawWave(p, data->timeXInc, data->penWidth);
         if (data->showAnglesOnXAndYAxis)
-            yProjection.drawAngles(p, data->timeXInc, data->show30And60Angles);
+            yProjection.drawAngles(p, data->timeXInc, data->show30And60Angles, data->showAngleInRadians);
     }
 
     //--------------------------------------------------------------------
@@ -507,7 +507,7 @@ void RenderWidget::drawSineAndCosinePoints(QPainter *p)
     if (data->showSinOnXAxis)
     {
         if (data->showAnglesOnXAndYAxis)
-            xProjection.drawAngles(p, data->timeXInc, data->show30And60Angles);
+            xProjection.drawAngles(p, data->timeXInc, data->show30And60Angles, data->showAngleInRadians);
     }
     p->setOpacity(1);
 }

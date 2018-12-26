@@ -11,6 +11,7 @@
 #include <math.h>
 #include <QDir>
 #include <QMessageBox>
+#include <QKeyEvent>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -108,6 +109,18 @@ void MainWindow::renderWidgetPaintEvent()
         arduinoSimulator->tick();
     }
 }
+
+void MainWindow::keyPressEvent(QKeyEvent *event)
+{
+    if (event->key() == Qt::Key_Space)
+    {
+        if (event->modifiers() & Qt::ControlModifier)
+            cw->continueVectorAndUnpauseTime();
+        else
+            cw->pauseVectorAndTime();
+    }
+}
+
 
 void MainWindow::readSerialData()
 {

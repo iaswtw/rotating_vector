@@ -17,7 +17,9 @@ public:
     explicit ControlWindow(QWidget *parent = nullptr, MainWindow * mw = nullptr);
     ~ControlWindow();
     void continueVectorAndUnpauseTime();
+    void pauseVectorAndTime();
     void setLowestSpeed();
+
 
 private:
     MainWindow *mw;
@@ -101,6 +103,7 @@ private slots:
     void on_show1AndMinus1Ordinate_cb_stateChanged(int arg1);
     void on_showAllOrdinates_cb_stateChanged(int arg1);
     void on_showOrdinateCaptions_cb_stateChanged(int arg1);
+    void on_angleInRadians_cb_stateChanged(int arg1);
 };
 
 #endif // CONTROLWINDOW_H
