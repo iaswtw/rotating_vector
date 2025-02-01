@@ -147,37 +147,41 @@ void MainWindow::readSerialData()
 
 void MainWindow::processSerialLine(QByteArray line)
 {
-    QRegExp re("(\\d+\\.\\d+)[ ]+(\\d+)");
+    QRegularExpression re("(\\d+\\.\\d+)[ ]+(\\d+)");
 
     //printf("%s", line.data());
 
-    int pos = re.indexIn(line.data());
-    QStringList list = re.capturedTexts();
+    QRegularExpressionMatch match = re.match(line.data());
+
 
 //        printf("regex match result contains %d results. pos = %d\n", list.size(), pos);
-    if ((pos != -1) && (list.size() == 3))
+    if (match.hasMatch())
     {
-        QString qstr;
+        QString list = match.captured(0);
+        if (list.size() == 3)
+        {
+            QString qstr;
 
-        // Extract angle
-        qstr = list.at(1);
-        curAngleInDegrees = qstr.toDouble();
+            // Extract angle
+            qstr = list.at(1);
+            curAngleInDegrees = qstr.toDouble();
 
-        //printf("Angle: %.2f\n", double(curAngleInDegrees));
-        cw->ui->curAngle_le->setText(qstr.toLocal8Bit().constData());       // set current angle in GUI
+            //printf("Angle: %.2f\n", double(curAngleInDegrees));
+            cw->ui->curAngle_le->setText(qstr.toLocal8Bit().constData());       // set current angle in GUI
 
-        if (useArduino)
-            curAngleInDegrees += cw->ui->angleAdvanceOffset_sb->value();
+            if (useArduino)
+                curAngleInDegrees += cw->ui->angleAdvanceOffset_sb->value();
 
-        curAngleInRadians = curAngleInDegrees * M_PI / 180;
-        curHeight = int(amplitude * sin(curAngleInRadians));
-        curWidth  = int(amplitude * cos(curAngleInRadians));
+            curAngleInRadians = curAngleInDegrees * M_PI / 180;
+            curHeight = int(amplitude * sin(curAngleInRadians));
+            curWidth  = int(amplitude * cos(curAngleInRadians));
 
-        // Extract half steps
-        qstr = list.at(2);
-        halfSteps = qstr.toInt();
-        //printf("Half steps: %d\n", halfSteps);
-        cw->ui->curHalfSteps_le->setText(qstr.toLocal8Bit().constData());
+            // Extract half steps
+            qstr = list.at(2);
+            halfSteps = qstr.toInt();
+            //printf("Half steps: %d\n", halfSteps);
+            cw->ui->curHalfSteps_le->setText(qstr.toLocal8Bit().constData());
+        }
     }
     //printf("\n");
 }

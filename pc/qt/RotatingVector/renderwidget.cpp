@@ -398,7 +398,7 @@ void RenderWidget::drawRotatingVector(QPainter *p, VectorDrawingCoordinates v)
 
             QFontMetrics fm(font);
             QString angleString = QString::number(int(round(data->curAngleInDegrees))) + "°";
-            int w = fm.width(angleString);
+            int w = fm.horizontalAdvance(angleString);
 
             p->drawText(v.vector_origin_x - w/2,
                         v.vector_origin_y + data->amplitude + 60,

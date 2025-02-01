@@ -17,7 +17,7 @@ AboutDialog::AboutDialog(QWidget *parent) :
     setWindowTitle("About Rotating Vector");
 
     QString versionString;
-    versionString.sprintf("%d.%d.%d", MAJOR, MINOR, REVISION);
+    versionString.asprintf("%d.%d.%d", MAJOR, MINOR, REVISION);
     ui->nameAndVersion_label->setStyleSheet("font-weight: bold; color: black; font-size: 20px;");
     ui->nameAndVersion_label->setText(QString("Rotating Vector ") + versionString);
 

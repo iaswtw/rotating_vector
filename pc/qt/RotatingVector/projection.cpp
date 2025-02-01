@@ -215,7 +215,7 @@ void Projection::drawAngles(QPainter *p, int abscissaScale, bool showMultiplesOf
 
             if (showInRadians)
             {
-                w1 = fm.width("O");     // get width of 1 dummy character
+                w1 = fm.horizontalAdvance("O");     // get width of 1 dummy character
                 std::tuple<int, int> wh = _getRadianAngleDisplayWidthAndHeight(angles[i], w1, fontPixelSize);
                 w = std::get<0>(wh);
                 h = std::get<1>(wh);
@@ -223,7 +223,7 @@ void Projection::drawAngles(QPainter *p, int abscissaScale, bool showMultiplesOf
             else
             {
                 str = QString::number(angles[i]);
-                w = fm.width(str);
+                w = fm.horizontalAdvance(str);
                 h = fontPixelSize;
             }
 
@@ -352,7 +352,7 @@ void Projection::_drawRadianAngle(QPainter *p, int x, int y, int angleInDegree, 
                 p->drawText(x, ym, str);
 
                 QFontMetrics fm(p->font());
-                x += fm.width(str) + 2;
+                x += fm.horizontalAdvance(str) + 2;
             }
 
             p->drawText(x-1, y, "𝛑");
@@ -608,7 +608,7 @@ void Projection::drawCircularText(QPainter *p, int x, int y, int radius, bool cl
     // what angle will we start rendering characters?
     double angleInRadians = angleInDegrees * M_PI / 180;
     if (!alignStart)
-        angleInRadians -= directionMultiplier * fm.width(text) / double(radius);
+        angleInRadians -= directionMultiplier * fm.horizontalAdvance(text) / double(radius);
 
     radius = radius + (directionMultiplier * 6);            // adjust radius based on text direction
 
@@ -623,7 +623,7 @@ void Projection::drawCircularText(QPainter *p, int x, int y, int radius, bool cl
         p->drawText(0, 0, QString(text[i].unicode()));
         p->restore();
 
-        int w = fm.width(QString(text[i].unicode()));
+        int w = fm.horizontalAdvance(QString(text[i].unicode()));
         angleInRadians += directionMultiplier * double(w) / radius;
     }
 }

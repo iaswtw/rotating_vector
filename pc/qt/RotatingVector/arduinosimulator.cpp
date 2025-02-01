@@ -185,7 +185,7 @@ void ArduinoSimulator::tick()
 
 
         QString statusString;
-        statusString.sprintf("%.2f %d\n", currentAngleInDegrees, halfSteps);
+        statusString.asprintf("%.2f %d\n", currentAngleInDegrees, halfSteps);
 
         if (!mw->useArduino)
         {
